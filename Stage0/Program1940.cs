@@ -8,6 +8,7 @@ namespace Stage0
 {
     partial class Program
     {
+        
         static partial void welcome1940()
         {
             Console.WriteLine("I am also here!");
