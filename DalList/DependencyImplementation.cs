@@ -23,12 +23,12 @@ public class DependencyImplementation : IDependency
     /// deletes requested dependency from list
     /// </summary>
     /// <param name="id">id of dependency to delete</param>
-    /// <exception cref="NotImplementedException">if requested dependency not found </exception>
+    /// <exception cref=Exception">if requested dependency not found </exception>
     public void Delete(int id)
     {
         Dependency? found = DataSource.Dependencies.Find(x => x.Id == id);
         if (found==null)
-            throw new NotImplementedException();
+            throw new Exception($"Dependency with ID={id} does Not exist");
         else
             DataSource.Dependencies.Remove(found);
         
@@ -57,12 +57,12 @@ public class DependencyImplementation : IDependency
     /// updates existing dependency
     /// </summary>
     /// <param name="item">updated dependency</param>
-    /// <exception cref="NotImplementedException">if requested dependency not found </exception>
+    /// <exception cref="Exception">if requested dependency not found </exception>
     public void Update(Dependency item)
     {
         Dependency? found = DataSource.Dependencies.Find(x => x.Id == item.Id);
         if (found == null)
-            throw new NotImplementedException();
+            throw new Exception($"Dependency with ID={item.Id} does Not exist");
         else
         {
             DataSource.Dependencies.Remove(found);

@@ -24,12 +24,12 @@ public class TaskImplementation : ITask
     /// deletes requested Task from list
     /// </summary>
     /// <param name="id">id of Task to delete</param>
-    /// <exception cref="NotImplementedException">if requested Task not found </exception>
+    /// <exception cref="Exception">if requested Task not found </exception>
     public void Delete(int id)
     {
         Task? found = DataSource.Tasks.Find(x => x.Id == id);
         if (found == null)
-            throw new NotImplementedException();
+            throw new Exception($"Task with ID={id} does Not exist");
         else
             DataSource.Tasks.Remove(found);
     }
@@ -57,16 +57,32 @@ public class TaskImplementation : ITask
     /// updates existing Task
     /// </summary>
     /// <param name="item">updated Task</param>
-    /// <exception cref="NotImplementedException">if requested Task not found </exception>
+    /// <exception cref="Exception">if requested Task not found </exception>
     public void Update(Task item)
     {
         Task? found = DataSource.Tasks.Find(x => x.Id == item.Id);
         if (found == null)
-            throw new NotImplementedException();
+            throw new Exception($"Task with ID={item.Id} does Not exist");
         else
         {
             DataSource.Tasks.Remove(found);
             DataSource.Tasks.Add(item);
         }
     }
+
+    /// <summary>
+    /// help method to find id of task by description
+    /// </summary>
+    /// <param name="description">description of task to search for</param>
+    /// <returns>id of requested task</returns>
+    public int? FindId(string description)
+    {
+        Task? task = DataSource.Tasks.Find(x => x.Description == description);
+        if (task == null)
+            return null;
+        return task.Id;
+    }
 }
+
+
+

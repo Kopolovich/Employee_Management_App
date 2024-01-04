@@ -12,13 +12,13 @@ public class EngineerImplementation : IEngineer
     /// </summary>
     /// <param name="item">refernce to new item to add</param>
     /// <returns>Id of new Engineer</returns>
-    /// <exception cref="NotImplementedException">if requested Engineer not found</exception>
+    /// <exception cref="Exception">if requested Engineer already exists</exception>
     public int Create(Engineer item)
     {
 
         Engineer? found = DataSource.Engineers.Find(x => x.Id == item.Id);
-        if (found == null)
-            throw new NotImplementedException();
+        if (found != null)
+            throw new Exception($"Engineer with ID={item.Id} already exists");
         else
         {
             DataSource.Engineers.Add(item);
@@ -31,12 +31,12 @@ public class EngineerImplementation : IEngineer
     /// deletes requested Engineer from list
     /// </summary>
     /// <param name="id">id of Engineer to delete</param>
-    /// <exception cref="NotImplementedException">if requested Engineer not found </exception>
+    /// <exception cref="Exception">if requested Engineer not found </exception>
     public void Delete(int id)
     {
         Engineer? found = DataSource.Engineers.Find(x => x.Id == id);
         if (found == null)
-            throw new NotImplementedException();
+            throw new Exception($"Engineer with ID={id} does Not exist");
         else
             DataSource.Engineers.Remove(found);
     }
@@ -65,12 +65,12 @@ public class EngineerImplementation : IEngineer
     /// updates existing Engineer
     /// </summary>
     /// <param name="item">updated Engineer</param>
-    /// <exception cref="NotImplementedException">if requested Engineer not found </exception>
+    /// <exception cref="Exception">if requested Engineer not found </exception>
     public void Update(Engineer item)
     {
         Engineer? found = DataSource.Engineers.Find(x => x.Id == item.Id);
         if (found == null)
-            throw new NotImplementedException();
+            throw new Exception($"Engineer with ID={item.Id} does Not exist");
         else
         {
             DataSource.Engineers.Remove(found);
