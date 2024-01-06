@@ -2,7 +2,7 @@
 using DalApi;
 using DO;
 /// <summary>
-/// Implementation of CRUD methods of Dependency entity
+/// Implementation of CRUD methods for Dependency entity
 /// </summary>
 public class DependencyImplementation : IDependency
 {

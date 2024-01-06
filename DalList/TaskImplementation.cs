@@ -3,7 +3,7 @@ using DalApi;
 using DO;
 
 /// <summary>
-/// Implementation of CRUD methods of Task entity
+/// Implementation of CRUD methods for Task entity
 /// </summary>
 public class TaskImplementation : ITask
 {

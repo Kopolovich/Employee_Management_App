@@ -1,6 +1,7 @@
 ﻿using Dal;
 using DalApi;
 using DO;
+using System.Collections.Specialized;
 using System.Reflection.Emit;
 using System.Security.Cryptography.X509Certificates;
 namespace DalTest
@@ -86,7 +87,8 @@ namespace DalTest
                             case 2:
                                 {
                                     Console.WriteLine("enter id of task:");
-                                    int id = int.Parse(Console.ReadLine());
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
                                     Console.WriteLine($"{s_dalTask.Read(id)}"); //Reading and printing
                                     break;
                                 } 
@@ -101,9 +103,12 @@ namespace DalTest
                             case 4:
                                 {
                                     Console.WriteLine("enter id of task to update:");
-                                    int id = int.Parse(Console.ReadLine());
-                                    Console.WriteLine($"{s_dalTask.Read(id)}"); //printing current task
-                                    DO.Task updatedTask = createNewTask(id);//creating new task with updated info
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id); 
+                                    DO.Task currentTask = s_dalTask.Read(id);
+                                    if(currentTask == null) throw new Exception($"task with ID={id} does Not exist");
+                                    Console.WriteLine(currentTask); //printing current task
+                                    DO.Task updatedTask = createUpdatedTask(currentTask);//creating new task with updated info
                                     s_dalTask.Update(updatedTask);//updating
                                     break;
                                 }
@@ -111,7 +116,8 @@ namespace DalTest
                             case 5:
                                 {
                                     Console.WriteLine("enter id of task to delete:");
-                                    int id = int.Parse(Console.ReadLine());
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
                                     s_dalTask.Delete(id); //delete
                                     break;
                                 }
@@ -159,7 +165,8 @@ namespace DalTest
                             case 2:
                                 {
                                     Console.WriteLine("enter id of Engineer:");
-                                    int id = int.Parse(Console.ReadLine());
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
                                     Console.WriteLine($"{s_dalEngineer.Read(id)}"); //reading and printing
                                     break;
                                 }
@@ -174,29 +181,21 @@ namespace DalTest
                             case 4:
                                 {
                                     Console.WriteLine("enter id of engineer to update:");
-                                    int id = int.Parse(Console.ReadLine());
-                                    Console.WriteLine($"{s_dalEngineer.Read(id)}"); //printing current engineer
-
-                                    //receving updated input from user
-                                    Console.WriteLine("enter number between 0 to 4 for level of engineer (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
-                                    int levelInt = int.Parse(Console.ReadLine());
-                                    EngineerExperience level = (EngineerExperience)levelInt;
-                                    Console.WriteLine("enter an email:");
-                                    string? email = Console.ReadLine();
-                                    Console.WriteLine("enter hourly salary:");
-                                    double cost = double.Parse(Console.ReadLine());
-                                    Console.WriteLine("enter a name:");
-                                    string? name = Console.ReadLine();
-
-                                    Engineer engineer = new(id, level, email, cost, name); //creating new engineer with updated details
-                                    s_dalEngineer.Update(engineer); //updating
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
+                                    Engineer currentEngineer = s_dalEngineer.Read(id);
+                                    if (currentEngineer == null) throw new Exception($"engineer with ID={id} does Not exist");
+                                    Console.WriteLine(currentEngineer); //printing current engineer                                
+                                    Engineer updatedEngineer = createUpdatedEngineer(currentEngineer);
+                                    s_dalEngineer.Update(updatedEngineer); //updating
                                     break;
                                 }
 
                             case 5:
                                 {
                                     Console.WriteLine("enter id of engineer to delete:");
-                                    int id = int.Parse(Console.ReadLine());
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
                                     s_dalEngineer.Delete(id); //delete
                                     break;
                                 }
@@ -244,7 +243,8 @@ namespace DalTest
                             case 2:
                                 {
                                     Console.WriteLine("enter id of Dependency:");
-                                    int id = int.Parse(Console.ReadLine());
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
                                     Console.WriteLine($"{s_dalDependency.Read(id)}"); //reading and printing
                                     break;
                                 }
@@ -259,9 +259,12 @@ namespace DalTest
                             case 4:
                                 {
                                     Console.WriteLine("enter id of Dependency to update:");
-                                    int id = int.Parse(Console.ReadLine());
-                                    Console.WriteLine($"{s_dalDependency.Read(id)}"); //printing current dependency
-                                    Dependency updatedDependency = createNewDependency(id); 
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
+                                    Dependency currentDependency = s_dalDependency.Read(id);
+                                    if (currentDependency == null) throw new Exception($"dependecy with ID={id} does Not exist");
+                                    Console.WriteLine(currentDependency); //printing current dependency
+                                    Dependency updatedDependency = createUpdatedDependecy(currentDependency); 
                                     s_dalDependency.Update(updatedDependency); //update
                                     break;
                                 }
@@ -269,7 +272,8 @@ namespace DalTest
                             case 5:
                                 {
                                     Console.WriteLine("enter id of Dependency to delete:");
-                                    int id = int.Parse(Console.ReadLine());
+                                    int id;
+                                    int.TryParse(Console.ReadLine(), out id);
                                     s_dalDependency.Delete(id); //delete
                                     break;
                                 }
@@ -292,74 +296,197 @@ namespace DalTest
                 }
 
                 //methods to create new items with details recieves from user
-                //also used to create updated items
-                DO.Task createNewTask(int id = 0)
+                DO.Task createNewTask()
                 {
                     Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
-                    int levelInt = int.Parse(Console.ReadLine());
+                    int levelInt;
+                    int.TryParse(Console.ReadLine(), out levelInt);
                     EngineerExperience level = (EngineerExperience)levelInt;
+
                     Console.WriteLine("enter alias:");
                     string? alias = Console.ReadLine();
+
                     Console.WriteLine("enter description:");
                     string? description = Console.ReadLine();
+
                     Console.WriteLine("Enter Required Effort Time:");
-                    string? time = Console.ReadLine();
-                    TimeSpan? requiredEffortTime = TimeSpan.Parse(time);
-                    Console.WriteLine("enter 1 if task is milestone, otherwise 0");
-                    int isMile = int.Parse(Console.ReadLine());
-                    bool isMilestone;
-                    if (isMile == 1) { isMilestone = true; }
-                    else { isMilestone = false; }
+                    TimeSpan? requiredEffortTime;
+                    TimeSpan time;
+                    requiredEffortTime = TimeSpan.TryParse(Console.ReadLine(), out time) ? time : null;
+
+                    Console.WriteLine("enter true if task is milestone, otherwise false");
+                    bool? isMilestone = bool.Parse(Console.ReadLine());
+                    
                     Console.WriteLine("enter start date:");
-                    string? date = Console.ReadLine();
-                    DateTime? startDate = DateTime.Parse(date);
+                    DateTime? startDate;
+                    DateTime date;
+                    startDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : null;
+
                     Console.WriteLine("enter scheduled date:");
-                    date = Console.ReadLine();
-                    DateTime? scheduledDate = DateTime.Parse(date);
+                    DateTime? scheduledDate;
+                    scheduledDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : null;
+
                     Console.WriteLine("enter complete date");
-                    date = Console.ReadLine();
-                    DateTime? completeDate = DateTime.Parse(date);
+                    DateTime? completeDate;
+                    completeDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : null;
+
                     Console.WriteLine("enter deliverables:");
                     string? deliverables = Console.ReadLine();
+
                     Console.WriteLine("enter remarks: (optional)");
                     string? remarks = Console.ReadLine();
+
                     Console.WriteLine("enter id of engineer working on task:");
-                    int? engineerId = int.Parse(Console.ReadLine());
-             
-                    DO.Task? task = new(id, level, alias, description, DateTime.Now, requiredEffortTime,
+                    int? engineerId;
+                    int engId;
+                    engineerId = int.TryParse(Console.ReadLine(), out engId) ? engId : null;
+
+                    DO.Task? task = new(0, level, alias, description, DateTime.Now, requiredEffortTime,
                         isMilestone, startDate, scheduledDate, null, completeDate, deliverables, remarks, engineerId);
                     return task;
                 }
                 Engineer createNewEngineer() 
                 {
                     Console.WriteLine("enter id of engineer:");
-                    int id = int.Parse(Console.ReadLine());
-                    Console.WriteLine("enter number between 0 to 4 for level of engineer (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
-                    int levelInt = int.Parse(Console.ReadLine());
+                    int id;
+                    int.TryParse(Console.ReadLine(), out id);
+
+                    Console.WriteLine("enter level of engineer:");
+                    int levelInt;
+                    int.TryParse(Console.ReadLine(), out levelInt);
                     EngineerExperience level = (EngineerExperience)levelInt;
+
                     Console.WriteLine("enter an email:");
                     string? email = Console.ReadLine();
+
                     Console.WriteLine("enter hourly salary:");
-                    double? cost = int.Parse(Console.ReadLine());
+                    double cost;                    
+                    double.TryParse(Console.ReadLine(), out cost);
+
                     Console.WriteLine("enter a name:");
                     string? name = Console.ReadLine();
 
                     Engineer engineer = new(id, level, email, cost, name);
                     return engineer; 
                 }
-                Dependency createNewDependency(int id = 0)
+                Dependency createNewDependency()
                 {
                     Console.WriteLine("enter id of dependent task:");
-                    int DependentTaskId = int.Parse(Console.ReadLine());
+                    int dependentTaskId;
+                    int.TryParse(Console.ReadLine(), out dependentTaskId);
+
                     Console.WriteLine("enter id of task that is dependent on:");
-                    int dependsOnTaskId = int.Parse(Console.ReadLine());
-                    Dependency dependency = new(id, DependentTaskId,dependsOnTaskId);
+                    int dependsOnTaskId;
+                    int.TryParse(Console.ReadLine(), out dependsOnTaskId);
+
+                    Dependency dependency = new(0, dependentTaskId,dependsOnTaskId);
+                    return dependency;
+                }
+                //methods to create new items with updated details from user
+                DO.Task createUpdatedTask(DO.Task oldTask)
+                {
+                    Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change");
+                    
+                    Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
+                    int levelInt;
+                    bool success = int.TryParse(Console.ReadLine(), out levelInt);
+                    EngineerExperience level = success ? (EngineerExperience)levelInt : oldTask.Complexity;
+
+                    Console.WriteLine("enter alias:");
+                    string? alias = Console.ReadLine();
+                    if (alias == "") alias = oldTask.Alias;
+
+                    Console.WriteLine("enter description:");
+                    string? description = Console.ReadLine();
+                    if (description == "") description = oldTask.Description;
+
+                    Console.WriteLine("Enter Required Effort Time:");
+                    TimeSpan? requiredEffortTime;
+                    TimeSpan time;
+                    requiredEffortTime = TimeSpan.TryParse(Console.ReadLine(), out time) ? time : oldTask.RequiredEffortTime;
+                    
+                    Console.WriteLine("enter true if task is milestone, otherwise false");
+                    bool? isMilestone;
+                    bool isMile;
+                    isMilestone = bool.TryParse(Console.ReadLine(), out isMile) ? isMile : oldTask.IsMilestone;
+                                  
+                    Console.WriteLine("enter start date:");
+                    DateTime? startDate;
+                    DateTime date;
+                    startDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : oldTask.StartDate;
+
+
+                    Console.WriteLine("enter scheduled date:");
+                    DateTime? scheduledDate;
+                    scheduledDate = DateTime.TryParse(Console.ReadLine(), out date) ? date:oldTask.ScheduledDate;
+
+                    Console.WriteLine("enter complete date");
+                    DateTime? completeDate;
+                    completeDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : oldTask.CompleteDate;
+
+                  
+                    Console.WriteLine("enter deliverables:");
+                    string? deliverables = Console.ReadLine();
+                    if(deliverables == "") deliverables = oldTask.Deliverables;
+
+                    Console.WriteLine("enter remarks: (optional)");
+                    string? remarks = Console.ReadLine();
+                    if(remarks == "") remarks = oldTask.Remarks;
+
+                    Console.WriteLine("enter id of engineer working on task:");
+                    int? engineerId;
+                    int engId;
+                    engineerId = int.TryParse(Console.ReadLine(), out engId) ? engId : oldTask.EngineerId;
+
+                    DO.Task? task = new(oldTask.Id, level, alias, description, oldTask.CreatedAtDate, requiredEffortTime,
+                        isMilestone, startDate, scheduledDate, null, completeDate, deliverables, remarks, engineerId);
+                    return task;
+                }
+                Engineer createUpdatedEngineer(Engineer oldEngineer)
+                {
+                    Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change");
+
+                    Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
+                    int levelInt;
+                    bool success = int.TryParse(Console.ReadLine(), out levelInt);
+                    EngineerExperience level = success ? (EngineerExperience)levelInt : oldEngineer.Level;
+
+                    Console.WriteLine("enter an email:");
+                    
+                    string? email = Console.ReadLine();
+                    if(email == "") email = oldEngineer.Email;
+
+                    Console.WriteLine("enter hourly salary:");
+                    double? cost;
+                    double _cost;
+                    cost = double.TryParse(Console.ReadLine(), out _cost) ? _cost : oldEngineer.Cost;
+
+                    Console.WriteLine("enter a name:");
+                    string? name = Console.ReadLine();
+                    if(name == "") name = oldEngineer.Name;
+
+                    Engineer engineer = new(oldEngineer.Id, level, email, cost, name); //creating new engineer with updated details
+                    return engineer;
+                }
+                Dependency createUpdatedDependecy(Dependency oldDependency)
+                {
+                    Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change");
+
+                    Console.WriteLine("enter id of dependent task:");
+                    int dependentTaskId;
+                    dependentTaskId = int.TryParse(Console.ReadLine(), out dependentTaskId) ? dependentTaskId : oldDependency.DependentTask;
+
+                    Console.WriteLine("enter id of task that is dependent on:");
+                    int dependsOnTaskId;
+                    dependsOnTaskId  = int.TryParse(Console.ReadLine(), out dependsOnTaskId) ? dependsOnTaskId : oldDependency.DependsOnTask;
+                    
+                    Dependency dependency = new(oldDependency.Id, dependentTaskId, dependsOnTaskId);
                     return dependency;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                Console.WriteLine(ex.Message);
             }
         }
 

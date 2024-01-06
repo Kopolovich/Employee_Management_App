@@ -3,7 +3,7 @@ using DalApi;
 using DO;
 
 /// <summary>
-/// Implementation of CRUD methods of Engineer entity
+/// Implementation of CRUD methods for Engineer entity
 /// </summary>
 public class EngineerImplementation : IEngineer
 {
