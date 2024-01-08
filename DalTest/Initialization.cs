@@ -11,9 +11,7 @@ using System.Xml.Linq;
 /// </summary>
 public static class Initialization
 {
-    private static ITask? s_dalTask;
-    private static IEngineer? s_dalEngineer;
-    private static IDependency? s_dalDependency;
+    private static IDal? s_dal;
     private static readonly Random s_rand = new();
     
     /// <summary>
@@ -32,7 +30,7 @@ public static class Initialization
             int _id;
             do
                 _id = s_rand.Next(200000000, 400000000);
-            while (s_dalEngineer!.Read(_id) != null);
+            while (s_dal!.Engineer.Read(_id) != null);
 
             //creating email address for every engineer using his name
             int findSpace = _name.IndexOf(' ');
@@ -49,7 +47,7 @@ public static class Initialization
 
             Engineer newEngineer = new(_id, _level, _email , _cost, _name);
 
-            s_dalEngineer!.Create(newEngineer);
+            s_dal!.Engineer.Create(newEngineer);
         }
     }
 
@@ -107,7 +105,7 @@ public static class Initialization
             Task newTask = new(_id, _complexity, _alias, _description, _createdAtDate,
                 _requiredEffortTime, _isMilestone);
 
-            s_dalTask!.Create(newTask);
+            s_dal!.Task.Create(newTask);
         }       
 
     }
@@ -120,17 +118,17 @@ public static class Initialization
         //array of task descriptions
         string[] taskDescriptions =
         {
-            "Create a project timeline with milestones",//
-            "Manage and mitigate project risks",//
-            "Coordinate teams for effective communication",//
-            "Allocate resources based on project requirements",//
-            "Optimize budget with cost-benefit analysis",//
+            "Create a project timeline with milestones",
+            "Manage and mitigate project risks",
+            "Coordinate teams for effective communication",
+            "Allocate resources based on project requirements",
+            "Optimize budget with cost-benefit analysis",
             "Maintain project documentation and progress reports",
             "Use project management tools for task tracking",
-            "Conduct regular team meetings for updates", ////
+            "Conduct regular team meetings for updates", 
             "Choose appropriate technologies and methodologies",
             "Control project scope to prevent scope creep",
-            "Implement quality control measures", ////
+            "Implement quality control measures", 
             "Build and maintain stakeholder relationships",
             "Manage changes in project scope or requirements",
             "Provide feedback and conduct performance reviews",
@@ -146,7 +144,7 @@ public static class Initialization
         int[] tasksId = new int[taskDescriptions.Length];
         for (int i = 0; i < taskDescriptions.Length; i++) 
         {
-            int? temp = s_dalTask!.FindId(taskDescriptions[i]);
+            int? temp = s_dal!.Task.FindId(taskDescriptions[i]);
             if(temp!=null)
                 tasksId[i] = temp.Value;
         }
@@ -160,7 +158,7 @@ public static class Initialization
                 int _dependentTask = tasksId[tasksId.Length - 1];
                 int _dependsOnTask = tasksId[i];
                 Dependency newDependency = new(_id, _dependentTask, _dependsOnTask);
-                s_dalDependency!.Create(newDependency);
+                s_dal!.Dependency.Create(newDependency);
             }
         }
 
@@ -175,7 +173,7 @@ public static class Initialization
                     int _dependentTask = tasksId[7];
                     int _dependsOnTask = tasksId[i];
                     Dependency newDependency = new(_id, _dependentTask, _dependsOnTask);
-                    s_dalDependency!.Create(newDependency);
+                    s_dal!.Dependency.Create(newDependency);
 
                 }
 
@@ -184,7 +182,7 @@ public static class Initialization
                     int _dependentTask = tasksId[10];
                     int _dependsOnTask = tasksId[i];
                     Dependency newDependency = new(_id, _dependentTask, _dependsOnTask);
-                    s_dalDependency!.Create(newDependency);
+                    s_dal!.Dependency.Create(newDependency);
 
                 }
             }
@@ -197,14 +195,14 @@ public static class Initialization
             int _dependentTask = tasksId[17];
             int _dependsOnTask = tasksId[10];
             Dependency newDependency = new(_id, _dependentTask, _dependsOnTask);
-            s_dalDependency!.Create(newDependency);
+            s_dal!.Dependency.Create(newDependency);
         }
         {
             int _id = 0; //will be overriden by Create method (with automatic random id)
             int _dependentTask = tasksId[17];
             int _dependsOnTask = tasksId[7];
             Dependency newDependency = new(_id, _dependentTask, _dependsOnTask);
-            s_dalDependency!.Create(newDependency);
+            s_dal!.Dependency.Create(newDependency);
         }
 
         //Set task 16 to be dependent on the first 12 tasks exept 7,10
@@ -216,7 +214,7 @@ public static class Initialization
                 int _dependentTask = tasksId[16];
                 int _dependsOnTask = tasksId[i];
                 Dependency newDependency = new(_id, _dependentTask, _dependsOnTask);
-                s_dalDependency!.Create(newDependency);
+                s_dal!.Dependency.Create(newDependency);
             }
         }
         //Total of 41 dependencies
@@ -225,11 +223,9 @@ public static class Initialization
     /// <summary>
     /// publich method to call private methods to initialize lists
     /// </summary>
-    public static void Do (IDependency? dalDependency , ITask? dalTask , IEngineer? dalEngineer) 
+    public static void Do (IDal dal) 
     {
-        s_dalTask = dalTask ?? throw new NullReferenceException("DAL can not be null!");
-        s_dalEngineer = dalEngineer ?? throw new NullReferenceException("DAL can not be null!");
-        s_dalDependency = dalDependency ?? throw new NullReferenceException("DAL can not be null!");
+        s_dal = dal??throw new NullReferenceException("DAL object can not be null!");
 
         createTasks();
         createEngineers();  

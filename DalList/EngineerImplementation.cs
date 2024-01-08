@@ -5,7 +5,7 @@ using DO;
 /// <summary>
 /// Implementation of CRUD methods for Engineer entity
 /// </summary>
-public class EngineerImplementation : IEngineer
+internal class EngineerImplementation : IEngineer
 {
     /// <summary>
     /// adding new Engineer to list

@@ -5,7 +5,7 @@ using DO;
 /// <summary>
 /// Implementation of CRUD methods for Task entity
 /// </summary>
-public class TaskImplementation : ITask
+internal class TaskImplementation : ITask
 {
     /// <summary>
     /// adding new Task to list

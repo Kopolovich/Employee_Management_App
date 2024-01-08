@@ -9,16 +9,14 @@ namespace DalTest
    
     public class Program
     {
-        private static ITask? s_dalTask = new TaskImplementation(); 
-        private static IEngineer? s_dalEngineer = new EngineerImplementation(); 
-        private static IDependency? s_dalDependency = new DependencyImplementation(); 
-
+        static readonly IDal s_dal = new DalList();
+      
         
-        private static void Main(string[] args)
+        static void Main(string[] args)
         {
             try
             {                          
-                Initialization.Do(s_dalDependency,s_dalTask, s_dalEngineer);
+                Initialization.Do(s_dal);
                 void mainMenu()
                 {
                     Console.WriteLine("""
@@ -81,7 +79,7 @@ namespace DalTest
                             case 1:
                                 {
                                     DO.Task newTask = createNewTask(); //creating new task with info from user
-                                    s_dalTask.Create(newTask); //adding task to list
+                                    s_dal.Task.Create(newTask); //adding task to list
                                     break;
                                 }
                             case 2:
@@ -89,12 +87,12 @@ namespace DalTest
                                     Console.WriteLine("enter id of task:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    Console.WriteLine($"{s_dalTask.Read(id)}"); //Reading and printing
+                                    Console.WriteLine($"{s_dal.Task.Read(id)}"); //Reading and printing
                                     break;
                                 } 
                             case 3:
                                 {
-                                    List<DO.Task> tasks = s_dalTask.ReadAll(); //reading list
+                                    List<DO.Task> tasks = s_dal.Task.ReadAll(); //reading list
                                     foreach (DO.Task task in tasks) 
                                         Console.WriteLine(task); //printing each task                            
                                     break;
@@ -105,11 +103,11 @@ namespace DalTest
                                     Console.WriteLine("enter id of task to update:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id); 
-                                    DO.Task currentTask = s_dalTask.Read(id);
+                                    DO.Task currentTask = s_dal.Task.Read(id);
                                     if(currentTask == null) throw new Exception($"task with ID={id} does Not exist");
                                     Console.WriteLine(currentTask); //printing current task
                                     DO.Task updatedTask = createUpdatedTask(currentTask);//creating new task with updated info
-                                    s_dalTask.Update(updatedTask);//updating
+                                    s_dal.Task.Update(updatedTask);//updating
                                     break;
                                 }
 
@@ -118,7 +116,7 @@ namespace DalTest
                                     Console.WriteLine("enter id of task to delete:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    s_dalTask.Delete(id); //delete
+                                    s_dal.Task.Delete(id); //delete
                                     break;
                                 }
                             default:
@@ -159,7 +157,7 @@ namespace DalTest
                             case 1:
                                 {
                                     Engineer newEngineer = createNewEngineer(); //creating new engineer with info from user
-                                    s_dalEngineer.Create(newEngineer); //adding to list
+                                    s_dal.Engineer.Create(newEngineer); //adding to list
                                     break;
                                 }
                             case 2:
@@ -167,12 +165,12 @@ namespace DalTest
                                     Console.WriteLine("enter id of Engineer:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    Console.WriteLine($"{s_dalEngineer.Read(id)}"); //reading and printing
+                                    Console.WriteLine($"{s_dal.Engineer.Read(id)}"); //reading and printing
                                     break;
                                 }
                             case 3:
                                 {
-                                    List<Engineer> engineers = s_dalEngineer.ReadAll(); //reading list
+                                    List<Engineer> engineers = s_dal.Engineer.ReadAll(); //reading list
                                     foreach (Engineer engineer in engineers)
                                         Console.WriteLine(engineer); //print each engineer
                                     break;
@@ -183,11 +181,11 @@ namespace DalTest
                                     Console.WriteLine("enter id of engineer to update:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    Engineer currentEngineer = s_dalEngineer.Read(id);
+                                    Engineer currentEngineer = s_dal.Engineer.Read(id);
                                     if (currentEngineer == null) throw new Exception($"engineer with ID={id} does Not exist");
                                     Console.WriteLine(currentEngineer); //printing current engineer                                
                                     Engineer updatedEngineer = createUpdatedEngineer(currentEngineer);
-                                    s_dalEngineer.Update(updatedEngineer); //updating
+                                    s_dal.Engineer.Update(updatedEngineer); //updating
                                     break;
                                 }
 
@@ -196,7 +194,7 @@ namespace DalTest
                                     Console.WriteLine("enter id of engineer to delete:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    s_dalEngineer.Delete(id); //delete
+                                    s_dal.Engineer.Delete(id); //delete
                                     break;
                                 }
                             default:
@@ -237,7 +235,7 @@ namespace DalTest
                             case 1:
                                 {
                                     Dependency newDependency = createNewDependency(); //creating new dependency
-                                    s_dalDependency.Create(newDependency); //adding to list
+                                    s_dal.Dependency.Create(newDependency); //adding to list
                                     break;
                                 }
                             case 2:
@@ -245,12 +243,12 @@ namespace DalTest
                                     Console.WriteLine("enter id of Dependency:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    Console.WriteLine($"{s_dalDependency.Read(id)}"); //reading and printing
+                                    Console.WriteLine($"{s_dal.Dependency.Read(id)}"); //reading and printing
                                     break;
                                 }
                             case 3:
                                 {
-                                    List<Dependency> dependencies = s_dalDependency.ReadAll(); //reading list
+                                    List<Dependency> dependencies = s_dal.Dependency.ReadAll(); //reading list
                                     foreach (Dependency dependency in dependencies)
                                         Console.WriteLine(dependency); //print each dependency
                                     break;
@@ -261,11 +259,11 @@ namespace DalTest
                                     Console.WriteLine("enter id of Dependency to update:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    Dependency currentDependency = s_dalDependency.Read(id);
+                                    Dependency currentDependency = s_dal.Dependency.Read(id);
                                     if (currentDependency == null) throw new Exception($"dependecy with ID={id} does Not exist");
                                     Console.WriteLine(currentDependency); //printing current dependency
                                     Dependency updatedDependency = createUpdatedDependecy(currentDependency); 
-                                    s_dalDependency.Update(updatedDependency); //update
+                                    s_dal.Dependency.Update(updatedDependency); //update
                                     break;
                                 }
 
@@ -274,7 +272,7 @@ namespace DalTest
                                     Console.WriteLine("enter id of Dependency to delete:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    s_dalDependency.Delete(id); //delete
+                                    s_dal.Dependency.Delete(id); //delete
                                     break;
                                 }
                             default:

@@ -4,7 +4,7 @@ using DO;
 /// <summary>
 /// Implementation of CRUD methods for Dependency entity
 /// </summary>
-public class DependencyImplementation : IDependency
+internal class DependencyImplementation : IDependency
 {
     /// <summary>
     /// adding new Dependency to list
