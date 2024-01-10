@@ -28,7 +28,7 @@ internal class TaskImplementation : ITask
     /// <exception cref="Exception">if requested Task not found </exception>
     public void Delete(int id)
     {
-        Task? found = DataSource.Tasks.FirstOrDefault(x => x.Id == id);
+        Task? found = Read(id);
         if (found == null)
             throw new DalDoesNotExistException($"Task with ID={id} does Not exist");
         else
@@ -42,10 +42,7 @@ internal class TaskImplementation : ITask
     /// <returns>retrieved Task</returns>
     public Task? Read(int id)
     {
-        Task? temp = DataSource.Tasks.FirstOrDefault(x => x.Id == id);
-        if (temp == null)
-            throw new DalDoesNotExistException($"Task with ID={id} does not exist");
-        return temp;
+        return DataSource.Tasks.FirstOrDefault(x => x.Id == id);
     }
 
     /// <summary>
@@ -55,10 +52,7 @@ internal class TaskImplementation : ITask
     /// <returns>first item in list that matches the filter</returns>
     public Task? Read(Func<Task, bool> filter)
     {
-        Task? temp = DataSource.Tasks.FirstOrDefault(filter);
-        if (temp == null)
-            throw new DalDoesNotExistException("Requested task does not exist");
-        return temp;
+        return DataSource.Tasks.FirstOrDefault(filter);
     }
 
     /// <summary>
@@ -80,7 +74,7 @@ internal class TaskImplementation : ITask
     /// <exception cref="Exception">if requested Task not found </exception>
     public void Update(Task item)
     {
-        Task? found = DataSource.Tasks.FirstOrDefault(x => x.Id == item.Id);
+        Task? found = Read(item.Id);
         if (found == null)
             throw new DalDoesNotExistException($"Task with ID={item.Id} does Not exist");
         else

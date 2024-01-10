@@ -26,12 +26,11 @@ internal class DependencyImplementation : IDependency
     /// <exception cref=Exception">if requested dependency not found </exception>
     public void Delete(int id)
     {
-        Dependency? found = DataSource.Dependencies.FirstOrDefault(x => x.Id == id);
-        if (found==null)
+        Dependency? found = Read(id);
+        if (found == null)
             throw new DalDoesNotExistException($"Dependency with ID={id} does not exist");
         else
-            DataSource.Dependencies.Remove(found);
-        
+            DataSource.Dependencies.Remove(found);        
     }
 
     /// <summary>
@@ -41,10 +40,7 @@ internal class DependencyImplementation : IDependency
     /// <returns>retrieved dependency</returns>
     public Dependency? Read(int id)
     {
-        Dependency? temp = DataSource.Dependencies.FirstOrDefault(x => x.Id == id);
-        if (temp==null)
-            throw new DalDoesNotExistException($"Dependency with ID={id} does not exist");
-        return temp;
+        return DataSource.Dependencies.FirstOrDefault(x => x.Id == id);
     }
 
     /// <summary>
@@ -54,10 +50,7 @@ internal class DependencyImplementation : IDependency
     /// <returns>first item in list that matches the filter</returns>
     public Dependency? Read(Func<Dependency, bool> filter)
     {
-        Dependency? temp = DataSource.Dependencies.FirstOrDefault(filter);
-        if (temp == null)
-            throw new DalDoesNotExistException("Requested dependency does not exist");
-        return temp;
+        return DataSource.Dependencies.FirstOrDefault(filter);
     }
 
     /// <summary>
@@ -79,7 +72,7 @@ internal class DependencyImplementation : IDependency
     /// <exception cref="Exception">if requested dependency not found </exception>
     public void Update(Dependency item)
     {
-        Dependency? found = DataSource.Dependencies.FirstOrDefault(x => x.Id == item.Id);
+        Dependency? found = Read(item.Id);
         if (found == null)
             throw new DalDoesNotExistException($"Dependency with ID={item.Id} does not exist");
         else

@@ -92,7 +92,7 @@ namespace DalTest
                                 } 
                             case 3:
                                 {
-                                    List<DO.Task> tasks = (List<DO.Task>)s_dal.Task.ReadAll(); //reading list
+                                    List<DO.Task> tasks = (List<DO.Task>)s_dal.Task.ReadAll().ToList(); //reading list
                                     foreach (DO.Task task in tasks) 
                                         Console.WriteLine(task); //printing each task                            
                                     break;
@@ -104,7 +104,6 @@ namespace DalTest
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id); 
                                     DO.Task currentTask = s_dal.Task.Read(id);
-                                    if(currentTask == null) throw new Exception($"task with ID={id} does Not exist");
                                     Console.WriteLine(currentTask); //printing current task
                                     DO.Task updatedTask = createUpdatedTask(currentTask);//creating new task with updated info
                                     s_dal.Task.Update(updatedTask);//updating
@@ -170,7 +169,7 @@ namespace DalTest
                                 }
                             case 3:
                                 {
-                                    List<Engineer> engineers = (List<Engineer>)s_dal.Engineer.ReadAll(); //reading list
+                                    List<Engineer> engineers = (List<Engineer>)s_dal.Engineer.ReadAll().ToList(); //reading list
                                     foreach (Engineer engineer in engineers)
                                         Console.WriteLine(engineer); //print each engineer
                                     break;
@@ -182,7 +181,6 @@ namespace DalTest
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
                                     Engineer currentEngineer = s_dal.Engineer.Read(id);
-                                    if (currentEngineer == null) throw new Exception($"engineer with ID={id} does Not exist");
                                     Console.WriteLine(currentEngineer); //printing current engineer                                
                                     Engineer updatedEngineer = createUpdatedEngineer(currentEngineer);
                                     s_dal.Engineer.Update(updatedEngineer); //updating
@@ -248,7 +246,7 @@ namespace DalTest
                                 }
                             case 3:
                                 {
-                                    List<Dependency> dependencies = (List<Dependency>)s_dal.Dependency.ReadAll(); //reading list
+                                    List<Dependency> dependencies = (List<Dependency>)s_dal.Dependency.ReadAll().ToList(); //reading list
                                     foreach (Dependency dependency in dependencies)
                                         Console.WriteLine(dependency); //print each dependency
                                     break;
@@ -259,8 +257,7 @@ namespace DalTest
                                     Console.WriteLine("enter id of Dependency to update:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    Dependency currentDependency = s_dal.Dependency.Read(id);
-                                    if (currentDependency == null) throw new Exception($"dependecy with ID={id} does Not exist");
+                                    Dependency currentDependency = s_dal.Dependency.Read(id);                                    
                                     Console.WriteLine(currentDependency); //printing current dependency
                                     Dependency updatedDependency = createUpdatedDependecy(currentDependency); 
                                     s_dal.Dependency.Update(updatedDependency); //update

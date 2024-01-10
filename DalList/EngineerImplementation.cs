@@ -16,16 +16,13 @@ internal class EngineerImplementation : IEngineer
     /// <exception cref="Exception">if requested Engineer already exists</exception>
     public int Create(Engineer item)
     {
-
-        Engineer? found = DataSource.Engineers.FirstOrDefault(x => x.Id == item.Id);
-        if (found != null)
+        if (Read(item.Id) != null)
             throw new DalAlreadyExistsException($"Engineer with ID={item.Id} already exists");
         else
         {
             DataSource.Engineers.Add(item);
             return item.Id;
-        }
-        
+        }        
     }
 
     /// <summary>
@@ -35,7 +32,7 @@ internal class EngineerImplementation : IEngineer
     /// <exception cref="Exception">if requested Engineer not found </exception>
     public void Delete(int id)
     {
-        Engineer? found = DataSource.Engineers.FirstOrDefault(x => x.Id == id);
+        Engineer? found = Read(id);
         if (found == null)
             throw new DalDoesNotExistException($"Engineer with ID={id} does not exist");
         else
@@ -49,11 +46,9 @@ internal class EngineerImplementation : IEngineer
     /// <returns>retrieved Engineer</returns>
     public Engineer? Read(int id)
     {
-        Engineer? temp = DataSource.Engineers.FirstOrDefault(x => x.Id == id);
-        if (temp == null)
-            throw new DalDoesNotExistException($"Engineer with ID={id} does not exist");
-        return temp;
+        return DataSource.Engineers.FirstOrDefault(x => x.Id == id);
     }
+
 
     /// <summary>
     /// retrievs requested engineer by filter
@@ -62,10 +57,7 @@ internal class EngineerImplementation : IEngineer
     /// <returns>first item in list that matches the filter</returns>
     public Engineer? Read(Func<Engineer, bool> filter)
     {
-        Engineer? temp = DataSource.Engineers.FirstOrDefault(filter);
-        if (temp == null)
-            throw new DalDoesNotExistException("Requested engineer does not exist");
-        return temp;
+        return DataSource.Engineers.FirstOrDefault(filter);
     }
 
 
@@ -81,6 +73,7 @@ internal class EngineerImplementation : IEngineer
             return DataSource.Engineers.Where(filter);
     }
 
+
     /// <summary>
     /// updates existing Engineer
     /// </summary>
@@ -88,7 +81,7 @@ internal class EngineerImplementation : IEngineer
     /// <exception cref="Exception">if requested Engineer not found </exception>
     public void Update(Engineer item)
     {
-        Engineer? found = DataSource.Engineers.FirstOrDefault(x => x.Id == item.Id);
+        Engineer? found = Read(item.Id);
         if (found == null)
             throw new DalDoesNotExistException($"Engineer with ID={item.Id} does Not exist");
         else
