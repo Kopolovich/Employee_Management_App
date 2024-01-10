@@ -92,7 +92,7 @@ namespace DalTest
                                 } 
                             case 3:
                                 {
-                                    List<DO.Task> tasks = s_dal.Task.ReadAll(); //reading list
+                                    List<DO.Task> tasks = (List<DO.Task>)s_dal.Task.ReadAll(); //reading list
                                     foreach (DO.Task task in tasks) 
                                         Console.WriteLine(task); //printing each task                            
                                     break;
@@ -170,7 +170,7 @@ namespace DalTest
                                 }
                             case 3:
                                 {
-                                    List<Engineer> engineers = s_dal.Engineer.ReadAll(); //reading list
+                                    List<Engineer> engineers = (List<Engineer>)s_dal.Engineer.ReadAll(); //reading list
                                     foreach (Engineer engineer in engineers)
                                         Console.WriteLine(engineer); //print each engineer
                                     break;
@@ -248,7 +248,7 @@ namespace DalTest
                                 }
                             case 3:
                                 {
-                                    List<Dependency> dependencies = s_dal.Dependency.ReadAll(); //reading list
+                                    List<Dependency> dependencies = (List<Dependency>)s_dal.Dependency.ReadAll(); //reading list
                                     foreach (Dependency dependency in dependencies)
                                         Console.WriteLine(dependency); //print each dependency
                                     break;

@@ -1,6 +1,7 @@
 ﻿namespace Dal;
 using DalApi;
 using DO;
+using System.Linq;
 
 /// <summary>
 /// Implementation of CRUD methods for Task entity
@@ -27,9 +28,9 @@ internal class TaskImplementation : ITask
     /// <exception cref="Exception">if requested Task not found </exception>
     public void Delete(int id)
     {
-        Task? found = DataSource.Tasks.Find(x => x.Id == id);
+        Task? found = DataSource.Tasks.FirstOrDefault(x => x.Id == id);
         if (found == null)
-            throw new Exception($"Task with ID={id} does Not exist");
+            throw new DalDoesNotExistException($"Task with ID={id} does Not exist");
         else
             DataSource.Tasks.Remove(found);
     }
@@ -41,16 +42,35 @@ internal class TaskImplementation : ITask
     /// <returns>retrieved Task</returns>
     public Task? Read(int id)
     {
-        return DataSource.Tasks.Find(x => x.Id == id);
+        Task? temp = DataSource.Tasks.FirstOrDefault(x => x.Id == id);
+        if (temp == null)
+            throw new DalDoesNotExistException($"Task with ID={id} does not exist");
+        return temp;
+    }
+
+    /// <summary>
+    /// retrievs requested task by filter
+    /// </summary>
+    /// <param name="filter">Func type delegate, boolian function to filter</param>
+    /// <returns>first item in list that matches the filter</returns>
+    public Task? Read(Func<Task, bool> filter)
+    {
+        Task? temp = DataSource.Tasks.FirstOrDefault(filter);
+        if (temp == null)
+            throw new DalDoesNotExistException("Requested task does not exist");
+        return temp;
     }
 
     /// <summary>
     /// retreives list of Tasks
     /// </summary>
     /// <returns>copy of list of Tasks</returns>
-    public List<Task> ReadAll()
+    public IEnumerable<Task?> ReadAll(Func<Task, bool>? filter = null)
     {
-        return new List<Task>(DataSource.Tasks);
+        if (filter == null)
+            return DataSource.Tasks.Select(item => item);
+        else
+            return DataSource.Tasks.Where(filter);
     }
 
     /// <summary>
@@ -60,9 +80,9 @@ internal class TaskImplementation : ITask
     /// <exception cref="Exception">if requested Task not found </exception>
     public void Update(Task item)
     {
-        Task? found = DataSource.Tasks.Find(x => x.Id == item.Id);
+        Task? found = DataSource.Tasks.FirstOrDefault(x => x.Id == item.Id);
         if (found == null)
-            throw new Exception($"Task with ID={item.Id} does Not exist");
+            throw new DalDoesNotExistException($"Task with ID={item.Id} does Not exist");
         else
         {
             DataSource.Tasks.Remove(found);
@@ -77,7 +97,7 @@ internal class TaskImplementation : ITask
     /// <returns>id of requested task</returns>
     public int? FindId(string description)
     {
-        Task? task = DataSource.Tasks.Find(x => x.Description == description);
+        Task? task = DataSource.Tasks.FirstOrDefault(x => x.Description == description);
         if (task == null)
             return null;
         return task.Id;

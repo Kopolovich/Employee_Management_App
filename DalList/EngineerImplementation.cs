@@ -1,6 +1,7 @@
 ﻿namespace Dal;
 using DalApi;
 using DO;
+using System.Linq;
 
 /// <summary>
 /// Implementation of CRUD methods for Engineer entity
@@ -16,9 +17,9 @@ internal class EngineerImplementation : IEngineer
     public int Create(Engineer item)
     {
 
-        Engineer? found = DataSource.Engineers.Find(x => x.Id == item.Id);
+        Engineer? found = DataSource.Engineers.FirstOrDefault(x => x.Id == item.Id);
         if (found != null)
-            throw new Exception($"Engineer with ID={item.Id} already exists");
+            throw new DalAlreadyExistsException($"Engineer with ID={item.Id} already exists");
         else
         {
             DataSource.Engineers.Add(item);
@@ -34,9 +35,9 @@ internal class EngineerImplementation : IEngineer
     /// <exception cref="Exception">if requested Engineer not found </exception>
     public void Delete(int id)
     {
-        Engineer? found = DataSource.Engineers.Find(x => x.Id == id);
+        Engineer? found = DataSource.Engineers.FirstOrDefault(x => x.Id == id);
         if (found == null)
-            throw new Exception($"Engineer with ID={id} does Not exist");
+            throw new DalDoesNotExistException($"Engineer with ID={id} does not exist");
         else
             DataSource.Engineers.Remove(found);
     }
@@ -48,7 +49,23 @@ internal class EngineerImplementation : IEngineer
     /// <returns>retrieved Engineer</returns>
     public Engineer? Read(int id)
     {
-        return DataSource.Engineers.Find(x => x.Id == id);
+        Engineer? temp = DataSource.Engineers.FirstOrDefault(x => x.Id == id);
+        if (temp == null)
+            throw new DalDoesNotExistException($"Engineer with ID={id} does not exist");
+        return temp;
+    }
+
+    /// <summary>
+    /// retrievs requested engineer by filter
+    /// </summary>
+    /// <param name="filter">Func type delegate, boolian function to filter</param>
+    /// <returns>first item in list that matches the filter</returns>
+    public Engineer? Read(Func<Engineer, bool> filter)
+    {
+        Engineer? temp = DataSource.Engineers.FirstOrDefault(filter);
+        if (temp == null)
+            throw new DalDoesNotExistException("Requested engineer does not exist");
+        return temp;
     }
 
 
@@ -56,9 +73,12 @@ internal class EngineerImplementation : IEngineer
     /// retreives list of Engineers
     /// </summary>
     /// <returns>copy of list of Engineers</returns>
-    public List<Engineer> ReadAll()
+    public IEnumerable<Engineer?> ReadAll(Func<Engineer, bool>? filter = null)
     {
-        return new List<Engineer>(DataSource.Engineers);
+        if (filter == null)
+            return DataSource.Engineers.Select(item => item);
+        else
+            return DataSource.Engineers.Where(filter);
     }
 
     /// <summary>
@@ -68,9 +88,9 @@ internal class EngineerImplementation : IEngineer
     /// <exception cref="Exception">if requested Engineer not found </exception>
     public void Update(Engineer item)
     {
-        Engineer? found = DataSource.Engineers.Find(x => x.Id == item.Id);
+        Engineer? found = DataSource.Engineers.FirstOrDefault(x => x.Id == item.Id);
         if (found == null)
-            throw new Exception($"Engineer with ID={item.Id} does Not exist");
+            throw new DalDoesNotExistException($"Engineer with ID={item.Id} does Not exist");
         else
         {
             DataSource.Engineers.Remove(found);

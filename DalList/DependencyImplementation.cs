@@ -26,9 +26,9 @@ internal class DependencyImplementation : IDependency
     /// <exception cref=Exception">if requested dependency not found </exception>
     public void Delete(int id)
     {
-        Dependency? found = DataSource.Dependencies.Find(x => x.Id == id);
+        Dependency? found = DataSource.Dependencies.FirstOrDefault(x => x.Id == id);
         if (found==null)
-            throw new Exception($"Dependency with ID={id} does Not exist");
+            throw new DalDoesNotExistException($"Dependency with ID={id} does not exist");
         else
             DataSource.Dependencies.Remove(found);
         
@@ -41,16 +41,35 @@ internal class DependencyImplementation : IDependency
     /// <returns>retrieved dependency</returns>
     public Dependency? Read(int id)
     {
-        return DataSource.Dependencies.Find(x => x.Id == id);
+        Dependency? temp = DataSource.Dependencies.FirstOrDefault(x => x.Id == id);
+        if (temp==null)
+            throw new DalDoesNotExistException($"Dependency with ID={id} does not exist");
+        return temp;
+    }
+
+    /// <summary>
+    /// retrievs requested dependency by filter
+    /// </summary>
+    /// <param name="filter">Func type delegate, boolian function to filter</param>
+    /// <returns>first item in list that matches the filter</returns>
+    public Dependency? Read(Func<Dependency, bool> filter)
+    {
+        Dependency? temp = DataSource.Dependencies.FirstOrDefault(filter);
+        if (temp == null)
+            throw new DalDoesNotExistException("Requested dependency does not exist");
+        return temp;
     }
 
     /// <summary>
     /// retreives list of dependencies
     /// </summary>
     /// <returns>copy of list of dependencies</returns>
-    public List<Dependency> ReadAll()
+    public IEnumerable<Dependency?> ReadAll(Func<Dependency, bool>? filter = null)
     {
-        return new List<Dependency>(DataSource.Dependencies);
+        if (filter == null)
+            return DataSource.Dependencies.Select(item => item);
+        else
+            return DataSource.Dependencies.Where(filter);
     }
 
     /// <summary>
@@ -60,9 +79,9 @@ internal class DependencyImplementation : IDependency
     /// <exception cref="Exception">if requested dependency not found </exception>
     public void Update(Dependency item)
     {
-        Dependency? found = DataSource.Dependencies.Find(x => x.Id == item.Id);
+        Dependency? found = DataSource.Dependencies.FirstOrDefault(x => x.Id == item.Id);
         if (found == null)
-            throw new Exception($"Dependency with ID={item.Id} does Not exist");
+            throw new DalDoesNotExistException($"Dependency with ID={item.Id} does not exist");
         else
         {
             DataSource.Dependencies.Remove(found);
