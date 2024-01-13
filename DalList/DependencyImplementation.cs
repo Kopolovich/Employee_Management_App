@@ -7,7 +7,7 @@ using DO;
 internal class DependencyImplementation : IDependency
 {
     /// <summary>
-    /// adding new Dependency to list
+    /// adding new Dependency to collection
     /// </summary>
     /// <param name="item">refernce to new item to add</param>
     /// <returns>Id of new dependency</returns>
@@ -20,7 +20,7 @@ internal class DependencyImplementation : IDependency
     }
 
     /// <summary>
-    /// deletes requested dependency from list
+    /// deletes requested dependency from collection
     /// </summary>
     /// <param name="id">id of dependency to delete</param>
     /// <exception cref=Exception">if requested dependency not found </exception>
@@ -47,16 +47,16 @@ internal class DependencyImplementation : IDependency
     /// retrievs requested dependency by filter
     /// </summary>
     /// <param name="filter">Func type delegate, boolian function to filter</param>
-    /// <returns>first item in list that matches the filter</returns>
+    /// <returns>first item in collection that matches the filter</returns>
     public Dependency? Read(Func<Dependency, bool> filter)
     {
         return DataSource.Dependencies.FirstOrDefault(filter);
     }
 
     /// <summary>
-    /// retreives list of dependencies
+    /// retreives collection of dependencies
     /// </summary>
-    /// <returns>copy of list of dependencies</returns>
+    /// <returns>copy of collection of dependencies</returns>
     public IEnumerable<Dependency?> ReadAll(Func<Dependency, bool>? filter = null)
     {
         if (filter == null)

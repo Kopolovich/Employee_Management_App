@@ -9,7 +9,7 @@ using System.Linq;
 internal class TaskImplementation : ITask
 {
     /// <summary>
-    /// adding new Task to list
+    /// adding new Task to collection
     /// </summary>
     /// <param name="item">refernce to new item to add</param>
     /// <returns>Id of new Task</returns>
@@ -22,7 +22,7 @@ internal class TaskImplementation : ITask
     }
 
     /// <summary>
-    /// deletes requested Task from list
+    /// deletes requested Task from collection
     /// </summary>
     /// <param name="id">id of Task to delete</param>
     /// <exception cref="Exception">if requested Task not found </exception>
@@ -56,9 +56,9 @@ internal class TaskImplementation : ITask
     }
 
     /// <summary>
-    /// retreives list of Tasks
+    /// retreives collection of Tasks
     /// </summary>
-    /// <returns>copy of list of Tasks</returns>
+    /// <returns>copy of collection of Tasks</returns>
     public IEnumerable<Task?> ReadAll(Func<Task, bool>? filter = null)
     {
         if (filter == null)

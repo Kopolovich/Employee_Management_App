@@ -104,6 +104,8 @@ namespace DalTest
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id); 
                                     DO.Task currentTask = s_dal.Task.Read(id);
+                                    if(currentTask == null)
+                                        throw new DalDoesNotExistException($"Task with ID={id} does not exist");
                                     Console.WriteLine(currentTask); //printing current task
                                     DO.Task updatedTask = createUpdatedTask(currentTask);//creating new task with updated info
                                     s_dal.Task.Update(updatedTask);//updating
@@ -181,6 +183,8 @@ namespace DalTest
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
                                     Engineer currentEngineer = s_dal.Engineer.Read(id);
+                                    if (currentEngineer == null)
+                                        throw new DalDoesNotExistException($"Engineer with ID={id} does not exist");
                                     Console.WriteLine(currentEngineer); //printing current engineer                                
                                     Engineer updatedEngineer = createUpdatedEngineer(currentEngineer);
                                     s_dal.Engineer.Update(updatedEngineer); //updating
@@ -257,7 +261,9 @@ namespace DalTest
                                     Console.WriteLine("enter id of Dependency to update:");
                                     int id;
                                     int.TryParse(Console.ReadLine(), out id);
-                                    Dependency currentDependency = s_dal.Dependency.Read(id);                                    
+                                    Dependency currentDependency = s_dal.Dependency.Read(id);
+                                    if (currentDependency == null)
+                                        throw new DalDoesNotExistException($"Dependency with ID={id} does not exist");
                                     Console.WriteLine(currentDependency); //printing current dependency
                                     Dependency updatedDependency = createUpdatedDependecy(currentDependency); 
                                     s_dal.Dependency.Update(updatedDependency); //update

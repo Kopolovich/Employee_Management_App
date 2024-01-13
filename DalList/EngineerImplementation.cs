@@ -9,7 +9,7 @@ using System.Linq;
 internal class EngineerImplementation : IEngineer
 {
     /// <summary>
-    /// adding new Engineer to list
+    /// adding new Engineer to collection
     /// </summary>
     /// <param name="item">refernce to new item to add</param>
     /// <returns>Id of new Engineer</returns>
@@ -26,7 +26,7 @@ internal class EngineerImplementation : IEngineer
     }
 
     /// <summary>
-    /// deletes requested Engineer from list
+    /// deletes requested Engineer from collection
     /// </summary>
     /// <param name="id">id of Engineer to delete</param>
     /// <exception cref="Exception">if requested Engineer not found </exception>
@@ -54,7 +54,7 @@ internal class EngineerImplementation : IEngineer
     /// retrievs requested engineer by filter
     /// </summary>
     /// <param name="filter">Func type delegate, boolian function to filter</param>
-    /// <returns>first item in list that matches the filter</returns>
+    /// <returns>first item in collection that matches the filter</returns>
     public Engineer? Read(Func<Engineer, bool> filter)
     {
         return DataSource.Engineers.FirstOrDefault(filter);
@@ -62,9 +62,9 @@ internal class EngineerImplementation : IEngineer
 
 
     /// <summary>
-    /// retreives list of Engineers
+    /// retreives collection of Engineers
     /// </summary>
-    /// <returns>copy of list of Engineers</returns>
+    /// <returns>copy of collection of Engineers</returns>
     public IEnumerable<Engineer?> ReadAll(Func<Engineer, bool>? filter = null)
     {
         if (filter == null)
