@@ -9,14 +9,14 @@ namespace DalTest
    
     public class Program
     {
-        static readonly IDal s_dal = new DalList();
-      
-        
+        //static readonly IDal s_dal = new DalList();
+        static readonly IDal s_dal = new DalXml();
+              
         static void Main(string[] args)
         {
             try
             {                          
-                Initialization.Do(s_dal);
+                //Initialization.Do(s_dal); //for dalList
                 void mainMenu()
                 {
                     Console.WriteLine("""
@@ -25,6 +25,7 @@ namespace DalTest
                         Enter 1 for Task 
                         Enter 2 for Engineer
                         Enter 3 for Dependency
+                        Enter 4 to initialize data
                         """);
                     int choice = int.Parse(Console.ReadLine());
                     while(choice != 0)
@@ -39,6 +40,8 @@ namespace DalTest
                                 { subMenuEngineer(); break; }
                             case 3:
                                 { subMenuDependency(); break; }
+                            case 4:
+                                { initialize(); break; }    
                             default:
                                 Console.WriteLine("please enter number between 0 and 3");
                                 break;
@@ -49,6 +52,7 @@ namespace DalTest
                         Enter 1 for Task 
                         Enter 2 for Engineer
                         Enter 3 for Dependency
+                        Enter 4 to initialize data
                         """);
                         choice = int.Parse(Console.ReadLine());
 
@@ -294,6 +298,37 @@ namespace DalTest
                         choice = int.Parse(Console.ReadLine());
 
                     }
+                }
+                void initialize()
+                {
+                    Console.Write("Would you like to create Initial data? (Y/N)"); 
+                    string? ans = Console.ReadLine() ?? throw new FormatException("Wrong input"); 
+                    if (ans == "Y")
+                    {
+                        IEnumerable<DO.Task?> tasks = s_dal.Task.ReadAll();
+                        if(tasks != null)
+                        {
+                           foreach (var task in tasks) 
+                                s_dal.Task.Delete(task.Id);
+                        }
+
+                        IEnumerable<Dependency?> dependencies = s_dal.Dependency.ReadAll();
+                        if (dependencies != null)
+                        {
+                            foreach (var dependency in dependencies)
+                                s_dal.Task.Delete(dependency.Id);
+                        }
+
+                        IEnumerable<Engineer?> engineers = s_dal.Engineer.ReadAll();
+                        if (engineers != null)
+                        {
+                            foreach (var engineer in engineers)
+                                s_dal.Task.Delete(engineer.Id);
+                        }
+
+                        Initialization.Do(s_dal);
+                    }
+                       
                 }
 
                 //methods to create new items with details recieves from user

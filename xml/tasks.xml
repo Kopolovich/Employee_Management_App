@@ -1,3 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfTask>
+<ArrayOfTask xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Task>
+    <Id>1000</Id>
+    <Complexity>Intermediate</Complexity>
+    <Alias>F37</Alias>
+    <Description>Create a project timeline with milestones</Description>
+    <CreatedAtDate>2023-02-11T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1001</Id>
+    <Complexity>Beginner</Complexity>
+    <Alias>S68</Alias>
+    <Description>Manage and mitigate project risks</Description>
+    <CreatedAtDate>2023-11-19T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1002</Id>
+    <Complexity>Advanced</Complexity>
+    <Alias>R29</Alias>
+    <Description>Coordinate teams for effective communication</Description>
+    <CreatedAtDate>2023-09-23T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1003</Id>
+    <Complexity>AdvancedBeginner</Complexity>
+    <Alias>V39</Alias>
+    <Description>Allocate resources based on project requirements</Description>
+    <CreatedAtDate>2023-11-23T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1004</Id>
+    <Complexity>Intermediate</Complexity>
+    <Alias>D84</Alias>
+    <Description>Optimize budget with cost-benefit analysis</Description>
+    <CreatedAtDate>2023-09-04T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1005</Id>
+    <Complexity>Advanced</Complexity>
+    <Alias>U57</Alias>
+    <Description>Maintain project documentation and progress reports</Description>
+    <CreatedAtDate>2023-03-14T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1006</Id>
+    <Complexity>Beginner</Complexity>
+    <Alias>G48</Alias>
+    <Description>Use project management tools for task tracking</Description>
+    <CreatedAtDate>2023-11-26T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1007</Id>
+    <Complexity>Expert</Complexity>
+    <Alias>S51</Alias>
+    <Description>Conduct regular team meetings for updates</Description>
+    <CreatedAtDate>2023-05-18T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1008</Id>
+    <Complexity>Intermediate</Complexity>
+    <Alias>K68</Alias>
+    <Description>Choose appropriate technologies and methodologies</Description>
+    <CreatedAtDate>2023-04-30T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1009</Id>
+    <Complexity>Expert</Complexity>
+    <Alias>I11</Alias>
+    <Description>Control project scope to prevent scope creep</Description>
+    <CreatedAtDate>2023-12-28T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1010</Id>
+    <Complexity>Expert</Complexity>
+    <Alias>Y84</Alias>
+    <Description>Implement quality control measures</Description>
+    <CreatedAtDate>2023-10-04T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1011</Id>
+    <Complexity>Beginner</Complexity>
+    <Alias>U82</Alias>
+    <Description>Build and maintain stakeholder relationships</Description>
+    <CreatedAtDate>2023-02-16T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1012</Id>
+    <Complexity>AdvancedBeginner</Complexity>
+    <Alias>Z62</Alias>
+    <Description>Manage changes in project scope or requirements</Description>
+    <CreatedAtDate>2023-12-23T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1013</Id>
+    <Complexity>Expert</Complexity>
+    <Alias>Y14</Alias>
+    <Description>Provide feedback and conduct performance reviews</Description>
+    <CreatedAtDate>2023-09-28T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1014</Id>
+    <Complexity>AdvancedBeginner</Complexity>
+    <Alias>Y88</Alias>
+    <Description>Ensure compliance with industry standards</Description>
+    <CreatedAtDate>2023-09-19T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1015</Id>
+    <Complexity>AdvancedBeginner</Complexity>
+    <Alias>F12</Alias>
+    <Description>Develop contingency plans for challenges</Description>
+    <CreatedAtDate>2023-12-18T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1016</Id>
+    <Complexity>Intermediate</Complexity>
+    <Alias>E26</Alias>
+    <Description>Foster innovation and continuous improvement</Description>
+    <CreatedAtDate>2023-04-21T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1017</Id>
+    <Complexity>Beginner</Complexity>
+    <Alias>K28</Alias>
+    <Description>Coordinate user acceptance testing and feedback</Description>
+    <CreatedAtDate>2024-01-08T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1018</Id>
+    <Complexity>Advanced</Complexity>
+    <Alias>I24</Alias>
+    <Description>Manage vendor relationships and contracts</Description>
+    <CreatedAtDate>2023-08-10T00:00:00+03:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1019</Id>
+    <Complexity>Beginner</Complexity>
+    <Alias>J98</Alias>
+    <Description>Conduct post-project evaluations for improvement</Description>
+    <CreatedAtDate>2024-01-08T00:00:00+02:00</CreatedAtDate>
+    <RequiredEffortTime xsi:nil="true" />
+    <IsMilestone>false</IsMilestone>
+    <StartDate xsi:nil="true" />
+    <ScheduledDate xsi:nil="true" />
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
 </ArrayOfTask>
