@@ -29,9 +29,11 @@ internal class EngineerImplementation : IEngineer
             XElement id = new XElement("Id", item.Id);
             XElement level = new XElement("Level", item.Level);
             XElement email = new XElement("Email", item.Email);
+            XElement cost = new XElement("Cost", item.Cost);
             XElement name = new XElement("Name", item.Name);
+            
 
-            engineerRoot.Add(new XElement("Engineer", id, level, email, name)); //adding to root new Xelement containig XElements for each field
+            engineerRoot.Add(new XElement("Engineer", id, level, email, cost, name)); //adding to root new Xelement containig XElements for each field
             XMLTools.SaveListToXMLElement(engineerRoot, s_engineers_xml); //saving updated root to XML file
             return item.Id;
         }
@@ -117,10 +119,12 @@ internal class EngineerImplementation : IEngineer
     {
         return new Engineer()
         {
-            Id = Convert.ToInt32(e.Element("Id").Value),
-            Level = (EngineerExperience)e.ToEnumNullable<EngineerExperience>(e.Element("Level").Value),
-            Email = e.Element("Email").Value ?? null,
-            Name = e.Element("Name").Value ?? null,
+            Id = e.ToIntNullable("Id") ?? throw new FormatException("Can not convert id"),
+            //Level = (EngineerExperience)Enum.Parse(typeof(EngineerExperience), e.Element("Level").Value, true),
+            Level = e.ToEnumNullable<EngineerExperience>("Level") ?? EngineerExperience.Beginner,
+            Email = e.Element("Email").Value ?? "",
+            Cost = e.ToDoubleNullable("Cost") ?? null,
+            Name = e.Element("Name").Value ?? "",            
         };
     }
 }

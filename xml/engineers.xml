@@ -1,33 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfEngineer>
   <Engineer>
-    <Id>380818228</Id>
-    <Level>Intermediate</Level>
+    <Id>277511387</Id>
+    <Level>Expert</Level>
     <Email>DaniLevi@gmail.com</Email>
+    <Cost>140</Cost>
     <Name>Dani Levi</Name>
   </Engineer>
   <Engineer>
-    <Id>272484376</Id>
-    <Level>AdvancedBeginner</Level>
+    <Id>396503280</Id>
+    <Level>Beginner</Level>
     <Email>EliAmar@gmail.com</Email>
+    <Cost>120</Cost>
     <Name>Eli Amar</Name>
   </Engineer>
   <Engineer>
-    <Id>333676410</Id>
-    <Level>Advanced</Level>
+    <Id>366306127</Id>
+    <Level>AdvancedBeginner</Level>
     <Email>YairCohen@gmail.com</Email>
+    <Cost>125</Cost>
     <Name>Yair Cohen</Name>
   </Engineer>
   <Engineer>
-    <Id>237013332</Id>
-    <Level>AdvancedBeginner</Level>
+    <Id>369574187</Id>
+    <Level>Expert</Level>
     <Email>ArielaLevin@gmail.com</Email>
+    <Cost>140</Cost>
     <Name>Ariela Levin</Name>
   </Engineer>
   <Engineer>
-    <Id>280657636</Id>
-    <Level>Beginner</Level>
+    <Id>341129226</Id>
+    <Level>AdvancedBeginner</Level>
     <Email>DinaKlein@gmail.com</Email>
+    <Cost>125</Cost>
     <Name>Dina Klein</Name>
   </Engineer>
 </ArrayOfEngineer>

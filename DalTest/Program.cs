@@ -9,14 +9,14 @@ namespace DalTest
    
     public class Program
     {
-        //static readonly IDal s_dal = new DalList();
-        static readonly IDal s_dal = new DalXml();
+        //static readonly IDal s_dal = new DalList(); //stage 2
+        static readonly IDal s_dal = new DalXml(); //stage 3
               
         static void Main(string[] args)
         {
             try
             {                          
-                //Initialization.Do(s_dal); //for dalList
+                //Initialization.Do(s_dal); //for dalList - stage 2
                 void mainMenu()
                 {
                     Console.WriteLine("""
@@ -305,28 +305,8 @@ namespace DalTest
                     string? ans = Console.ReadLine() ?? throw new FormatException("Wrong input"); 
                     if (ans == "Y")
                     {
-                        IEnumerable<DO.Task?> tasks = s_dal.Task.ReadAll();
-                        if(tasks != null)
-                        {
-                           foreach (var task in tasks) 
-                                s_dal.Task.Delete(task.Id);
-                        }
-
-                        IEnumerable<Dependency?> dependencies = s_dal.Dependency.ReadAll();
-                        if (dependencies != null)
-                        {
-                            foreach (var dependency in dependencies)
-                                s_dal.Task.Delete(dependency.Id);
-                        }
-
-                        IEnumerable<Engineer?> engineers = s_dal.Engineer.ReadAll();
-                        if (engineers != null)
-                        {
-                            foreach (var engineer in engineers)
-                                s_dal.Task.Delete(engineer.Id);
-                        }
-
-                        Initialization.Do(s_dal);
+                        s_dal.Reset(); //emptying files
+                        Initialization.Do(s_dal); //initializing files
                     }
                        
                 }
