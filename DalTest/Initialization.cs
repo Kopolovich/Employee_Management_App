@@ -1,4 +1,5 @@
 ﻿namespace DalTest;
+using Dal;
 using DalApi;
 using DO;
 using System;
@@ -223,9 +224,9 @@ public static class Initialization
     /// <summary>
     /// publich method to call private methods to initialize lists
     /// </summary>
-    public static void Do (IDal dal) 
+    public static void Do () 
     {
-        s_dal = dal??throw new NullReferenceException("DAL object can not be null!");
+        s_dal = Factory.Get;
 
         createTasks();
         createEngineers();  

@@ -1,8 +1,16 @@
 ﻿namespace Dal;
 using DalApi;
+using System.Diagnostics;
 
-public class DalXml : IDal
+/// <summary>
+/// Implements the IDal interface by initializing the sub-interfaces in the access classes
+/// </summary>
+sealed internal class DalXml : IDal
 {
+    public static IDal Instance { get; } = new DalXml();
+    private DalXml() { }
+
+
     public IEngineer Engineer => new EngineerImplementation();
 
     public ITask Task => new TaskImplementation();
