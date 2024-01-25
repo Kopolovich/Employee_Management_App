@@ -14,7 +14,7 @@ public interface IEngineer
     /// </summary>
     /// <param name="id"> id of requested engineer</param>
     /// <returns> logic engineer entity </returns>
-    public BO.Engineer? Read(int id);
+    public BO.Engineer Read(int id);
 
 
     /// <summary>

@@ -1,4 +1,6 @@
-﻿namespace Stage0
+﻿using System.Text.RegularExpressions;
+
+namespace Stage0
 {
     partial class Program
     {
@@ -18,3 +20,4 @@
         }
     }
 }
+

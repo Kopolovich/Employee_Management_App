@@ -14,7 +14,7 @@ public interface ITask
     /// </summary>
     /// <param name="id"> id of requested task</param>
     /// <returns> logic task entity </returns>
-    public BO.Task? Read(int id);
+    public BO.Task Read(int id);
 
 
     /// <summary>
