@@ -31,7 +31,6 @@ public interface ITask
     /// <param name="task"> updated task </param>
     public void Update(BO.Task? task);
 
-
     /// <summary>
     /// deleting task from data
     /// </summary>
