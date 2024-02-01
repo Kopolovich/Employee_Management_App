@@ -1,7 +1,7 @@
 ﻿namespace DalApi;
 using System.Xml.Linq;
 
-static class Config
+static internal class Config
 {
     /// <summary>
     /// internal PDS class

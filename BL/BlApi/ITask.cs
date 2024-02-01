@@ -22,7 +22,7 @@ public interface ITask
     /// </summary>
     /// <param name="filter">optional filter</param>
     /// <returns> collection of logic task entities </returns>
-    public IEnumerable<BO.Task> ReadAll(Func<DO.Task, bool>? filter = null);
+    public IEnumerable<BO.Task> ReadAll(Func<BO.Task, bool>? filter = null);
 
 
     /// <summary>
@@ -36,4 +36,11 @@ public interface ITask
     /// </summary>
     /// <param name="id"> id of requested task </param>
     public void Delete(int id);
+
+    /// <summary>
+    /// assigning scheduled start date to task
+    /// </summary>
+    /// <param name="id"> id of task </param>
+    /// <param name="startDate"> scheduled start date </param>
+    public void AssignScheduledDateToTask(int id, DateTime startDate);
 }

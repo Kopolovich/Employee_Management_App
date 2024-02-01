@@ -20,9 +20,9 @@ public record Task
 (
     int Id,
     EngineerExperience Complexity,
+    DateTime CreatedAtDate,
     string? Alias = null,
     string? Description = null,
-    DateTime? CreatedAtDate = null,
     TimeSpan? RequiredEffortTime = null,
     bool? IsMilestone = null,
     DateTime? StartDate = null,
@@ -34,5 +34,5 @@ public record Task
     int? EngineerId = null
 )
 {
-    public Task() : this(0, EngineerExperience.Beginner) { } //empty ctor
+    public Task() : this(0, EngineerExperience.Beginner, DateTime.Now) { } //empty ctor
 }

@@ -12,7 +12,7 @@ namespace DalTest
     {
         //static readonly IDal s_dal = new DalList(); //stage 2
         //static readonly IDal s_dal = new DalXml(); //stage 3
-        static readonly IDal s_dal = Factory.Get; //stage 4
+        static readonly IDal s_dal = DalApi.Factory.Get; //stage 4
 
         static void Main(string[] args)
         {
@@ -359,7 +359,7 @@ namespace DalTest
                     int engId;
                     engineerId = int.TryParse(Console.ReadLine(), out engId) ? engId : null;
 
-                    DO.Task? task = new(0, level, alias, description, DateTime.Now, requiredEffortTime,
+                    DO.Task? task = new(0, level, DateTime.Now, description, alias, requiredEffortTime,
                         isMilestone, startDate, scheduledDate, null, completeDate, deliverables, remarks, engineerId);
                     return task;
                 }
@@ -456,7 +456,7 @@ namespace DalTest
                     int engId;
                     engineerId = int.TryParse(Console.ReadLine(), out engId) ? engId : oldTask.EngineerId;
 
-                    DO.Task? task = new(oldTask.Id, level, alias, description, oldTask.CreatedAtDate, requiredEffortTime,
+                    DO.Task? task = new(oldTask.Id, level, oldTask.CreatedAtDate, description, alias, requiredEffortTime,
                         isMilestone, startDate, scheduledDate, null, completeDate, deliverables, remarks, engineerId);
                     return task;
                 }

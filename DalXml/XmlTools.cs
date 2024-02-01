@@ -34,6 +34,18 @@ static class XMLTools
         XMLTools.SaveListToXMLElement(root, data_config_xml);
         return nextId;
     }
+    public static void SetStartDate(string data_config_xml, string elemName, DateTime? startDate)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(data_config_xml);
+        root.Element(elemName)?.SetValue((startDate).ToString());
+        XMLTools.SaveListToXMLElement(root, data_config_xml);
+    }
+    public static DateTime? GetStartDate(string data_config_xml, string elemName)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(data_config_xml);
+        DateTime? startDate = root.ToDateTimeNullable(elemName) ?? throw new FormatException($"can't convert start date.  {data_config_xml}, {elemName}");
+        return startDate;
+    }
     #endregion
 
     #region SaveLoadWithXElement

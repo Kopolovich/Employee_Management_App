@@ -2,12 +2,14 @@
 using BlApi;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 internal class EngineerImplementation : IEngineer
 {
-    private DalApi.IDal _dal = Factory.Get;
-    private BlImplementation.TaskImplementation _Itask = new BlImplementation.TaskImplementation();
+    private DalApi.IDal _dal = DalApi.Factory.Get;
+    private BlImplementation.TaskImplementation _iTask = new BlImplementation.TaskImplementation();
 
     /// <summary>
     /// adding new engineer to dal
@@ -27,6 +29,7 @@ internal class EngineerImplementation : IEngineer
 
             //adding engineer using dal Create method
             _dal.Engineer.Create(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
+
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -46,13 +49,16 @@ internal class EngineerImplementation : IEngineer
         if (doEngineer == null)
             throw new BO.BlDoesNotExistException($"Engineer with ID={id} does not exist");
 
-        IEnumerable<DO.Task> dTasks = _dal.Task.ReadAll(item => item.EngineerId == id);
+        //finding all tasks assigned to engineer
+        IEnumerable<DO.Task>? dTasks = _dal.Task.ReadAll(item => item.EngineerId == id);
 
+        //finding current task that engineer is working on
         DO.Task? currentTask = (from DO.Task dTask in dTasks
-                               where _Itask.Read(dTask.Id).Status == BO.Status.OnTrack
+                               where _iTask.Read(dTask.Id).Status == BO.Status.OnTrack
                                select dTask).FirstOrDefault();                               
 
-        BO.TaskInEnginner ? taskInEnginner = null;
+        //defining task in engineer help entity to contain current task info
+        BO.TaskInEnginner? taskInEnginner = null;
         if (currentTask != null)
             taskInEnginner = new BO.TaskInEnginner() { Id = currentTask.Id, Alias = currentTask.Alias };
         
@@ -72,13 +78,22 @@ internal class EngineerImplementation : IEngineer
     /// </summary>
     /// <param name="filter"> optional filter to filter engineers </param>
     /// <returns> collection of logic engineer entities </returns>
-    public IEnumerable<BO.Engineer> ReadAll(Func<DO.Engineer, bool>? filter = null)
+    public IEnumerable<BO.Engineer> ReadAll(Func<BO.Engineer, bool>? filter = null)
     {
+        if(filter != null)
+        {
+            return (
+             from DO.Engineer doEngineer in _dal.Engineer.ReadAll()
+             let boEngineer = Read(doEngineer.Id) //using Read method to create logic entity
+             where filter(boEngineer)
+             select boEngineer
+             );
+        }
         return (
-                from DO.Engineer doEngineer in _dal.Engineer.ReadAll(filter)
-                let boEngineer = Read(doEngineer.Id) //using Read method to create logic entity
-                select boEngineer 
-                );
+            from DO.Engineer doEngineer in _dal.Engineer.ReadAll()
+            let boEngineer = Read(doEngineer.Id) //using Read method to create logic entity
+            select boEngineer 
+            );
     }
 
     /// <summary>
@@ -99,13 +114,17 @@ internal class EngineerImplementation : IEngineer
                 throw new BO.BlInvalidValueException("Engineer with invalid values");
 
             //making sure the updated level is not lower than current level
-            DO.Engineer? doEngineer= _dal.Engineer.Read(engineer.Id);
+            DO.Engineer? doEngineer = _dal.Engineer.Read(engineer.Id);
             if (doEngineer == null)
                 throw new BO.BlDoesNotExistException($"Engineer with ID={engineer!.Id} does Not exist");
             if (doEngineer.Level > (DO.EngineerExperience)engineer.Level)
                 throw new BO.BlInvalidValueException("It is not possible to lower the experience level of an engineer");
 
             _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
+            
+            //if possible, assign task to engineer
+            if(Dal.Config.ProjectStartDate != null && engineer.Task != null)
+                AssignTaskToEngineer(engineer.Id, engineer.Task);
         }
 
         catch (DO.DalAlreadyExistsException ex)
@@ -132,7 +151,7 @@ internal class EngineerImplementation : IEngineer
         //checking if there is a task that engineer is currently working on
         if(engineer.Task != null)
         {
-            BO.Task boTask = _Itask.Read(engineer.Task.Id);
+            BO.Task boTask = _iTask.Read(engineer.Task.Id);
             if (boTask.Status == BO.Status.OnTrack)
                 throw new BO.BlDeletionImpossibleException("Can not delete engineer that is currently working on a task");
         }
@@ -162,5 +181,52 @@ internal class EngineerImplementation : IEngineer
         Regex regex = new Regex(pattern);
         // Use the IsMatch method to validate the email
         return regex.IsMatch(email);
+    }
+
+    /// <summary>
+    /// private help method for assigning task to engineer
+    /// </summary>
+    /// <param name="engineerId"> id of engineer </param>
+    /// <param name="task"> task to be assigned to </param>
+    /// <exception cref="BO.BlDoesNotExistException"> if requested task does not exist </exception>
+    /// <exception cref="BO.BlAssignmentImpossibleException"> if engineer can not be assigned to task for varios reasons </exception>
+    void AssignTaskToEngineer(int engineerId, BO.TaskInEnginner task)
+    {
+        //checking if task exists
+        DO.Task? dTask = _dal.Task.Read(task.Id);
+        if (dTask == null) throw new BO.BlDoesNotExistException($"Task with id={task.Id} does not exist");
+
+        //checking if a different engineer is already assigned to task
+        if (dTask.EngineerId != null && dTask.EngineerId != engineerId) 
+            throw new BO.BlAssignmentImpossibleException("A different engineer is already assigned to task");
+
+        //checking if previos tasks are not done yet
+        var dependencies = from item in _iTask.Read(task.Id).Dependencies
+                           where _iTask.Read(item.Id).Status != BO.Status.Done
+                           select item;
+        if(dependencies.Any()) throw new BO.BlAssignmentImpossibleException("Previos tasks are not done yet");
+
+        //checking if the complexity of the task is higher than engineer's level
+        if (dTask.Complexity > _dal.Engineer.Read(engineerId)!.Level) 
+            throw new BO.BlAssignmentImpossibleException("The complexity of the task is higher than engineer's level");
+
+        //assigning task to engineer using dal update method
+        _dal.Task.Update(new DO.Task()
+        {
+            Id = dTask.Id,
+            Complexity = dTask.Complexity,
+            Alias = dTask.Alias,
+            Description = dTask.Description,
+            CreatedAtDate = dTask.CreatedAtDate,
+            RequiredEffortTime = dTask.RequiredEffortTime,
+            IsMilestone = dTask.IsMilestone,
+            StartDate = dTask.StartDate,
+            ScheduledDate = dTask.ScheduledDate,
+            DeadlineDate = dTask.DeadlineDate,
+            CompleteDate = dTask.CompleteDate,
+            Deliverables = dTask.Deliverables,
+            Remarks = dTask.Remarks,
+            EngineerId = engineerId
+        });
     }
 }

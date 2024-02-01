@@ -59,7 +59,7 @@ internal class TaskImplementation : ITask
     /// retreives collection of Tasks
     /// </summary>
     /// <returns>copy of collection of Tasks</returns>
-    public IEnumerable<Task?> ReadAll(Func<Task, bool>? filter = null)
+    public IEnumerable<Task> ReadAll(Func<Task, bool>? filter = null)
     {
         if (filter == null)
             return DataSource.Tasks.Select(item => item);

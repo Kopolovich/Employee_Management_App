@@ -3,5 +3,5 @@ using BlApi;
 
 internal class MilestoneImplementation : IMilestone
 {
-    private DalApi.IDal _dal = Factory.Get;
+    private DalApi.IDal _dal = DalApi.Factory.Get;
 }

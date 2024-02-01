@@ -74,7 +74,7 @@ internal class DependencyImplementation : IDependency
     /// retreives collection of dependencies from XML file
     /// </summary>
     /// <returns>copy of XML file of dependencies</returns>
-    public IEnumerable<Dependency?> ReadAll(Func<Dependency, bool>? filter = null)
+    public IEnumerable<Dependency> ReadAll(Func<Dependency, bool>? filter = null)
     {
         List<Dependency> dependencies = XMLTools.LoadListFromXMLSerializer<Dependency>(s_dependencies_xml); //deserialize
 

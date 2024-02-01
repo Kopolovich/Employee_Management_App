@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
+
 internal class TaskImplementation : ITask
 {
-    private DalApi.IDal _dal = Factory.Get;
+    private DalApi.IDal _dal = DalApi.Factory.Get;
 
     /// <summary>
     /// adding new task to dal
@@ -19,25 +20,21 @@ internal class TaskImplementation : ITask
     {
         if (task == null) throw new BO.BlNullPropertyException("Task is null");
 
+        if (Dal.Config.ProjectStartDate != null)
+            throw new BO.BlCreationImpossibleException("Can not add new task after the project start date was declared");
+
         if (task.Id <= 0 || task.Alias == "") throw new BO.BlInvalidValueException("Task with invalid values");
        
+        //Creating new task with allowed props to this stage of the project
         _dal.Task.Create(
             new DO.Task()
             {
-                   Id = task.Id,
                    Complexity = (DO.EngineerExperience)task.Complexity,
                    Alias = task.Alias,
                    Description = task.Description,
-                   CreatedAtDate = task.CreatedAtDate,
                    RequiredEffortTime = task.RequiredEffortTime,
-                   IsMilestone = task.Milestone == null ? false : true,
-                   StartDate = task.StartDate,
-                   ScheduledDate = task.ScheduledDate,
-                   DeadlineDate = task.DeadlineDate,
-                   CompleteDate = task.CompleteDate,
                    Deliverables = task.Deliverables,
-                   Remarks = task.Remarks,
-                   EngineerId = task.Engineer == null ? null : task.Engineer.Id
+                   Remarks = task.Remarks
             });
 
         // Creating dependencies in dal for all tasks that new task depends on
@@ -58,28 +55,6 @@ internal class TaskImplementation : ITask
     {
         DO.Task? doTask = _dal.Task.Read(id);
         if(doTask == null) throw new BO.BlDoesNotExistException($"Task with ID={id} does not exist");
-
-        //creating list of tasks that requested task depends on 
-        IEnumerable <DO.Dependency?> dependencies = _dal.Dependency.ReadAll(item => item.DependentTask == id);
-        List<BO.TaskInList> depTasks = (from dependency in dependencies
-                                        let depTask = _dal.Task.Read(dependency.DependsOnTask)
-                                        select new BO.TaskInList()
-                                        {
-                                            Id = depTask.Id,
-                                            Description = depTask.Description,
-                                            Alias = depTask.Alias,
-                                            Status = GetStatus(depTask)
-                                        }).ToList();
-        
-        //finding name of engineer
-        int engId = doTask.EngineerId ?? 0;
-        DO.Engineer? engineer = null;
-        BO.EngineerInTask? engineerInTask = null;
-        if (engId != 0)
-        {
-            engineer = _dal.Engineer.Read(engId);
-            engineerInTask = new BO.EngineerInTask() { Id = engineer.Id, Name = engineer.Name };
-        }
             
         return new BO.Task()
         {
@@ -88,7 +63,7 @@ internal class TaskImplementation : ITask
             Alias = doTask.Alias,
             CreatedAtDate = doTask.CreatedAtDate,
             Status = GetStatus(doTask),
-            Dependencies = depTasks,
+            Dependencies = GetDependencies(id),
             Milestone = null,
             RequiredEffortTime = doTask.RequiredEffortTime,
             StartDate = doTask.StartDate,
@@ -98,10 +73,9 @@ internal class TaskImplementation : ITask
             CompleteDate = doTask.CompleteDate,
             Deliverables = doTask.Deliverables,
             Remarks = doTask.Remarks,
-            Engineer = engineerInTask,
+            Engineer = GetEngineerInTask(doTask),
             Complexity = (BO.EngineerExperience)doTask.Complexity
         };
-
     }
 
     /// <summary>
@@ -109,13 +83,24 @@ internal class TaskImplementation : ITask
     /// </summary>
     /// <param name="filter"> optional filter to filter tasks </param>
     /// <returns> collection of logic task entities </returns>
-    public IEnumerable<BO.Task> ReadAll(Func<DO.Task, bool>? filter = null)
+    public IEnumerable<BO.Task> ReadAll(Func<BO.Task, bool>? filter = null)
     {
+        if(filter != null) 
+        {
+            return (
+            from DO.Task doTask in _dal.Task.ReadAll()
+            let boTask = Read(doTask.Id) //using Read method to create logic entity
+            where filter(boTask)
+            select boTask
+            );
+        }
+
         return (
-                from DO.Task doTask in _dal.Task.ReadAll(filter)
-                let boTask = Read(doTask.Id) //using Read method to create logic entity
-                select boTask
-                );  
+        from DO.Task doTask in _dal.Task.ReadAll()
+        let boTask = Read(doTask.Id) //using Read method to create logic entity
+        select boTask
+        );
+
     }
 
     /// <summary>
@@ -134,13 +119,64 @@ internal class TaskImplementation : ITask
             if (_dal.Task.Read(task.Id) == null) throw new BO.BlDoesNotExistException($"Task with ID={task.Id} does not exist");
             if (task.Id <= 0 || task.Alias == "")
                 throw new BO.BlInvalidValueException("Task with invalid values");
-
-            //Checking if updated task contains a new scheduled date and if it is 
-            if (task.ScheduledDate != null && task.ScheduledDate != _dal.Task.Read(task.Id)!.ScheduledDate)
-                CheckScheduledDate(task.Id, task.ScheduledDate);
             
-            _dal.Task.Delete(task.Id); //deleting old task
-            Create(task); //creating updated task
+            //Checking if trying to update fields that can not be updated while project is still in planning
+            if (Dal.Config.ProjectStartDate == null)
+            {
+                if (task.Engineer != null)
+                    throw new BO.BlUpdatingImpossibleException("Can not assign engineer to task before the project start date was declared");
+                if (task.StartDate != null)
+                    throw new BO.BlUpdatingImpossibleException("Can not start working on task before the project start date was declared");
+                if (task.CompleteDate != null)
+                    throw new BO.BlUpdatingImpossibleException("Can not finish working on task before the project start date was declared");
+            }
+
+            //Checking if updated task contains a new scheduled date
+            if (task.ScheduledDate != null && task.ScheduledDate != _dal.Task.Read(task.Id)!.ScheduledDate)
+                CheckScheduledDate(task.Id, (DateTime)task.ScheduledDate);
+
+            //updating dependencies
+            List<BO.TaskInList>? currentDependencies = Read(task.Id).Dependencies;
+            List<BO.TaskInList>? newDependencies = task.Dependencies;
+            if(currentDependencies == null)
+                currentDependencies = new List<BO.TaskInList>();
+            if (newDependencies == null)
+                newDependencies = new List<BO.TaskInList>();
+
+            var dependenciesToDelete = currentDependencies
+                                       .Where (item => !newDependencies.Contains(item))
+                                       .Select (item => _dal.Dependency.Read(dep => dep.DependsOnTask == item.Id))
+                                       .ToList();
+
+            var dependenciesToAdd = newDependencies
+                                    .Where (item => !currentDependencies.Contains(item))
+                                    .Select (item => item)
+                                    .ToList();
+
+            dependenciesToDelete.ForEach(dependency => _dal.Dependency.Delete(dependency.Id));
+            dependenciesToAdd.ForEach(dependency => _dal.Dependency.Create(new DO.Dependency()
+            {
+                DependentTask = task.Id,
+                DependsOnTask = dependency.Id
+            }));
+
+
+            _dal.Task.Update(new DO.Task()
+            {
+                Id = task.Id,
+                Complexity = (DO.EngineerExperience)task.Complexity,
+                CreatedAtDate = task.CreatedAtDate,
+                Alias = task.Alias,
+                Description = task.Description,
+                RequiredEffortTime = task.RequiredEffortTime,
+                StartDate = task.StartDate,
+                ScheduledDate = task.ScheduledDate,
+                DeadlineDate = task.DeadlineDate,
+                CompleteDate = task.CompleteDate,
+                Deliverables = task.Deliverables,
+                Remarks = task.Remarks,
+                EngineerId = task.Engineer == null ? null : task.Engineer.Id
+            });
         }
  
         catch (DO.DalDoesNotExistException ex)
@@ -160,9 +196,11 @@ internal class TaskImplementation : ITask
         if(_dal.Task.Read(id) == null)
             throw new BO.BlDoesNotExistException($"Task with ID={id} does Not exist");
 
-        IEnumerable<DO.Dependency?>? dependencies = _dal.Dependency.ReadAll
-          (item => item.DependsOnTask == id && Read(item.DependentTask).Status != BO.Status.Done);
-        if (dependencies.Any())
+        if (Dal.Config.ProjectStartDate != null)
+            throw new BO.BlDeletionImpossibleException("Can not delete task after the project start date was declared");
+
+        IEnumerable<DO.Dependency>? dependencies = _dal.Dependency.ReadAll(item => item.DependsOnTask == id);
+        if (dependencies.Any(item => Read(item.DependentTask).Status != BO.Status.Done))
             throw new BO.BlDeletionImpossibleException($"There are tasks that depend on Task with ID={id}");
 
         try
@@ -174,7 +212,6 @@ internal class TaskImplementation : ITask
             throw new BO.BlDoesNotExistException($"Task with ID={id} does Not exist", ex);
         }
        
-
     }
 
     /// <summary>
@@ -183,17 +220,51 @@ internal class TaskImplementation : ITask
     /// <param name="id"> id of task </param>
     /// <param name="startDate"> new/updated scheduled start date </param>
     /// <exception cref="BO.BlInvalidValueException"> if date is invalid </exception>
-    void CheckScheduledDate(int id, DateTime? startDate)
+    void CheckScheduledDate(int id, DateTime startDate)
     {
+        if(Dal.Config.ProjectStartDate != null) 
+            throw new BO.BlUpdatingImpossibleException("Can not update scheduled task date after the project start date was declared");
+        
         BO.Task task = Read(id);
         IEnumerable<DO.Task?> depenedOnTasks = from item in task.Dependencies 
                                let doTask = _dal.Task.Read(item.Id)
-                               where doTask.ScheduledDate == null || doTask.CompleteDate > startDate
+                               where doTask.ScheduledDate == null || Read(doTask.Id).ForecastDate > startDate
                                select doTask;
 
         if (depenedOnTasks.Any())
-            throw new BO.BlInvalidValueException($"Can not assign requested date to task");
+            throw new BO.BlUpdatingImpossibleException($"Requested start date can not be assigned to this task");
 
+    }
+
+
+    /// <summary>
+    /// assigning scheduled start date to task
+    /// </summary>
+    /// <param name="id"> id of task </param>
+    /// <param name="startDate"> scheduled start date </param>
+    /// <exception cref="BO.BlDoesNotExistException"> if task does not exist in dal </exception>
+    public void AssignScheduledDateToTask(int id, DateTime startDate)
+    {
+        CheckScheduledDate(id, startDate);
+        DO.Task? task = _dal.Task.Read(id);
+        if (task == null)
+            throw new BO.BlDoesNotExistException($"Task with ID={id} does Not exist");
+        _dal.Task.Update(new DO.Task()
+        {
+            Id = task.Id,
+            Complexity = task.Complexity,
+            CreatedAtDate = task.CreatedAtDate,
+            Alias = task.Alias,
+            Description = task.Description,
+            RequiredEffortTime = task.RequiredEffortTime,
+            StartDate = task.StartDate,
+            ScheduledDate = startDate,
+            DeadlineDate = task.DeadlineDate,
+            CompleteDate = task.CompleteDate,
+            Deliverables = task.Deliverables,
+            Remarks = task.Remarks,
+            EngineerId = task.EngineerId
+        });
     }
 
     /// <summary>
@@ -219,6 +290,43 @@ internal class TaskImplementation : ITask
                 break;
         }
         return currentStatus;
+    }
+
+    
+    /// <summary>
+    /// private help method to create list of tasks that requested task depends on
+    /// </summary>
+    /// <param name="id"> id of dependent task</param>
+    /// <returns> list of depends on tasks </returns>
+    List<BO.TaskInList> GetDependencies(int id) 
+    {
+        return (from dependency in _dal.Dependency.ReadAll(item => item.DependentTask == id)
+                let depTask = _dal.Task.Read(dependency.DependsOnTask)
+                select new BO.TaskInList()
+                {
+                    Id = depTask.Id,
+                    Description = depTask.Description,
+                    Alias = depTask.Alias,
+                    Status = GetStatus(depTask)
+                }).ToList();
+    }
+
+    /// <summary>
+    /// private help method to get name of engineer working on task
+    /// </summary>
+    /// <param name="doTask"> task </param>
+    /// <returns> EngineerInTask entity which contains name and id of engineer </returns>
+    BO.EngineerInTask? GetEngineerInTask(DO.Task doTask)
+    {
+        int engId = doTask.EngineerId ?? 0;
+        DO.Engineer? engineer = null;
+        BO.EngineerInTask? engineerInTask = null;
+        if (engId != 0)
+        {
+            engineer = _dal.Engineer.Read(engId);
+            engineerInTask = new BO.EngineerInTask() { Id = engineer.Id, Name = engineer.Name };
+        }
+        return engineerInTask;
     }
 
 }

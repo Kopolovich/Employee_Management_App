@@ -15,3 +15,11 @@ public enum Status
 {
     Unscheduled, Scheduled, OnTrack, InJeopardy, Done
 }
+
+/// <summary>
+/// enum for status of project
+/// </summary>
+public enum ProjectStatus
+{
+   InPlanning, InExecution
+}

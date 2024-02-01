@@ -74,7 +74,7 @@ internal class TaskImplementation:ITask
     /// retreives collection of Tasks from XML file
     /// </summary>
     /// <returns>copy of collection of Tasks</returns>
-    public IEnumerable<Task?> ReadAll(Func<Task, bool>? filter = null)
+    public IEnumerable<Task> ReadAll(Func<Task, bool>? filter = null)
     {
         List<Task> tasks = XMLTools.LoadListFromXMLSerializer<Task>(s_tasks_xml); //deserialize
 

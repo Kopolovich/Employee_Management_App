@@ -65,7 +65,7 @@ internal class EngineerImplementation : IEngineer
     /// retreives collection of Engineers
     /// </summary>
     /// <returns>copy of collection of Engineers</returns>
-    public IEnumerable<Engineer?> ReadAll(Func<Engineer, bool>? filter = null)
+    public IEnumerable<Engineer> ReadAll(Func<Engineer, bool>? filter = null)
     {
         if (filter == null)
             return DataSource.Engineers.Select(item => item);

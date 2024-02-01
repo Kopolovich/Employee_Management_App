@@ -61,3 +61,30 @@ public class BlInvalidValueException : Exception
 {
     public BlInvalidValueException(string? message) : base(message) { }
 }
+
+/// <summary>
+/// exception for impossible assignment
+/// </summary>
+[Serializable]
+public class BlAssignmentImpossibleException : Exception
+{
+    public BlAssignmentImpossibleException(string? message) : base(message) { }
+}
+
+/// <summary>
+/// exception for trying to create an unallowed entity 
+/// </summary>
+[Serializable]
+public class BlCreationImpossibleException : Exception
+{
+    public BlCreationImpossibleException(string? message) : base(message) { }
+}
+
+/// <summary>
+/// exception for trying to update an entity when not allowed 
+/// </summary>
+[Serializable]
+public class BlUpdatingImpossibleException : Exception
+{
+    public BlUpdatingImpossibleException(string? message) : base(message) { }
+}
