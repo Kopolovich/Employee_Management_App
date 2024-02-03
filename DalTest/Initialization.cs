@@ -98,12 +98,12 @@ public static class Initialization
             string? _alias = $"{ch}{s_rand.Next(10, 99)}";
 
             //setting created at date to random date in the past year
-            DateTime? _createdAtDate = DateTime.Today.AddDays(-s_rand.Next(1, 365));
+            DateTime _createdAtDate = DateTime.Today.AddDays(-s_rand.Next(1, 365));
 
             TimeSpan? _requiredEffortTime = null;
             bool? _isMilestone = false;
 
-            Task newTask = new(_id, _complexity, _alias, _description, _createdAtDate,
+            Task newTask = new(_id, _complexity, _createdAtDate, _description, _alias,
                 _requiredEffortTime, _isMilestone);
 
             s_dal!.Task.Create(newTask);

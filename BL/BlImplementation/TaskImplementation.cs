@@ -83,7 +83,7 @@ internal class TaskImplementation : ITask
     /// </summary>
     /// <param name="filter"> optional filter to filter tasks </param>
     /// <returns> collection of logic task entities </returns>
-    public IEnumerable<BO.Task> ReadAll(Func<BO.Task, bool>? filter = null)
+    public IEnumerable<BO.TaskInList> ReadAll(Func<BO.Task, bool>? filter = null)
     {
         if(filter != null) 
         {
@@ -91,14 +91,24 @@ internal class TaskImplementation : ITask
             from DO.Task doTask in _dal.Task.ReadAll()
             let boTask = Read(doTask.Id) //using Read method to create logic entity
             where filter(boTask)
-            select boTask
+            select new BO.TaskInList(){
+                                        Id = boTask.Id,
+                                        Description = boTask.Description,
+                                        Alias = boTask.Alias,
+                                        Status = boTask.Status
+                                      }
             );
         }
 
         return (
         from DO.Task doTask in _dal.Task.ReadAll()
         let boTask = Read(doTask.Id) //using Read method to create logic entity
-        select boTask
+        select new BO.TaskInList() { 
+                                     Id = boTask.Id,
+                                     Description= boTask.Description,
+                                     Alias = boTask.Alias,
+                                     Status = boTask.Status
+                                   }
         );
 
     }

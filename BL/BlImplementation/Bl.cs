@@ -17,8 +17,8 @@ internal class Bl : IBl
     {
         tasks.ForEach(task => Task.Create(task));
 
-        List<BO.Task> doTasks = Task.ReadAll().ToList();
-        doTasks.ForEach(task => Task.AssignScheduledDateToTask(task.Id, GetEarliestDate(task, projectStartDate)));
+        List<BO.TaskInList> doTasks = Task.ReadAll().ToList();
+        doTasks.ForEach(task => Task.AssignScheduledDateToTask(task.Id, GetEarliestDate(Task.Read(task.Id), projectStartDate)));
         
         Dal.Config.ProjectStartDate = projectStartDate;
     }

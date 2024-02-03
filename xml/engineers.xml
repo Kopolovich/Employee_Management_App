@@ -35,4 +35,39 @@
     <Cost>125</Cost>
     <Name>Dina Klein</Name>
   </Engineer>
+  <Engineer>
+    <Id>381370306</Id>
+    <Level>Intermediate</Level>
+    <Email>DaniLevi@gmail.com</Email>
+    <Cost>130</Cost>
+    <Name>Dani Levi</Name>
+  </Engineer>
+  <Engineer>
+    <Id>336612907</Id>
+    <Level>AdvancedBeginner</Level>
+    <Email>EliAmar@gmail.com</Email>
+    <Cost>125</Cost>
+    <Name>Eli Amar</Name>
+  </Engineer>
+  <Engineer>
+    <Id>222175831</Id>
+    <Level>Expert</Level>
+    <Email>YairCohen@gmail.com</Email>
+    <Cost>140</Cost>
+    <Name>Yair Cohen</Name>
+  </Engineer>
+  <Engineer>
+    <Id>216514358</Id>
+    <Level>Advanced</Level>
+    <Email>ArielaLevin@gmail.com</Email>
+    <Cost>135</Cost>
+    <Name>Ariela Levin</Name>
+  </Engineer>
+  <Engineer>
+    <Id>392323669</Id>
+    <Level>AdvancedBeginner</Level>
+    <Email>DinaKlein@gmail.com</Email>
+    <Cost>125</Cost>
+    <Name>Dina Klein</Name>
+  </Engineer>
 </ArrayOfEngineer>

@@ -22,7 +22,7 @@ public interface ITask
     /// </summary>
     /// <param name="filter">optional filter</param>
     /// <returns> collection of logic task entities </returns>
-    public IEnumerable<BO.Task> ReadAll(Func<BO.Task, bool>? filter = null);
+    public IEnumerable<BO.TaskInList> ReadAll(Func<BO.Task, bool>? filter = null);
 
 
     /// <summary>

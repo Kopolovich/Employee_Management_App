@@ -1,5 +1,7 @@
 ﻿using DalApi;
 using System.Linq.Expressions;
+using System.Reflection.Emit;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BlTest;
@@ -94,8 +96,8 @@ internal class Program
                         }
                     case 3:
                         {
-                            List<BO.Task> tasks = s_bl.Task.ReadAll().ToList(); //reading list
-                            foreach (BO.Task task in tasks)
+                            List<BO.TaskInList> tasks = s_bl.Task.ReadAll().ToList(); //reading list
+                            foreach (BO.TaskInList task in tasks)
                                 Console.WriteLine(task); //printing each task                            
                             break;
                         }
@@ -451,6 +453,7 @@ internal class Program
 
         Console.WriteLine("enter a name:");
         string? name = Console.ReadLine();
+
         BO.TaskInEnginner? currentTask = null;
         Console.WriteLine("Do you want to assign task to engineer?");
         string? ans = Console.ReadLine();
@@ -478,33 +481,57 @@ internal class Program
         };    
     }
 
-    //fix from here
-    //static BO.Engineer createUpdatedEngineer(BO.Engineer currentEngineer)
-//    {
-//        Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change");
 
-//        Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
-//        int levelInt;
-//        bool success = int.TryParse(Console.ReadLine(), out levelInt);
-//        EngineerExperience level = success ? (EngineerExperience)levelInt : oldEngineer.Level;
+    static BO.Engineer createUpdatedEngineer(BO.Engineer currentEngineer)
+    {
+        Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change");
 
-//        Console.WriteLine("enter an email:");
+        Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
+        int levelInt;
+        bool success = int.TryParse(Console.ReadLine(), out levelInt);
+        BO.EngineerExperience level = success ? (BO.EngineerExperience)levelInt : currentEngineer.Level;
 
-//        string? email = Console.ReadLine();
-//        if (email == "") email = oldEngineer.Email;
+        Console.WriteLine("enter an email:");
 
-//        Console.WriteLine("enter hourly salary:");
-//        double? cost;
-//        double _cost;
-//        cost = double.TryParse(Console.ReadLine(), out _cost) ? _cost : oldEngineer.Cost;
+        string? email = Console.ReadLine();
+        if (email == "") email = currentEngineer.Email;
 
-//        Console.WriteLine("enter a name:");
-//        string? name = Console.ReadLine();
-//        if (name == "") name = oldEngineer.Name;
+        Console.WriteLine("enter hourly salary:");
+        double? cost;
+        double _cost;
+        cost = double.TryParse(Console.ReadLine(), out _cost) ? _cost : currentEngineer.Cost;
 
-//        Engineer engineer = new(oldEngineer.Id, level, email, cost, name); //creating new engineer with updated details
-//        return engineer;
-//    }
+        Console.WriteLine("enter a name:");
+        string? name = Console.ReadLine();
+        if (name == "") name = currentEngineer.Name;
+
+        Console.WriteLine("Do you want to update current task?");
+        string? ans = Console.ReadLine();
+        BO.TaskInEnginner? currentTask = null;
+        if (ans != null && ans == "Y")
+        {
+            Console.WriteLine("enter task id:");
+            int taskId;
+            if (!int.TryParse(Console.ReadLine(), out taskId))
+                throw new BO.BlInvalidValueException("Id has to contain numbers only");
+            currentTask = new BO.TaskInEnginner()
+            {
+                Id = taskId,
+                Alias = s_bl.Task.Read(taskId).Alias
+            };
+        }
+
+
+        return new BO.Engineer()
+        {
+            Id = currentEngineer.Id,
+            Name = name,
+            Email = email,
+            Level = level,
+            Cost = cost,
+            Task = currentTask
+        }; //creating new engineer with updated details
+    }
 }
 
  
