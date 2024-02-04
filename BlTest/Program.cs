@@ -17,8 +17,6 @@ internal class Program
         if (ans == "Y")
             DalTest.Initialization.Do();
         mainMenu();
-
-        
     }
 
     static void mainMenu()

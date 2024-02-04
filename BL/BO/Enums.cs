@@ -9,11 +9,11 @@ public enum EngineerExperience
 }
 
 /// <summary>
-/// enum for status of task/milestone completion
+/// enum for status of task completion
 /// </summary>
 public enum Status
 {
-    Unscheduled, Scheduled, OnTrack, InJeopardy, Done
+    Unscheduled, Scheduled, OnTrack, Done
 }
 
 /// <summary>

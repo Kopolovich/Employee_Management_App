@@ -1,5 +1,6 @@
 ﻿namespace BlImplementation;
 using BlApi;
+using BO;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -10,8 +11,6 @@ internal class Bl : IBl
     public ITask Task => new TaskImplementation();
 
     public IEngineer Engineer => new EngineerImplementation();
-
-    public IMilestone Milestone => new MilestoneImplementation();
 
     public void CreateProjectSchedule(List<BO.Task> tasks, DateTime projectStartDate)
     {
@@ -37,11 +36,4 @@ internal class Bl : IBl
         return (DateTime)previosTasks.MaxBy(task => task.ScheduledDate)!.ScheduledDate!;
 
     }
-
-    //public ProjectStatus GetProjectStatus()
-    //{
-    //    if (Dal.Config.ProjectStartDate == null)
-    //        return ProjectStatus.InPlanning;
-    //    else return ProjectStatus.InExecution;
-    //}
 }
