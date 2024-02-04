@@ -7,7 +7,7 @@ using System.Diagnostics;
 /// </summary>
 sealed internal class DalXml : IDal
 {
-    //public static IDal Instance { get; } = new DalXml();
+    //public static IDal Instance => new DalXml();
     //private DalXml() { }
 
     private static readonly Lazy<DalXml> lazy =

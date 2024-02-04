@@ -13,7 +13,7 @@ internal class Program
     static void Main(string[] args)
     {
         Console.Write("Would you like to create Initial data? (Y/N)");
-        string? ans = Console.ReadLine() ?? throw new FormatException("Wrong input");
+        string? ans =  Console.ReadLine() ?? throw new FormatException("Wrong input");
         if (ans == "Y")
             DalTest.Initialization.Do();
         mainMenu();
@@ -267,30 +267,43 @@ internal class Program
         }
     }
 
+    /// <summary>
+    /// Help method for creating new task
+    /// </summary>
+    /// <returns> new logic task entity </returns>
+    /// <exception cref="BO.BlInvalidValueException"> for invalid inputs </exception>
+    /// <exception cref="FormatException"> for wrong inputs </exception>
     static BO.Task createNewTask()
     {
+        //assigning new level and check it with try parse method
         Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
         int levelInt;
         int.TryParse(Console.ReadLine(), out levelInt);
         BO.EngineerExperience level = (BO.EngineerExperience)levelInt;
 
+        //assigning new alias
         Console.WriteLine("enter alias:");
         string? alias = Console.ReadLine();
 
+        //assigning new description
         Console.WriteLine("enter description:");
         string? description = Console.ReadLine();
 
+        //assigning new Required Effort Time and check it with try parse method
         Console.WriteLine("Enter Required Effort Time:");
         TimeSpan requiredEffortTime;
         if (!TimeSpan.TryParse(Console.ReadLine(), out requiredEffortTime))
             throw new BO.BlInvalidValueException("Required effort time has to be in time span format");
 
+        //assigning new deliverables
         Console.WriteLine("enter deliverables:");
         string? deliverables = Console.ReadLine();
 
+        //assigning new remarks
         Console.WriteLine("enter remarks: (optional)");
         string? remarks = Console.ReadLine();
 
+        //assigning new task dependencies
         Console.WriteLine("Does this task depend on previos tasks?");
         string? ans = Console.ReadLine() ?? throw new FormatException("Wrong input");
         List<BO.TaskInList>? dependencies = null;
@@ -300,7 +313,10 @@ internal class Program
             int id;
             if (!int.TryParse(Console.ReadLine(), out id))
                 throw new BO.BlInvalidValueException("Id has to contain numbers only");
+
+            //reads requested task props
             BO.Task depTask = s_bl.Task.Read(id);
+            //creating new list of dependencies
             if(dependencies == null)
                 dependencies = new List<BO.TaskInList>();
             dependencies.Add(new BO.TaskInList()
@@ -314,7 +330,7 @@ internal class Program
             ans = Console.ReadLine() ?? throw new FormatException("Wrong input");
         }
             
-            BO.Task? task = new()
+           return new BO.Task()
         {
             Id = 0,
             Description = description,
@@ -332,60 +348,76 @@ internal class Program
             Engineer = null,
             Complexity = level
         };
-        return task;
     }
 
+    /// <summary>
+    /// Help method for updating requested task
+    /// </summary>
+    /// <param name="oldTask"> un-updated task </param>
+    /// <returns> task with updates </returns>
+    /// <exception cref="FormatException"> for wrong input </exception>
+    /// <exception cref="BO.BlInvalidValueException"> for invalid values </exception>
     static BO.Task createUpdatedTask(BO.Task oldTask)
     {
-        Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change, \n if you enter info in worng format those fields will not be updated (those fields will stay the same as before)");
 
+        Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change, \n if you enter info in worng format those fields will not be updated (those fields will stay the same as before)");
+        //assigning level and check it with try parse method
         Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
         int levelInt;
         bool success = int.TryParse(Console.ReadLine(), out levelInt);
         BO.EngineerExperience level = success ? (BO.EngineerExperience)levelInt : oldTask.Complexity;
 
+        //assigning alias
         Console.WriteLine("enter alias:");
         string? alias = Console.ReadLine();
         if (alias == "") alias = oldTask.Alias;
 
+        //assigning description
         Console.WriteLine("enter description:");
         string? description = Console.ReadLine();
         if (description == "") description = oldTask.Description;
 
+        //assigning Required Effort Time and check it with try parse method
         Console.WriteLine("Enter Required Effort Time:");
         TimeSpan? requiredEffortTime;
         TimeSpan time;
         requiredEffortTime = TimeSpan.TryParse(Console.ReadLine(), out time) ? time : oldTask.RequiredEffortTime;
 
+        //assigning start date and check it with try parse method
         Console.WriteLine("enter start date:");
         DateTime? startDate;
         DateTime date;
         startDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : oldTask.StartDate;
 
-
+        //assigning scheduled date and check it with try parse method
         Console.WriteLine("enter scheduled date:");
         DateTime? scheduledDate;
         scheduledDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : oldTask.ScheduledDate;
 
+        //assigning complete date and check it with try parse method
         Console.WriteLine("enter complete date");
         DateTime? completeDate;
         completeDate = DateTime.TryParse(Console.ReadLine(), out date) ? date : oldTask.CompleteDate;
 
+        //assigning deliverables
         Console.WriteLine("enter deliverables: (optional)");
         string? deliverables = Console.ReadLine();
         if (deliverables == "") deliverables = oldTask.Deliverables;
 
+        //assigning remarks
         Console.WriteLine("enter remarks: (optional)");
         string? remarks = Console.ReadLine();
         if (remarks == "") remarks = oldTask.Remarks;
 
+        //assigning engineer id that working on task and check it with try parse method
         Console.WriteLine("enter id of engineer working on task:");
         int? engineerId;
         int engId;
         engineerId = int.TryParse(Console.ReadLine(), out engId) ? engId : (oldTask.Engineer != null ? oldTask.Engineer.Id : null);
 
+        //assigning dependencies
         Console.WriteLine("Does this task depend on previos tasks?");
-        string? ans = Console.ReadLine() ?? throw new FormatException("Wrong input");
+        string? ans = Console.ReadLine(); //?? throw new FormatException("Wrong input");
         List<BO.TaskInList>? dependencies = null;
         while (ans == "Y")
         {
@@ -408,7 +440,7 @@ internal class Program
         }
 
 
-        BO.Task? task = new() 
+        return new BO.Task() 
         {
             Id = 0,
             Description = description,
@@ -426,32 +458,43 @@ internal class Program
             Engineer = engineerId == null ? null : new BO.EngineerInTask() { Id = (int)engineerId , Name = s_bl.Engineer.Read((int)engineerId).Name},
             Complexity = level
         };
-        return task;
+       
     }
 
+    /// <summary>
+    /// Help methos for creating new engineer
+    /// </summary>
+    /// <returns> new engineer logic entity </returns>
+    /// <exception cref="BO.BlInvalidValueException"> for invalid inputs </exception>
     static BO.Engineer createNewEngineer()
     {
+        //assigning new id and check it with try parse method
         Console.WriteLine("enter id of engineer:");
         int id;
         if (!int.TryParse(Console.ReadLine(), out id))
             throw new BO.BlInvalidValueException("Id has to contain numbers only");
 
+        //assigning new leval and check it with try parse method
         Console.WriteLine("enter level of engineer:");
         int levelInt;
         int.TryParse(Console.ReadLine(), out levelInt);
         BO.EngineerExperience level = (BO.EngineerExperience)levelInt;
 
+        //assigning new email
         Console.WriteLine("enter an email:");
         string? email = Console.ReadLine();
 
+        //assigning new cost and check it with try parse method
         Console.WriteLine("enter hourly salary:");
         double cost;
         if (!double.TryParse(Console.ReadLine(), out cost))
             throw new BO.BlInvalidValueException("cost has to contain numbers only");
 
+        //assigning new name
         Console.WriteLine("enter a name:");
         string? name = Console.ReadLine();
 
+        //assigning new current tasks in engineer
         BO.TaskInEnginner? currentTask = null;
         Console.WriteLine("Do you want to assign task to engineer?");
         string? ans = Console.ReadLine();
@@ -479,30 +522,38 @@ internal class Program
         };    
     }
 
-
+    /// <summary>
+    /// Help method for updating engineer
+    /// </summary>
+    /// <param name="currentEngineer"> unupdated engineer </param>
+    /// <returns> engineer with updates </returns>
+    /// <exception cref="BO.BlInvalidValueException"> for invalid inputs </exception>
     static BO.Engineer createUpdatedEngineer(BO.Engineer currentEngineer)
     {
         Console.WriteLine("enter new values only for the fields you want to update, the rest will stay without change");
-
+        //assigning level and check it with try parse method
         Console.WriteLine("enter number between 0 to 4 for level of complexity (Beginner, AdvancedBeginner, Intermediate, Advanced, Expert)");
         int levelInt;
         bool success = int.TryParse(Console.ReadLine(), out levelInt);
         BO.EngineerExperience level = success ? (BO.EngineerExperience)levelInt : currentEngineer.Level;
 
+        //assigning email
         Console.WriteLine("enter an email:");
-
         string? email = Console.ReadLine();
         if (email == "") email = currentEngineer.Email;
 
+        //assigning cost and check it with try parse method
         Console.WriteLine("enter hourly salary:");
         double? cost;
         double _cost;
         cost = double.TryParse(Console.ReadLine(), out _cost) ? _cost : currentEngineer.Cost;
 
+        //assigning name
         Console.WriteLine("enter a name:");
         string? name = Console.ReadLine();
         if (name == "") name = currentEngineer.Name;
 
+        //assigning current tasks in engineer
         Console.WriteLine("Do you want to update current task?");
         string? ans = Console.ReadLine();
         BO.TaskInEnginner? currentTask = null;

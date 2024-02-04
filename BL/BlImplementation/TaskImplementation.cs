@@ -30,8 +30,8 @@ internal class TaskImplementation : ITask
             new DO.Task()
             {
                    Complexity = (DO.EngineerExperience)task.Complexity,
-                   Alias = task.Alias,
                    Description = task.Description,
+                   Alias = task.Alias,
                    RequiredEffortTime = task.RequiredEffortTime,
                    Deliverables = task.Deliverables,
                    Remarks = task.Remarks
@@ -174,8 +174,8 @@ internal class TaskImplementation : ITask
                 Id = task.Id,
                 Complexity = (DO.EngineerExperience)task.Complexity,
                 CreatedAtDate = task.CreatedAtDate,
-                Alias = task.Alias,
                 Description = task.Description,
+                Alias = task.Alias,
                 RequiredEffortTime = task.RequiredEffortTime,
                 StartDate = task.StartDate,
                 ScheduledDate = task.ScheduledDate,
@@ -261,8 +261,8 @@ internal class TaskImplementation : ITask
             Id = task.Id,
             Complexity = task.Complexity,
             CreatedAtDate = task.CreatedAtDate,
-            Alias = task.Alias,
             Description = task.Description,
+            Alias = task.Alias,
             RequiredEffortTime = task.RequiredEffortTime,
             StartDate = task.StartDate,
             ScheduledDate = startDate,
