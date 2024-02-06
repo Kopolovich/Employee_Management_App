@@ -9,7 +9,8 @@ using System.Text.RegularExpressions;
 internal class EngineerImplementation : IEngineer
 {
     private DalApi.IDal _dal = DalApi.Factory.Get;
-    private BlImplementation.TaskImplementation _iTask = new BlImplementation.TaskImplementation();
+    private TaskImplementation _iTask = new TaskImplementation();
+    private IBl _bl = new Bl();
 
     /// <summary>
     /// adding new engineer to dal
@@ -123,7 +124,7 @@ internal class EngineerImplementation : IEngineer
             _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
             
             //if possible, assign task to engineer
-            if(Dal.Config.ProjectStartDate != null && engineer.Task != null)
+            if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution && engineer.Task != null)
                 AssignTaskToEngineer(engineer.Id, engineer.Task);
         }
 
@@ -166,6 +167,7 @@ internal class EngineerImplementation : IEngineer
         
     }
 
+    #region Help methods
     /// <summary>
     /// private help method to check if email address is valid
     /// </summary>
@@ -227,5 +229,6 @@ internal class EngineerImplementation : IEngineer
             EngineerId = engineerId
         });
     }
+    #endregion
 
 }

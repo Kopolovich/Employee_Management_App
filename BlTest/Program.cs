@@ -1,4 +1,4 @@
-﻿using DalApi;
+﻿using BlApi;
 using System.Linq.Expressions;
 using System.Reflection.Emit;
 using System.Xml.Linq;
@@ -9,13 +9,19 @@ namespace BlTest;
 internal class Program
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    
 
     static void Main(string[] args)
     {
         Console.Write("Would you like to create Initial data? (Y/N)");
         string? ans =  Console.ReadLine() ?? throw new FormatException("Wrong input");
         if (ans == "Y")
+        {
+            s_bl.Reset();
             DalTest.Initialization.Do();
+        }
+            
+
         mainMenu();
     }
 
@@ -26,7 +32,10 @@ internal class Program
                         Enter 0 to exit
                         Enter 1 for Task 
                         Enter 2 for Engineer
+                        Enter 3 to plan project schedule (after all wanted tasks were already entered)
+                        Enter 4 to see project status
                         """);
+        
         int choice = int.Parse(Console.ReadLine());
         while (choice != 0)
         {
@@ -38,6 +47,32 @@ internal class Program
                     { subMenuTask(); break; }
                 case 2:
                     { subMenuEngineer(); break; }
+                case 3: 
+                    {
+                        try
+                        {
+                            Console.WriteLine("Please enter project scheduled start date");
+                            DateTime date;
+                            if (!DateTime.TryParse(Console.ReadLine(), out date))
+                                throw new BO.BlInvalidValueException("Scheduled project start date has to be in date time format and can not be null");
+                            s_bl.CreateProjectSchedule(date);
+                            Console.WriteLine("dates have been assigned to all tasks!");
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine(
+                            $"""
+                            Name of exception: {ex.GetType().Name}
+                            {ex.Message}
+                            """);
+                            if (ex.InnerException != null)
+                            {
+                                Console.WriteLine($"Inner exception: {ex.InnerException.GetType().Name}, {ex.InnerException.Message}");
+                            }
+                        }
+                        break;
+                    }
+                    case 4: Console.WriteLine(s_bl.GetProjectStatus()); break;
                 default:
                     Console.WriteLine("please enter number between 0 and 2");
                     break;
@@ -47,6 +82,8 @@ internal class Program
                         Enter 0 to exit
                         Enter 1 for Task 
                         Enter 2 for Engineer
+                        Enter 3 to plan project schedule (after all wanted tasks were already entered)
+                        Enter 4 to see project status
                         """);
             choice = int.Parse(Console.ReadLine());
 
@@ -442,7 +479,7 @@ internal class Program
 
         return new BO.Task() 
         {
-            Id = 0,
+            Id = oldTask.Id,
             Description = description,
             Alias = alias,
             CreatedAtDate = DateTime.Now,

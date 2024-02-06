@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 internal class TaskImplementation : ITask
 {
     private DalApi.IDal _dal = DalApi.Factory.Get;
+    private IBl _bl = new Bl();
 
     /// <summary>
     /// adding new task to dal
@@ -20,10 +21,11 @@ internal class TaskImplementation : ITask
     {
         if (task == null) throw new BO.BlNullPropertyException("Task is null");
 
-        if (Dal.Config.ProjectStartDate != null)
+        if (_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
             throw new BO.BlCreationImpossibleException("Can not add new task after the project start date was declared");
 
-        if (task.Id <= 0 || task.Alias == "") throw new BO.BlInvalidValueException("Task with invalid values");
+        //not checking id correctness cuz it is automatically created in dal create method (temporarily 0)
+        if (task.Alias == "") throw new BO.BlInvalidValueException("Task must contain alias");
        
         //Creating new task with allowed props to this stage of the project
         _dal.Task.Create(
@@ -55,7 +57,7 @@ internal class TaskImplementation : ITask
     {
         DO.Task? doTask = _dal.Task.Read(id);
         if(doTask == null) throw new BO.BlDoesNotExistException($"Task with ID={id} does not exist");
-            
+                 
         return new BO.Task()
         {
             Id = doTask.Id,
@@ -67,7 +69,7 @@ internal class TaskImplementation : ITask
             RequiredEffortTime = doTask.RequiredEffortTime,
             StartDate = doTask.StartDate,
             ScheduledDate = doTask.ScheduledDate,
-            ForecastDate = (doTask.ScheduledDate > doTask.StartDate ? doTask.ScheduledDate : doTask.StartDate) + doTask.RequiredEffortTime,
+            ForecastDate = GetForcast(doTask),
             CompleteDate = doTask.CompleteDate,
             Deliverables = doTask.Deliverables,
             Remarks = doTask.Remarks,
@@ -89,24 +91,26 @@ internal class TaskImplementation : ITask
             from DO.Task doTask in _dal.Task.ReadAll()
             let boTask = Read(doTask.Id) //using Read method to create logic entity
             where filter(boTask)
-            select new BO.TaskInList(){
-                                        Id = boTask.Id,
-                                        Description = boTask.Description,
-                                        Alias = boTask.Alias,
-                                        Status = boTask.Status
-                                      }
+            select new BO.TaskInList()
+            {
+                Id = boTask.Id,
+                Description = boTask.Description,
+                Alias = boTask.Alias,
+                Status = boTask.Status
+            }
             );
         }
 
         return (
         from DO.Task doTask in _dal.Task.ReadAll()
         let boTask = Read(doTask.Id) //using Read method to create logic entity
-        select new BO.TaskInList() { 
-                                     Id = boTask.Id,
-                                     Description= boTask.Description,
-                                     Alias = boTask.Alias,
-                                     Status = boTask.Status
-                                   }
+        select new BO.TaskInList() 
+        { 
+            Id = boTask.Id,
+            Description= boTask.Description,
+            Alias = boTask.Alias,
+            Status = boTask.Status
+        }
         );
 
     }
@@ -129,7 +133,7 @@ internal class TaskImplementation : ITask
                 throw new BO.BlInvalidValueException("Task with invalid values");
             
             //Checking if trying to update fields that can not be updated while project is still in planning
-            if (Dal.Config.ProjectStartDate == null)
+            if (_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
             {
                 if (task.Engineer != null)
                     throw new BO.BlUpdatingImpossibleException("Can not assign engineer to task before the project start date was declared");
@@ -137,6 +141,14 @@ internal class TaskImplementation : ITask
                     throw new BO.BlUpdatingImpossibleException("Can not start working on task before the project start date was declared");
                 if (task.CompleteDate != null)
                     throw new BO.BlUpdatingImpossibleException("Can not finish working on task before the project start date was declared");
+            }
+
+            //checking if trying to update required effort time while project is in excution
+            if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
+            {
+                if (task.RequiredEffortTime != null && task.RequiredEffortTime != Read(task.Id).RequiredEffortTime )
+                    throw new BO.BlUpdatingImpossibleException("Can not change required effort time after the project start date was declared");
+               
             }
 
             //Checking if updated task contains a new scheduled date
@@ -203,7 +215,7 @@ internal class TaskImplementation : ITask
         if(_dal.Task.Read(id) == null)
             throw new BO.BlDoesNotExistException($"Task with ID={id} does Not exist");
 
-        if (Dal.Config.ProjectStartDate != null)
+        if (_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
             throw new BO.BlDeletionImpossibleException("Can not delete task after the project start date was declared");
 
         IEnumerable<DO.Dependency>? dependencies = _dal.Dependency.ReadAll(item => item.DependsOnTask == id);
@@ -220,29 +232,6 @@ internal class TaskImplementation : ITask
         }
        
     }
-
-    /// <summary>
-    /// Help method to check if scheduled start date is valid
-    /// </summary>
-    /// <param name="id"> id of task </param>
-    /// <param name="startDate"> new/updated scheduled start date </param>
-    /// <exception cref="BO.BlInvalidValueException"> if date is invalid </exception>
-    void CheckScheduledDate(int id, DateTime startDate)
-    {
-        if(Dal.Config.ProjectStartDate != null) 
-            throw new BO.BlUpdatingImpossibleException("Can not update scheduled task date after the project start date was declared");
-        
-        BO.Task task = Read(id);
-        IEnumerable<DO.Task?> depenedOnTasks = from item in task.Dependencies 
-                               let doTask = _dal.Task.Read(item.Id)
-                               where doTask.ScheduledDate == null || Read(doTask.Id).ForecastDate > startDate
-                               select doTask;
-
-        if (depenedOnTasks.Any())
-            throw new BO.BlUpdatingImpossibleException($"Requested start date can not be assigned to this task");
-
-    }
-
 
     /// <summary>
     /// assigning scheduled start date to task
@@ -271,6 +260,29 @@ internal class TaskImplementation : ITask
             Remarks = task.Remarks,
             EngineerId = task.EngineerId
         });
+    }
+
+    #region Help methods
+    /// <summary>
+    /// Help method to check if scheduled start date is valid
+    /// </summary>
+    /// <param name="id"> id of task </param>
+    /// <param name="startDate"> new/updated scheduled start date </param>
+    /// <exception cref="BO.BlInvalidValueException"> if date is invalid </exception>
+    void CheckScheduledDate(int id, DateTime startDate)
+    {
+        if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution) 
+            throw new BO.BlUpdatingImpossibleException("Can not update scheduled task date after the project start date was declared");
+        
+        BO.Task task = Read(id);
+        IEnumerable<DO.Task?> depenedOnTasks = from item in task.Dependencies 
+                               let doTask = _dal.Task.Read(item.Id)
+                               where doTask.ScheduledDate == null || Read(doTask.Id).ForecastDate > startDate
+                               select doTask;
+
+        if (depenedOnTasks.Any())
+            throw new BO.BlUpdatingImpossibleException($"Requested start date can not be assigned to this task because of previos tasks");
+
     }
 
     /// <summary>
@@ -335,4 +347,19 @@ internal class TaskImplementation : ITask
         return engineerInTask;
     }
 
+    /// <summary>
+    /// Private help method to calculate forcast date
+    /// </summary>
+    /// <param name="doTask"> task </param>
+    /// <returns> forcast date </returns>
+    DateTime? GetForcast(DO.Task doTask)
+    {
+        DateTime? forcast = null;
+        if (doTask.ScheduledDate != null && doTask.StartDate != null)
+            forcast = (doTask.ScheduledDate > doTask.StartDate ? doTask.ScheduledDate : doTask.StartDate) + doTask.RequiredEffortTime;
+        if (doTask.ScheduledDate != null && doTask.StartDate == null)
+            forcast = doTask.ScheduledDate + doTask.RequiredEffortTime;
+        return forcast;
+    }
+    #endregion
 }

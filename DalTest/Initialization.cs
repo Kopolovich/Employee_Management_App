@@ -100,7 +100,8 @@ public static class Initialization
             //setting created at date to random date in the past year
             DateTime _createdAtDate = DateTime.Today.AddDays(-s_rand.Next(1, 365));
 
-            TimeSpan? _requiredEffortTime = null;
+
+            TimeSpan? _requiredEffortTime = TimeSpan.FromDays(s_rand.Next(1, 10));
             bool? _isMilestone = false;
 
             Task newTask = new(_id, _complexity, _createdAtDate, _description, _alias,
@@ -227,7 +228,7 @@ public static class Initialization
     public static void Do () 
     {
         s_dal = Factory.Get;
-
+        //s_dal.Reset();
         createTasks();
         createEngineers();  
         createDependencies();
