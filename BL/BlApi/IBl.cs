@@ -8,4 +8,5 @@ public interface IBl
     public ProjectStatus GetProjectStatus();
     public void CreateProjectSchedule(DateTime projectStartDate);
     public void Reset();
+    public void Initialize();
 }

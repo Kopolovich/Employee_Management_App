@@ -78,6 +78,12 @@ internal class Bl : IBl
         RemoveStartDate("data-config", "ProjectStartDate");
     }
 
+    public void Initialize()
+    {
+        Reset();
+        DalTest.Initialization.Do();
+    }
+
     /// <summary>
     /// method to get project status according to project start date
     /// </summary>
