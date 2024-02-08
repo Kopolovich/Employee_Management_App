@@ -49,6 +49,30 @@ namespace PL.Engineer
         public static readonly DependencyProperty CurrentEngineerProperty =
             DependencyProperty.Register("CurrentEngineer", typeof(BO.Engineer), typeof(EngineerWindow), new PropertyMetadata(0));
 
+        private void Button_Click_AddOrUpdateEngineer(object sender, RoutedEventArgs e)
+        {
+            Button? btn = sender! as Button;
+            if (btn != null)
+            {
+                try
+                {
+                    if (btn.Content.ToString() == "Add")
+                    {
+                        s_bl.Engineer.Create(CurrentEngineer);
+                    }
 
+                    else
+                    {
+                        s_bl.Engineer.Update(CurrentEngineer);
+                    }
+                }
+                catch(Exception ex)
+                { 
+                    MessageBox.Show(ex.Message, "", MessageBoxButton.OK );
+                }
+
+        
+            }
+        }
     }
 }
