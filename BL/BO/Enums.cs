@@ -5,9 +5,13 @@
 /// </summary>
 public enum EngineerExperience
 {
-    Beginner, AdvancedBeginner, Intermediate, Advanced, Expert, All
+    Beginner, AdvancedBeginner, Intermediate, Advanced, Expert
 }
 
+public enum EngineerExperienceForFilter
+{
+    Beginner, AdvancedBeginner, Intermediate, Advanced, Expert, All
+}
 /// <summary>
 /// enum for status of task completion
 /// </summary>

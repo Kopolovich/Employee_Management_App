@@ -23,7 +23,7 @@ namespace PL.Engineer
         public EngineerListWindow()
         {
             InitializeComponent();
-            EngineerList = s_bl.Engineer.ReadAll();
+            //EngineerList = s_bl.Engineer.ReadAll();
         }
 
 
@@ -37,13 +37,30 @@ namespace PL.Engineer
         public static readonly DependencyProperty EngineerListProperty =
             DependencyProperty.Register("EngineerList", typeof(IEnumerable<BO.Engineer>), typeof(EngineerListWindow), new PropertyMetadata(null));
 
-        public BO.EngineerExperience Level { get; set; } = BO.EngineerExperience.All;
+        public BO.EngineerExperienceForFilter Level { get; set; } = BO.EngineerExperienceForFilter.All;
 
         private void ComboBox_SelectionChanged_FilterEngineerByLevel(object sender, SelectionChangedEventArgs e)
         {
-            EngineerList = (Level == BO.EngineerExperience.All) ?
-                s_bl.Engineer.ReadAll() : s_bl.Engineer.ReadAll(item => item.Level == Level);
+            EngineerList = (Level == BO.EngineerExperienceForFilter.All) ?
+                s_bl.Engineer.ReadAll() : s_bl.Engineer.ReadAll(item => item.Level == (BO.EngineerExperience)Level);
 
+        }
+
+        private void Button_Click_OpenEngineerWindow_Add(object sender, RoutedEventArgs e)
+        {
+            new EngineerWindow().ShowDialog();
+        }
+
+       private void ListView_DoubleClick_UpdateEngineer(object sender, RoutedEventArgs e)
+        {
+            BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
+            if (engineer != null)
+                new EngineerWindow(engineer.Id).ShowDialog();
+        }
+
+        private void Window_Activated_Refresh(object sender, EventArgs e)
+        {
+            EngineerList = s_bl.Engineer.ReadAll();
         }
     }
 }

@@ -34,9 +34,8 @@ namespace PL.Engineer
                 {
                     MessageBox.Show(ex.Message,"error", MessageBoxButton.OK);
                 }
-                
+           
         }
-
 
 
         public BO.Engineer CurrentEngineer
@@ -47,8 +46,13 @@ namespace PL.Engineer
 
         // Using a DependencyProperty as the backing store for CurrentEngineer.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CurrentEngineerProperty =
-            DependencyProperty.Register("CurrentEngineer", typeof(BO.Engineer), typeof(EngineerWindow), new PropertyMetadata(0));
+            DependencyProperty.Register("CurrentEngineer", typeof(BO.Engineer), typeof(EngineerWindow), new PropertyMetadata(null));
 
+        /// <summary>
+        /// adds new engineer or updated existing engineer
+        /// </summary>
+        /// <param name="sender"> button clicked on </param>
+        /// <param name="e"> event args </param>
         private void Button_Click_AddOrUpdateEngineer(object sender, RoutedEventArgs e)
         {
             Button? btn = sender! as Button;
@@ -59,20 +63,26 @@ namespace PL.Engineer
                     if (btn.Content.ToString() == "Add")
                     {
                         s_bl.Engineer.Create(CurrentEngineer);
+                        MessageBox.Show($"Engineer added successfully");
                     }
 
                     else
                     {
                         s_bl.Engineer.Update(CurrentEngineer);
+                        MessageBox.Show($"Engineer updated successfully");
                     }
+                    
+                    Close();
                 }
                 catch(Exception ex)
                 { 
                     MessageBox.Show(ex.Message, "", MessageBoxButton.OK );
                 }
-
+                
         
             }
         }
+
+       
     }
 }

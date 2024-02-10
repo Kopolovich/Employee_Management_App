@@ -6,29 +6,30 @@
         xmlns:local="clr-namespace:PL.Engineer"
         mc:Ignorable="d"
         Title="EngineerListWindow" Height="640" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Activated="Window_Activated_Refresh"
+         >
+
     <!--Extrnal Grid-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>
             <RowDefinition Height="500*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40*"/>
         </Grid.RowDefinitions>
-        
+
         <!--Internal, Upper Grid-->
         <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="level" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}"
-                      SelectedValue="{Binding Level, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged_FilterEngineerByLevel"/>
+            <Label Content="Choose level:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="cooper black" FontSize="20"/>
+            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource EngineerCollectionForFilterKey}}"
+                      SelectedValue="{Binding Level, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged_FilterEngineerByLevel" FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center"/>
         </Grid>
 
         <!--List-->
-        <ListView Margin="5" Grid.Row="1" ItemsSource="{Binding EngineerList}">
+        <ListView Margin="5" Grid.Row="1" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateEngineer">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
@@ -36,7 +37,7 @@
             </ListView.View>
         </ListView>
 
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
+        <Button FontSize="20" Content="Add new engineer" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" FontFamily="Cooper Black" Margin="0,1,0,0"/>
 
     </Grid>
 
