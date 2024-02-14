@@ -1,4 +1,5 @@
 ﻿using PL.Engineer;
+using PL.Task;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,11 @@ namespace PL
         private void Button_Click_ShowEngineerListWindow(object sender, RoutedEventArgs e)
         {
             new EngineerListWindow().Show();
+        }
+
+        private void Button_Click_ShowTaskListWindow(object sender, RoutedEventArgs e)
+        {
+            new TaskListWindow().Show();
         }
     }
 }

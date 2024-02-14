@@ -26,8 +26,6 @@ namespace PL.Engineer
             //EngineerList = s_bl.Engineer.ReadAll();
         }
 
-
-
         public IEnumerable<BO.Engineer> EngineerList
         {
             get { return (IEnumerable<BO.Engineer>)GetValue(EngineerListProperty); }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Engineer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,16 +13,68 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL.Task
+namespace PL.Task;
+
+/// <summary>
+/// Interaction logic for TaskWindow.xaml
+/// </summary>
+public partial class TaskWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for TaskWindow.xaml
-    /// </summary>
-    public partial class TaskWindow : Window
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public TaskWindow(int id = 0)
     {
-        public TaskWindow()
+        InitializeComponent();
+        if (id == 0)
+            CurrentTask = new();
+        else
+            try
+            {
+                CurrentTask = s_bl.Task.Read(id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "error", MessageBoxButton.OK);
+            }
+
+    }
+
+    public BO.Task CurrentTask
+    {
+        get { return (BO.Task)GetValue(CurrentTaskProperty); }
+        set { SetValue(CurrentTaskProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for CurrentEngineer.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty CurrentTaskProperty =
+        DependencyProperty.Register("CurrentTask", typeof(BO.Task), typeof(TaskWindow), new PropertyMetadata(null));
+
+    private void Button_Click_AddOrUpdateTask(object sender, RoutedEventArgs e)
+    {
+        Button? btn = sender! as Button;
+        if (btn != null)
         {
-            InitializeComponent();
+            try
+            {
+                if (btn.Content.ToString() == "Add")
+                {
+                    s_bl.Task.Create(CurrentTask);
+                    MessageBox.Show($"Task added successfully");
+                }
+
+                else
+                {
+                    s_bl.Task.Update(CurrentTask);
+                    MessageBox.Show($"Task updated successfully");
+                }
+
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
+            }
+
+
         }
     }
 }

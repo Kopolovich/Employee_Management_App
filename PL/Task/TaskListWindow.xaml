@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Task"
         mc:Ignorable="d"
-        Title="TaskListWindow" Height="450" Width="800">
-    
+        Title="TaskListWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Activated="Window_Activated_Refresh">
+
     <!--Extrnal Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -21,14 +23,16 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource EngineerCollectionForFilterKey}}"
-                    SelectedValue="{Binding Level, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged_FilterEngineerByLevel" FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center"/>
+            <ComboBox Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                     FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center"/>
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource EngineerCollectionForFilterKey}}"
-                   SelectedValue="{Binding Level, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged_FilterEngineerByLevel" FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center"/>
+                   SelectedValue="{Binding Level, Mode=TwoWay}"  FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center"/>
+            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                     FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center" Visibility="Hidden" />
         </Grid>
 
         <!--List-->
-        <ListView Margin="5" Grid.Row="1" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateEngineer">
+        <ListView Margin="5" Grid.Row="1" ItemsSource="{Binding TaskList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateTask">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
@@ -36,7 +40,7 @@
             </ListView.View>
         </ListView>
 
-        <Button FontSize="20" Content="Add new engineer" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" FontFamily="Cooper Black" Margin="0,1,0,0"/>
+        <Button FontSize="20" Content="Add new task" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="200"  FontFamily="Cooper Black" Click="Button_Click_OpenTaskWindow_Add"/>
 
     </Grid>
 </Window>

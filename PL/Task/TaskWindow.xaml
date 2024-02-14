@@ -5,8 +5,121 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Task"
         mc:Ignorable="d"
-        Title="TaskWindow" Height="450" Width="800">
+        Title="TaskWindow" Height="650" Width="500"
+        DataContext="{Binding CurrentTask, RelativeSource={RelativeSource Self}, Mode=TwoWay}">
+
+    <Window.Resources>
+        <Style x:Key="myLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontFamily" Value="Bahnschrift SemiBold" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Grid.Column" Value="0"/>
+            <Setter Property="Height" Value="45" />
+            <Setter Property="Width" Value="82" />
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFF8F9F9"/>
+                <GradientStop Color="#FF85BFE0" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270*"/>
+            <ColumnDefinition Width="250*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="85*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Id" Style="{StaticResource myLabelStyle}"  Margin="10,9,0,23" Width="255" HorizontalAlignment="Left" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+        <Label Content="Description" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="10,8,0,24" Grid.Row="2" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Alias" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="10,11,0,21" Grid.Row="3" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Creation date" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="10,10,0,23" HorizontalAlignment="Left" Grid.Row="4" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Status" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="10,9,0,23" Grid.Row="5" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Dependencies" Style="{StaticResource myLabelStyle}" Margin="10,9,0,23" RenderTransformOrigin="0.5,1.975" Grid.Row="6" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Required effort time" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="7" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Scheduled start date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="8" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Actual start date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="9" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Estimated complition date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="10" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Actual complition date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,23" RenderTransformOrigin="0.5,1.975" Grid.Row="11" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Deliverables" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="12" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Remareks" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="13" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Assigned engineer" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="14" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Complexity (minimum engineer level)" Style="{StaticResource myLabelStyle}" Margin="4,6,0,0" RenderTransformOrigin="0.5,1.975" Grid.Row="15" HorizontalAlignment="Left" Grid.RowSpan="2" Width="255" VerticalAlignment="Top"/>
+
+        <TextBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+         Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
+         IsEnabled="{Binding Id, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}" Height="23"/>
+
+        <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+        Text="{Binding Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <TextBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+        Text="{Binding Alias, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <TextBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+        Text="{Binding CreatedAtDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsEnabled="False" Height="23"/>
+
+        <TextBox Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+        Text="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsEnabled="False" Height="23"/>
+
+        <ComboBox Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170" Height="23"/>
+
+        <TextBox Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+        Text="{Binding RequiredEffortTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <DatePicker Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
+        Text="{Binding ScheduledDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <DatePicker Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
+        Text="{Binding StartDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <DatePicker Grid.Column="1" Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
+        Text="{Binding ForecastDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <DatePicker Grid.Column="1" Grid.Row="11" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
+        Text="{Binding CompleteDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"  Height="23"/>
+
+        <TextBox Grid.Column="1" Grid.Row="12" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+        Text="{Binding Deliverables, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <TextBox Grid.Column="1" Grid.Row="13" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+        Text="{Binding Remarks, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+
+        <ComboBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170" Height="23"
+        RenderTransformOrigin="0.5,0.5" Grid.Row="14" />
+
+        <ComboBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170" Height="23"
+          SelectedValue="{Binding Complexity, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+          ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" RenderTransformOrigin="0.5,0.5" Grid.Row="15" />
+
+        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConverIdToContentKey}}" HorizontalAlignment="Left" Margin="45,0,0,0" VerticalAlignment="Center" Height="31" Width="80" Grid.Row="16" Grid.Column="1" RenderTransformOrigin="0.217,0.639"/>
+
     </Grid>
 </Window>
