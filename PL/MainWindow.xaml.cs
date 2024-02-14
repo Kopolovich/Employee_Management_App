@@ -23,16 +23,30 @@ namespace PL
             InitializeComponent();
         }
 
-        private void Button_Click_Show_Engineers(object sender, RoutedEventArgs e)
-        {
-            new EngineerListWindow().Show();
-        }
+     
 
         private void Button_Click_Init_DB(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult mbResult = MessageBox.Show("Are you sure you want to initialize the Data Base?", "", MessageBoxButton.YesNo);
+            MessageBoxResult mbResult = MessageBox.Show("Are you sure you want to initialize the Data Base? \n all existing data will be permanently deleted", "", MessageBoxButton.YesNo);
             if(mbResult == MessageBoxResult.Yes)
                 s_bl.Initialize();
+        }
+
+        private void Button_Click_Reset_DB(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult mbResult = MessageBox.Show("Are you sure you want to reset the Data? \n all existing data will be permanently deleted", "", MessageBoxButton.YesNo);
+            if (mbResult == MessageBoxResult.Yes)
+                s_bl.Reset();
+        }
+
+        private void Button_Click_ShowAdminWindow(object sender, RoutedEventArgs e)
+        {
+            new AdminWindow().Show();
+        }
+
+        private void Button_Click_ShowEngineerUserWindow(object sender, RoutedEventArgs e)
+        {
+            new EngineerUserWindow().Show();
         }
     }
 }

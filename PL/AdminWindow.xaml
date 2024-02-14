@@ -1,0 +1,15 @@
+﻿<Window x:Class="PL.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="AdminWindow" Height="450" Width="800">
+    <Grid>
+        <Button Content="View engineer list " HorizontalAlignment="Left" Margin="85,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowEngineerListWindow"/>
+        <Button Content="View Task list " HorizontalAlignment="Left" Margin="243,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowEngineerListWindow"/>
+        <Button Content="Gantt chart " HorizontalAlignment="Left" Margin="400,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowEngineerListWindow"/>
+        <Button Content="Create project schedule" HorizontalAlignment="Left" Margin="553,318,0,0" VerticalAlignment="Top" Height="26" Width="169" Click="Button_Click_ShowEngineerListWindow"/>
+    </Grid>
+</Window>

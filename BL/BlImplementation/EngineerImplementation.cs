@@ -121,8 +121,11 @@ internal class EngineerImplementation : IEngineer
             if (doEngineer.Level > (DO.EngineerExperience)engineer.Level)
                 throw new BO.BlInvalidValueException("It is not possible to lower the experience level of an engineer");
 
+            if (_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning && engineer.Task != null)
+                throw new BO.BlUpdatingImpossibleException("Can not assign task to engineer while project is still in planning");
+
             _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
-            
+
             //if possible, assign task to engineer
             if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution && engineer.Task != null)
                 AssignTaskToEngineer(engineer.Id, engineer.Task);
