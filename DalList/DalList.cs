@@ -1,5 +1,6 @@
 ﻿namespace Dal;
 using DalApi;
+using DO;
 using System.Data.SqlTypes;
 
 /// <summary>
@@ -21,4 +22,15 @@ sealed internal class DalList : IDal
     public ITask Task =>  new TaskImplementation();
 
     public IDependency Dependency => new DependencyImplementation();
+
+    public void Reset()
+    {
+        DataSource.Tasks.Clear();
+        DataSource.Engineers.Clear();
+        DataSource.Dependencies.Clear();
+
+        DataSource.Config.ProjectStartDate = null;
+        DataSource.Config.NextDependencyId = DataSource.Config.StartDependencyId;
+        DataSource.Config.NextTaskId = DataSource.Config.StartTaskId;
+    }
 }

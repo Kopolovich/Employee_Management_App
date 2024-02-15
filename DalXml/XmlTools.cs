@@ -34,6 +34,19 @@ static class XMLTools
         XMLTools.SaveListToXMLElement(root, data_config_xml);
         return nextId;
     }
+
+    public static void ResetNextId(string data_config_xml, string elemName)
+    {
+        int resetValue = 0;
+        if (elemName == "NextTaskId")
+            resetValue = 1000;
+        else
+            resetValue = 100;
+        XElement root = LoadListFromXMLElement(data_config_xml);
+        int nextId = root.ToIntNullable(elemName) ?? throw new FormatException($"can't convert id.  {data_config_xml}, {elemName}");
+        root.Element(elemName)?.SetValue((resetValue).ToString());
+        SaveListToXMLElement(root, data_config_xml);
+    }
     public static void SetStartDate(string data_config_xml, string elemName, DateTime? startDate)
     {
         XElement root = XMLTools.LoadListFromXMLElement(data_config_xml);
@@ -54,9 +67,12 @@ static class XMLTools
 
     public static void RemoveStartDate(string data_config_xml, string elemName)
     {
+        const string s_xml_dir = @"..\xml\";
+        string filePath = $"{s_xml_dir + data_config_xml}.xml";
         XElement root = XMLTools.LoadListFromXMLElement(data_config_xml);
         if (root.Element(elemName) != null)
-            root.Element(elemName).Remove();
+            root.Element(elemName)!.Remove();
+        root.Save(filePath);
     }
 
     #endregion

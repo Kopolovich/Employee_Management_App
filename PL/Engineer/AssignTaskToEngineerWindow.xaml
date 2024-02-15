@@ -8,10 +8,10 @@
         Title="AssignTaskToEngineerWindow" Height="400" Width="400"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
-        <Label Content="Choose a task:" HorizontalAlignment="Left" Margin="164,132,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                  Width="228" ItemsSource="{Binding TaskInEngineerList}" SelectedValue="{Binding CurrentTask, Mode=TwoWay}"/>
-        <Button Content="Assign" HorizontalAlignment="Center" Margin="0,265,0,0" VerticalAlignment="Top" Height="26" Width="100" Click="Button_Click_AssignTaskToEngineer"/>
+        <Label Content="Choose a task:" HorizontalAlignment="Center" Margin="0,35,0,0" VerticalAlignment="Top" FontFamily="Cooper black" FontSize="32"/>
+        <ComboBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                  FontFamily="Comic Sans MS" Width="228" ItemsSource="{Binding TaskInEngineerList}" SelectedValue="{Binding CurrentTask, Mode=TwoWay}" Height="36" Margin="0,109,0,0"/>
+        <Button Content="Assign" HorizontalAlignment="Center" Margin="0,329,0,0" VerticalAlignment="Top" Height="26" Width="100" Click="Button_Click_AssignTaskToEngineer"/>
 
     </Grid>
 </Window>

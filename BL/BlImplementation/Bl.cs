@@ -1,11 +1,11 @@
 ﻿namespace BlImplementation;
 using BlApi;
 using BO;
-using DO;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -23,23 +23,32 @@ internal class Bl : IBl
     public void CreateProjectSchedule(DateTime projectStartDate)
     {
         //reading tasks and saving in sorted list
-        List<BO.TaskInList> doTasks = Task.ReadAll().OrderBy(item => item.Id).ToList();
+        List<BO.TaskInList> tasks = Task.ReadAll().OrderBy(item => item.Id).ToList();
+        
         //making sure all tasks have required effort time assigned
-        if (doTasks.Any(task => Task.Read(task.Id).RequiredEffortTime == null))
+        if (tasks.Any(task => Task.Read(task.Id).RequiredEffortTime == null))
             throw new BO.BlInvalidValueException("Can not plan project schedule if not all tasks have required effort time assigned");
         
         //for each task, finding the earliest possible date and assigning to task
-        DateTime? date;
-        doTasks.ForEach(task =>
-        {
-            date = GetEarliestDate(Task.Read(task.Id), projectStartDate);
-            if (date == null) throw new BO.BlInvalidValueException("Forcast date is null");
-            Task.AssignScheduledDateToTask(task.Id, (DateTime)date);
-        });
+        tasks.ForEach(task => RecursiveProjectSchedule(task.Id, projectStartDate));     
         
         //updating project start date in config
         Dal.Config.ProjectStartDate = projectStartDate;
-        
+    }
+
+    void RecursiveProjectSchedule(int id, DateTime projectStartDate) 
+    { 
+        BO.Task task = Task.Read(id);
+        if (task.ScheduledDate != null) return;
+
+        List<BO.TaskInList>? prevTasks = task.Dependencies ?? new List<BO.TaskInList>();
+
+        prevTasks.ForEach(task => RecursiveProjectSchedule(task.Id, projectStartDate));
+
+        DateTime? startDate = GetEarliestDate(Task.Read(task.Id), projectStartDate);
+
+        if (startDate == null) throw new BO.BlInvalidValueException("Forecast date is null");
+            Task.AssignScheduledDateToTask(task.Id, (DateTime)startDate);
     }
 
     /// <summary>
@@ -51,20 +60,20 @@ internal class Bl : IBl
     /// <exception cref="BO.BlAssignmentImpossibleException"></exception>
     DateTime? GetEarliestDate(BO.Task task, DateTime projectStartDate)
     {
-        //if there are no previos tasks the task scheduled start date is the project start date
+        //if there are no previous tasks the task scheduled start date is the project start date
         if (task.Dependencies == null || task.Dependencies.Count == 0)
             return projectStartDate;
 
-        //reading previos tasks 
-        var previosTasks = from dependency in task.Dependencies
+        //reading previous tasks 
+        var previousTasks = from dependency in task.Dependencies
                            select Task.Read(dependency.Id);
 
-        //checking if any previos tasks dont have a scheduled start date yet
-        if (previosTasks.Any(task => task.ScheduledDate == null))
-            throw new BO.BlAssignmentImpossibleException("Can not assign scheduled start date to task if previos tasks dont have a scheduled start date yet");
+        //checking if any previous tasks don't have a scheduled start date yet
+        if (previousTasks.Any(task => task.ScheduledDate == null))
+            throw new BO.BlAssignmentImpossibleException("Can not assign scheduled start date to task if previous tasks don't have a scheduled start date yet");
 
-        //finding maximal planned finish date of previos tasks
-        return previosTasks.Max(task => task.ForecastDate);
+        //finding maximal planned finish date of previous tasks
+        return previousTasks.Max(task => task.ForecastDate);
 
     }
 
@@ -73,14 +82,14 @@ internal class Bl : IBl
     /// </summary>
     public void Reset()  
     {
-        DalApi.IDal _dal = DalApi.Factory.Get;
-        _dal.Reset();
-        RemoveStartDate("data-config", "ProjectStartDate");
+        DalApi.Factory.Get.Reset();
     }
 
+    /// <summary>
+    /// method to initialize data
+    /// </summary>
     public void Initialize()
     {
-        Reset();
         DalTest.Initialization.Do();
     }
 
@@ -93,39 +102,5 @@ internal class Bl : IBl
         return Dal.Config.ProjectStartDate != null ? ProjectStatus.InExecution : ProjectStatus.InPlanning;
     }
 
-    #region remove date from xml file
-    //help method
-    static XElement LoadListFromXMLElement(string entity)
-    {
-        const string s_xml_dir = @"..\xml\";
-        string filePath = $"{s_xml_dir + entity}.xml";
-        try
-        {
-            if (File.Exists(filePath))
-                return XElement.Load(filePath);
-            XElement rootElem = new(entity);
-            rootElem.Save(filePath);
-            return rootElem;
-        }
-        catch (Exception ex)
-        {
-            throw new DalXMLFileLoadCreateException($"fail to load xml file: {s_xml_dir + filePath}, {ex.Message}");
-        }
-    }
-    /// <summary>
-    /// help method to remove project start date from config
-    /// </summary>
-    /// <param name="data_config_xml"> file name </param>
-    /// <param name="elemName"> tag name </param>
-    static void RemoveStartDate(string data_config_xml, string elemName)
-    {
-        const string s_xml_dir = @"..\xml\";
-        string filePath = $"{s_xml_dir + data_config_xml}.xml";
-        XElement root = LoadListFromXMLElement(data_config_xml);
-        if (root.Elements(elemName).Any())
-            (root.Element(elemName)!).Remove();
-        root.Save(filePath);
-    }
-    #endregion
 }
 

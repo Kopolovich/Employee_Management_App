@@ -223,12 +223,12 @@ public static class Initialization
     }
 
     /// <summary>
-    /// publich method to call private methods to initialize lists
+    /// public method to call private methods to initialize lists
     /// </summary>
     public static void Do () 
     {
         s_dal = Factory.Get;
-        //s_dal.Reset();
+        s_dal.Reset();
         createTasks();
         createEngineers();  
         createDependencies();

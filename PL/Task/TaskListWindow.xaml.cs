@@ -31,6 +31,7 @@ public partial class TaskListWindow : Window
     {
         TaskList = s_bl.Task.ReadAll();
     }
+
     public BO.EngineerExperienceForFilter Level { get; set; } = BO.EngineerExperienceForFilter.All;
     public IEnumerable<BO.TaskInList> TaskList
     {
