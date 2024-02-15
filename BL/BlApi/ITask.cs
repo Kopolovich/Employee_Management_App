@@ -43,4 +43,6 @@ public interface ITask
     /// <param name="id"> id of task </param>
     /// <param name="startDate"> scheduled start date </param>
     public void AssignScheduledDateToTask(int id, DateTime startDate);
+
+    public IEnumerable<BO.TaskInEngineer> ReadTasksForEngineer(int id);
 }

@@ -532,7 +532,7 @@ internal class Program
         string? name = Console.ReadLine();
 
         //assigning new current tasks in engineer
-        BO.TaskInEnginner? currentTask = null;
+        BO.TaskInEngineer? currentTask = null;
         Console.WriteLine("Do you want to assign task to engineer?");
         string? ans = Console.ReadLine();
         if (ans != null && ans == "Y")
@@ -541,7 +541,7 @@ internal class Program
             int taskId;
             if (!int.TryParse(Console.ReadLine(), out taskId))
                 throw new BO.BlInvalidValueException("Id has to contain numbers only");
-            currentTask = new BO.TaskInEnginner()
+            currentTask = new BO.TaskInEngineer()
             {
                 Id = taskId,
                 Alias = s_bl.Task.Read(taskId).Alias
@@ -593,14 +593,14 @@ internal class Program
         //assigning current tasks in engineer
         Console.WriteLine("Do you want to update current task?");
         string? ans = Console.ReadLine();
-        BO.TaskInEnginner? currentTask = null;
+        BO.TaskInEngineer? currentTask = null;
         if (ans != null && ans == "Y")
         {
             Console.WriteLine("enter task id:");
             int taskId;
             if (!int.TryParse(Console.ReadLine(), out taskId))
                 throw new BO.BlInvalidValueException("Id has to contain numbers only");
-            currentTask = new BO.TaskInEnginner()
+            currentTask = new BO.TaskInEngineer()
             {
                 Id = taskId,
                 Alias = s_bl.Task.Read(taskId).Alias

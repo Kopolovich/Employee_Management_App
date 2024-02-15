@@ -37,4 +37,11 @@ public interface IEngineer
     /// </summary>
     /// <param name="id"> id of requested engineer </param>
     public void Delete(int id);
+
+    /// <summary>
+    /// assigning task to engineer
+    /// </summary>
+    /// <param name="engineerId"> id of engineer </param>
+    /// <param name="task"> requested task </param>
+    public void AssignTaskToEngineer(int engineerId, BO.TaskInEngineer task);
 }

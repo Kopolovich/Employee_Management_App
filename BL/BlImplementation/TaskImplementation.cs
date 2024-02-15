@@ -15,7 +15,7 @@ internal class TaskImplementation : ITask
     /// adding new task to dal
     /// </summary>
     /// <param name="task"> logic task entity </param>
-    /// <exception cref="BO.BlNullPropertyException"> if recieved task is null </exception>
+    /// <exception cref="BO.BlNullPropertyException"> if received task is null </exception>
     /// <exception cref="BO.BlInvalidValueException"> if one or more of task's props contain invalid values </exception>
     public void Create(BO.Task? task)
     {
@@ -262,6 +262,24 @@ internal class TaskImplementation : ITask
         });
     }
 
+    /// <summary>
+    /// Method that returns all tasks that requested engineer can be assigned to
+    /// </summary>
+    /// <param name="id"> id of requested engineer </param>
+    /// <returns> list of tasks </returns>
+    /// <exception cref="BO.BlDoesNotExistException"> if engineer does not exist </exception>
+    public IEnumerable<BO.TaskInEngineer> ReadTasksForEngineer(int id)
+    {
+        DO.Engineer? engineer = _dal.Engineer.Read(id);
+        if(engineer == null)
+            throw new BO.BlDoesNotExistException($"Engineer with id = {id} does not exist");
+
+        return (from task in ReadAll(task=> task.Engineer == null && 
+                (task.Dependencies == null || task.Dependencies.All(dependency => dependency.Status == BO.Status.Done)))
+                where Read(task.Id).Complexity <= (BO.EngineerExperience)engineer.Level
+                select new BO.TaskInEngineer() {Id = task.Id, Alias = task.Alias});
+    }
+
     #region Help methods
     /// <summary>
     /// Help method to check if scheduled start date is valid
@@ -361,5 +379,6 @@ internal class TaskImplementation : ITask
             forcast = doTask.ScheduledDate + doTask.RequiredEffortTime;
         return forcast;
     }
+
     #endregion
 }

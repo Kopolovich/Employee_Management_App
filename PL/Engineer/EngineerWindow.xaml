@@ -40,14 +40,13 @@
             <RowDefinition Height="70*"/>
             <RowDefinition Height="70*"/>
             <RowDefinition Height="70*"/>
-            <RowDefinition Height="70*"/>
         </Grid.RowDefinitions>
         <Label Content="Id" Style="{StaticResource myLabelStyle}"  Margin="140,15,0,5" Width="82" HorizontalAlignment="Left" Grid.Row="1"/>
         <Label Content="Name" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,13,0,7" Grid.Row="2" HorizontalAlignment="Left"/>
         <Label Content="Email" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,16,0,4" Grid.Row="3" HorizontalAlignment="Left"/>
         <Label Content="Level" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,15,0,6" HorizontalAlignment="Left" Grid.Row="4"/>
         <Label Content="Cost" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,14,0,6" Grid.Row="5" HorizontalAlignment="Left"/>
-        <Label Content="Task Id" Style="{StaticResource myLabelStyle}" Margin="140,15,0,5" RenderTransformOrigin="0.5,1.975" Grid.Row="6" HorizontalAlignment="Left"/>
+        
 
         <TextBox Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
                  Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
@@ -61,8 +60,6 @@
                   ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" RenderTransformOrigin="0.5,0.5" Grid.Row="4" />
         <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
                  Text="{Binding Cost, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="5" Height="23" Grid.ColumnSpan="2" Margin="216,0,0,0"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                 Text="{Binding Task.Id, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="6" Height="23"/>
-        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConverIdToContentKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="7" Grid.Column="1"/>
+        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConverIdToContentKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1"/>
     </Grid>
 </Window>

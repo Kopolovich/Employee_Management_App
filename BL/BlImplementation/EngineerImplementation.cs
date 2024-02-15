@@ -16,7 +16,7 @@ internal class EngineerImplementation : IEngineer
     /// adding new engineer to dal
     /// </summary>
     /// <param name="engineer"> engineer logic entity </param>
-    /// <exception cref="BO.BlNullPropertyException"> if recieved engineer is null </exception>
+    /// <exception cref="BO.BlNullPropertyException"> if received engineer is null </exception>
     /// <exception cref="BO.BlInvalidValueException"> if one or more of engineer's props contain invalid values </exception>
     /// <exception cref="BO.BlAlreadyExistsException"> if engineer with this Id already exists </exception>
     public void Create(BO.Engineer? engineer)
@@ -24,7 +24,7 @@ internal class EngineerImplementation : IEngineer
         try
         {
             if (engineer == null)
-                throw new BO.BlNullPropertyException("Enigneer is null");
+                throw new BO.BlNullPropertyException("Engineer is null");
             if (engineer.Id <= 0 || engineer.Name == "" || engineer.Cost <= 0 || !CheckEmail(engineer.Email!))
                 throw new BO.BlInvalidValueException("Engineer with invalid values");
 
@@ -59,9 +59,9 @@ internal class EngineerImplementation : IEngineer
                                select dTask).FirstOrDefault();                               
 
         //defining task in engineer help entity to contain current task info
-        BO.TaskInEnginner? taskInEnginner = null;
+        BO.TaskInEngineer? taskInEngineer = null;
         if (currentTask != null)
-            taskInEnginner = new BO.TaskInEnginner() { Id = currentTask.Id, Alias = currentTask.Alias };
+            taskInEngineer = new BO.TaskInEngineer() { Id = currentTask.Id, Alias = currentTask.Alias };
         
         return new BO.Engineer()
         {
@@ -70,7 +70,7 @@ internal class EngineerImplementation : IEngineer
             Email = doEngineer.Email,
             Level = (BO.EngineerExperience)doEngineer.Level,
             Cost = doEngineer.Cost,
-            Task = taskInEnginner
+            Task = taskInEngineer
         };
     }
     
@@ -110,7 +110,7 @@ internal class EngineerImplementation : IEngineer
         try
         {
             if (engineer == null)
-                throw new BO.BlNullPropertyException("Enigneer is null");
+                throw new BO.BlNullPropertyException("Engineer is null");
             if (engineer.Id <= 0 || engineer.Name == "" || engineer.Cost <= 0 || !CheckEmail(engineer.Email!))
                 throw new BO.BlInvalidValueException("Engineer with invalid values");
 
@@ -121,14 +121,15 @@ internal class EngineerImplementation : IEngineer
             if (doEngineer.Level > (DO.EngineerExperience)engineer.Level)
                 throw new BO.BlInvalidValueException("It is not possible to lower the experience level of an engineer");
 
-            if (_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning && engineer.Task != null)
-                throw new BO.BlUpdatingImpossibleException("Can not assign task to engineer while project is still in planning");
+            //if (_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning && engineer.Task != null)
+            //    throw new BO.BlUpdatingImpossibleException("Can not assign task to engineer while project is still in planning");
+            
+            //if possible, assign task to engineer
+            //if (_bl.GetProjectStatus() == BO.ProjectStatus.InExecution && engineer.Task != null)
+            //    AssignTaskToEngineer(engineer, engineer.Task);
 
             _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
-
-            //if possible, assign task to engineer
-            if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution && engineer.Task != null)
-                AssignTaskToEngineer(engineer.Id, engineer.Task);
+                      
         }
 
         catch (DO.DalAlreadyExistsException ex)
@@ -170,49 +171,35 @@ internal class EngineerImplementation : IEngineer
         
     }
 
-    #region Help methods
-    /// <summary>
-    /// private help method to check if email address is valid
-    /// </summary>
-    /// <param name="email"> email address </param>
-    /// <returns> true if email is valid, else false </returns>
-    bool CheckEmail(string email)
-    {
-        if (email == null)
-            return false;
-        // Basic regular expression for email validation
-        string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-        // Create a Regex object
-        Regex regex = new Regex(pattern);
-        // Use the IsMatch method to validate the email
-        return regex.IsMatch(email);
-    }
-
     /// <summary>
     /// private help method for assigning task to engineer
     /// </summary>
     /// <param name="engineerId"> id of engineer </param>
     /// <param name="task"> task to be assigned to </param>
     /// <exception cref="BO.BlDoesNotExistException"> if requested task does not exist </exception>
-    /// <exception cref="BO.BlAssignmentImpossibleException"> if engineer can not be assigned to task for varios reasons </exception>
-    void AssignTaskToEngineer(int engineerId, BO.TaskInEnginner task)
+    /// <exception cref="BO.BlAssignmentImpossibleException"> if engineer can not be assigned to task for various reasons </exception>
+    public void AssignTaskToEngineer(int engineerId, BO.TaskInEngineer task)
     {
+        //checking if project is still in planning
+        if (_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+            throw new BO.BlUpdatingImpossibleException("Can not assign task to engineer while project is still in planning");
+
         //checking if task exists
         DO.Task? dTask = _dal.Task.Read(task.Id);
         if (dTask == null) throw new BO.BlDoesNotExistException($"Task with id={task.Id} does not exist");
 
         //checking if a different engineer is already assigned to task
-        if (dTask.EngineerId != null && dTask.EngineerId != engineerId) 
+        if (dTask.EngineerId != null && dTask.EngineerId != engineerId)
             throw new BO.BlAssignmentImpossibleException("A different engineer is already assigned to task");
 
-        //checking if previos tasks are not done yet
+        //checking if previous tasks are not done yet
         var dependencies = from item in _iTask.Read(task.Id).Dependencies
                            where _iTask.Read(item.Id).Status != BO.Status.Done
                            select item;
-        if(dependencies.Any()) throw new BO.BlAssignmentImpossibleException("Previos tasks are not done yet");
+        if (dependencies.Any()) throw new BO.BlAssignmentImpossibleException("Previous tasks are not done yet");
 
         //checking if the complexity of the task is higher than engineer's level
-        if (dTask.Complexity > _dal.Engineer.Read(engineerId)!.Level) 
+        if (dTask.Complexity > (DO.EngineerExperience)Read(engineerId).Level)
             throw new BO.BlAssignmentImpossibleException("The complexity of the task is higher than engineer's level");
 
         //assigning task to engineer using dal update method
@@ -232,6 +219,25 @@ internal class EngineerImplementation : IEngineer
             EngineerId = engineerId
         });
     }
+
+    #region Help methods
+    /// <summary>
+    /// private help method to check if email address is valid
+    /// </summary>
+    /// <param name="email"> email address </param>
+    /// <returns> true if email is valid, else false </returns>
+    bool CheckEmail(string email)
+    {
+        if (email == null)
+            return false;
+        // Basic regular expression for email validation
+        string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        // Create a Regex object
+        Regex regex = new Regex(pattern);
+        // Use the IsMatch method to validate the email
+        return regex.IsMatch(email);
+    }
+
     #endregion
 
 }
