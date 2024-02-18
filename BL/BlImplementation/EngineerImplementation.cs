@@ -184,6 +184,11 @@ internal class EngineerImplementation : IEngineer
         if (_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
             throw new BO.BlUpdatingImpossibleException("Can not assign task to engineer while project is still in planning");
 
+        //checking if engineer is still working on different task
+        BO.TaskInEngineer? oldTask = Read(engineerId).Task;
+        if (oldTask != null && _iTask.Read(oldTask.Id).Status != BO.Status.Done)
+            throw new BO.BlUpdatingImpossibleException("Can not assign a new task to engineer before he finishes working on his current task");
+
         //checking if task exists
         DO.Task? dTask = _dal.Task.Read(task.Id);
         if (dTask == null) throw new BO.BlDoesNotExistException($"Task with id={task.Id} does not exist");
@@ -211,7 +216,7 @@ internal class EngineerImplementation : IEngineer
             Description = dTask.Description,
             CreatedAtDate = dTask.CreatedAtDate,
             RequiredEffortTime = dTask.RequiredEffortTime,
-            StartDate = dTask.StartDate,
+            StartDate = DateTime.Now,
             ScheduledDate = dTask.ScheduledDate,
             CompleteDate = dTask.CompleteDate,
             Deliverables = dTask.Deliverables,

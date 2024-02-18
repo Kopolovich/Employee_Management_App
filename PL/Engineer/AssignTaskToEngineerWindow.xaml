@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL.Engineer"
         mc:Ignorable="d"
         Title="AssignTaskToEngineerWindow" Height="400" Width="400"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Activated="Window_Activated_Refresh">
     <Grid>
         <Label Content="Choose a task:" HorizontalAlignment="Center" Margin="0,35,0,0" VerticalAlignment="Top" FontFamily="Cooper black" FontSize="32"/>
         <ComboBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" 

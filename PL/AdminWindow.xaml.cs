@@ -3,6 +3,7 @@ using PL.Task;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace PL
     /// </summary>
     public partial class AdminWindow : Window
     {
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         public AdminWindow()
         {
             InitializeComponent();
@@ -34,6 +36,20 @@ namespace PL
         private void Button_Click_ShowTaskListWindow(object sender, RoutedEventArgs e)
         {
             new TaskListWindow().Show();
+        }
+
+        private void Button_Click_CreateSchedule(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                s_bl.CreateProjectSchedule(DateTime.Now);
+                MessageBox.Show("Scheduled start dates have been assigned to all tasks! \nGoodLuck!", "", MessageBoxButton.OK);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
+            }
         }
     }
 }

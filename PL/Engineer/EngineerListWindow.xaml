@@ -13,6 +13,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
             <RowDefinition Height="500*"/>
             <RowDefinition Height="40*"/>
         </Grid.RowDefinitions>
@@ -28,8 +29,10 @@
                       SelectedValue="{Binding Level, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged_FilterEngineerByLevel" FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center"/>
         </Grid>
 
+        <Label Grid.Row ="1" Content="Double click to update engineer, right click to assign task to engineer" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"/>
+
         <!--List-->
-        <ListView Margin="5" Grid.Row="1" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateEngineer">
+        <ListView Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
@@ -37,7 +40,7 @@
             </ListView.View>
         </ListView>
 
-        <Button FontSize="20" Content="Add new engineer" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" FontFamily="Cooper Black" Margin="0,1,0,0"/>
+        <Button FontSize="20" Content="Add new engineer" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" FontFamily="Cooper Black" Margin="0,1,0,0"/>
 
     </Grid>
 

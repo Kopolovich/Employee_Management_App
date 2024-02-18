@@ -25,16 +25,19 @@ public partial class AssignTaskToEngineerWindow : Window
     {
         InitializeComponent();
         TaskInEngineerList = s_bl.Task.ReadTasksForEngineer(id);
-        if (TaskInEngineerList.Any()) 
-            CurrentTask = TaskInEngineerList.First();
-        else
+     
+                   
+        EngineerId = id;
+    }
+
+    private void Window_Activated_Refresh(object sender, EventArgs e)
+    {
+        if (!TaskInEngineerList.Any())
         {
             MessageBox.Show("No available tasks for this engineer", "", MessageBoxButton.OK);
             Close();
         }
-        EngineerId = id;
     }
-
     public IEnumerable<BO.TaskInEngineer> TaskInEngineerList
     {
         get { return (IEnumerable<BO.TaskInEngineer>)GetValue(TaskInEngineerListProperty); }
@@ -52,7 +55,16 @@ public partial class AssignTaskToEngineerWindow : Window
     {
         try
         {
-            s_bl.Engineer.AssignTaskToEngineer(EngineerId, CurrentTask);
+            if(CurrentTask != null)
+            {
+                s_bl.Engineer.AssignTaskToEngineer(EngineerId, CurrentTask);
+                MessageBox.Show("Task assigned to engineer successfully", "", MessageBoxButton.OK);
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Please choose a task", "", MessageBoxButton.OK);
+            }
         }
         catch (Exception ex)
         {

@@ -22,6 +22,9 @@ internal class Bl : IBl
     /// <exception cref="BO.BlInvalidValueException"> if can not plan project schedule because not all tasks have required effort time assigned </exception>
     public void CreateProjectSchedule(DateTime projectStartDate)
     {
+        if (GetProjectStatus() == ProjectStatus.InExecution)
+            throw new BO.BlCreationImpossibleException("Can not create project schedule while project is in Execution stage");
+        
         //reading tasks and saving in sorted list
         List<BO.TaskInList> tasks = Task.ReadAll().OrderBy(item => item.Id).ToList();
         

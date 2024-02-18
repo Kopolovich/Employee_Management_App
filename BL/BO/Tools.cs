@@ -13,7 +13,7 @@ internal class Tools
         string str = "";
         var properties = typeof(T).GetProperties();
 
-        //for each propery, print the name and than the value
+        //for each property, print the name and than the value
         foreach (var property in properties)
         {
             var value = property.GetValue(obj);
@@ -25,6 +25,10 @@ internal class Tools
                 {
                     str += $"- {item}\n";
                 }
+            }
+            if(value is BO.TaskInEngineer task)
+            {
+                str += $"{property.Name}: Id: {task.Id} Alias: {task.Alias}\n";
             }
             else
             {

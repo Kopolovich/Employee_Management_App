@@ -60,5 +60,12 @@ namespace PL.Engineer
         {
             EngineerList = s_bl.Engineer.ReadAll();
         }
+
+        private void MouseRight_assignTask(object sender, EventArgs e)
+        {
+            BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
+            if (engineer != null)
+                new AssignTaskToEngineerWindow(engineer.Id).ShowDialog();
+        }
     }
 }

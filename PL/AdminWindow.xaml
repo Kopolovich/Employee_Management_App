@@ -10,6 +10,6 @@
         <Button Content="View engineer list " HorizontalAlignment="Left" Margin="85,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowEngineerListWindow"/>
         <Button Content="View Task list " HorizontalAlignment="Left" Margin="243,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowTaskListWindow" />
         <Button Content="Gantt chart " HorizontalAlignment="Left" Margin="400,318,0,0" VerticalAlignment="Top" Height="26" Width="104" />
-        <Button Content="Create project schedule" HorizontalAlignment="Left" Margin="553,318,0,0" VerticalAlignment="Top" Height="26" Width="169" />
+        <Button Content="Create project schedule" HorizontalAlignment="Left" Margin="553,318,0,0" VerticalAlignment="Top" Height="26" Width="169" Click="Button_Click_CreateSchedule" />
     </Grid>
 </Window>
