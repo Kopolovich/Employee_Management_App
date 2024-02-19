@@ -52,4 +52,56 @@ public partial class TaskListWindow : Window
         if (task != null)
             new TaskWindow(task.Id).ShowDialog();
     }
+
+    private void Click_filterByTime(object sender, RoutedEventArgs e)
+    {
+        MenuItem? menuItem = sender as MenuItem;
+        if (menuItem != null)
+        {
+            int startDays=0, endDays=0;
+            if((string)menuItem.Header == "Up to 2 days")
+            {
+                startDays = 0;
+                endDays = 2;
+            }
+            else if ((string)menuItem.Header == "3-9 days")
+            {
+                startDays= 3; 
+                endDays = 9;
+            }
+            else if((string)menuItem.Header == "10 and up")
+            {
+                TaskList = s_bl.Task.ReadAll(item => item.RequiredEffortTime >= new TimeSpan(10, 0, 0, 0));
+
+            }
+
+            TaskList = s_bl.Task.ReadAll(item=> item.RequiredEffortTime >= new TimeSpan(startDays,0,0,0) && item.RequiredEffortTime <= new TimeSpan(endDays, 0, 0, 0));
+        }
+    }
+
+    private void Click_filterByStatus(object sender, RoutedEventArgs e)
+    {
+        MenuItem? obMenuItem = e.OriginalSource as MenuItem;
+
+        if (obMenuItem != null)
+        {
+            TaskList = s_bl.Task.ReadAll(item => item.Status == (BO.Status)obMenuItem.Header);
+        }
+    }
+
+    private void Click_filterByComplexity(object sender, RoutedEventArgs e)
+    {
+        MenuItem? obMenuItem = e.OriginalSource as MenuItem;
+
+        if (obMenuItem != null)
+        {
+            
+            TaskList = s_bl.Task.ReadAll(item => item.Complexity == (BO.EngineerExperience)obMenuItem.Header);
+        }
+    }
+
+    private void Click_ResetFilters(object sender, RoutedEventArgs e)
+    {
+        TaskList = s_bl.Task.ReadAll();
+    }
 }

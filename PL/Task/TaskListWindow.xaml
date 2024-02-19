@@ -25,10 +25,15 @@
             </Grid.ColumnDefinitions>
 
             <Menu Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <MenuItem Header="Filter by:" Height="38" Width="122" >
-                    <MenuItem Header="Complexity" ItemsSource="{Binding Source={StaticResource EngineerCollectionForFilterKey}}"></MenuItem>
-                    <MenuItem Header="Status" ItemsSource="{Binding Source = {StaticResource StatusCollectionKey}}"></MenuItem>
-                    <MenuItem Header="Required effort time"></MenuItem>
+                <MenuItem Header="Filter by:" Height="26" Width="122" RenderTransformOrigin="0.502,0.61" FontFamily="Cooper Black" FontSize="16" >
+                    <MenuItem Header="Complexity" ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" Click="Click_filterByComplexity"  />
+                    <MenuItem Header="Status" ItemsSource="{Binding Source = {StaticResource StatusCollectionKey}}" Click="Click_filterByStatus"/>
+                    <MenuItem Header="Required effort time">
+                        <MenuItem Header="Up to 2 days" Click="Click_filterByTime"></MenuItem>
+                        <MenuItem Header="3-9 days" Click="Click_filterByTime"></MenuItem>
+                        <MenuItem Header="10 and up" Click="Click_filterByTime"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="No filter" Click="Click_ResetFilters"/>
                 </MenuItem>
             </Menu>
         </Grid>
