@@ -6,6 +6,7 @@
     <Application.Resources>
         <local:EngineerCollection x:Key="EngineerCollectionKey" />
         <local:EngineerCollectionForFilter x:Key="EngineerCollectionForFilterKey" />
+        <local:StatusCollection x:Key="StatusCollectionKey" />
         <local:ConvertIdToContent x:Key="ConverIdToContentKey"/>
         <local:ConvertIdToIsEnabled x:Key="ConvertIdToIsEnabledKey"/>
     </Application.Resources>

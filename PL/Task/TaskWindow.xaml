@@ -66,8 +66,8 @@
         <Label Content="Required effort time" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="7" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
         <Label Content="Scheduled start date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="8" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
         <Label Content="Actual start date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="9" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
-        <Label Content="Estimated complition date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="10" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
-        <Label Content="Actual complition date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,23" RenderTransformOrigin="0.5,1.975" Grid.Row="11" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Estimated completion date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="10" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
+        <Label Content="Actual completion date" Style="{StaticResource myLabelStyle}" Margin="10,10,0,23" RenderTransformOrigin="0.5,1.975" Grid.Row="11" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
         <Label Content="Deliverables" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="12" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
         <Label Content="Remareks" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="13" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
         <Label Content="Assigned engineer" Style="{StaticResource myLabelStyle}" Margin="10,10,0,22" RenderTransformOrigin="0.5,1.975" Grid.Row="14" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255"/>
@@ -95,16 +95,16 @@
         Text="{Binding RequiredEffortTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
 
         <DatePicker Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-        Text="{Binding ScheduledDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+        SelectedDate="{Binding ScheduledDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
 
         <DatePicker Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-        Text="{Binding StartDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+        SelectedDate="{Binding StartDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
 
         <DatePicker Grid.Column="1" Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-        Text="{Binding ForecastDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+        SelectedDate="{Binding ForecastDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
 
         <DatePicker Grid.Column="1" Grid.Row="11" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-        Text="{Binding CompleteDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"  Height="23"/>
+        SelectedDate="{Binding CompleteDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"  Height="23"/>
 
         <TextBox Grid.Column="1" Grid.Row="12" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
         Text="{Binding Deliverables, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
