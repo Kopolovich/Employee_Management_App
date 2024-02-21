@@ -29,7 +29,6 @@ class ConvertIdToIsEnabled : IValueConverter
     }
 }
 
-//ConvertIntToItemSource
 
 class ConvertIntToItemSource : IValueConverter
 {
@@ -43,3 +42,19 @@ class ConvertIntToItemSource : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+class ConverDateToText : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        DateTime date = (DateTime)value == DateTime.MinValue ? DateTime.Now : (DateTime)value;
+        return date.ToShortDateString();
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+

@@ -5,13 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Engineer"
         mc:Ignorable="d"
-        Title="AssignTaskToEngineerWindow" Height="400" Width="400"
+        Title="AssignTaskToEngineerWindow" Height="400" Width="400" Icon="/icon.png"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Activated="Window_Activated_Refresh">
-    <Grid>
-        <Label Content="Choose a task:" HorizontalAlignment="Center" Margin="0,35,0,0" VerticalAlignment="Top" FontFamily="Cooper black" FontSize="32"/>
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White"/>
+            <GradientStop Color="#FF02F3D2" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
+    <Grid Background="#FF232226">
+        <Label Content="Choose a task:" HorizontalAlignment="Center" Margin="0,35,0,0" VerticalAlignment="Top" FontFamily="Cooper black" FontSize="32" Foreground="White"/>
         <ComboBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" 
                   FontFamily="Comic Sans MS" Width="228" ItemsSource="{Binding TaskInEngineerList}" SelectedValue="{Binding CurrentTask, Mode=TwoWay}" Height="36" Margin="0,109,0,0"/>
-        <Button Content="Assign" HorizontalAlignment="Center" Margin="0,329,0,0" VerticalAlignment="Top" Height="26" Width="100" Click="Button_Click_AssignTaskToEngineer"/>
+        <Button Content="Assign" HorizontalAlignment="Center" Margin="0,329,0,0" VerticalAlignment="Top" Height="26" Width="100" Click="Button_Click_AssignTaskToEngineer" Background="{StaticResource myLinearGradient}"/>
 
     </Grid>
 </Window>

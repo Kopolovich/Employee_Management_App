@@ -14,7 +14,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="icon.png" />
+    <None Remove="logo.jpeg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icon.png" />
+    <Resource Include="logo.jpeg" />
   </ItemGroup>
 
 </Project>

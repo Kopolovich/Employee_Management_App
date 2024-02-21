@@ -5,12 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Engineer"
         mc:Ignorable="d"
-        Title="EngineerListWindow" Height="640" Width="800"
+        Title="EngineerListWindow" Height="640" Width="800" Icon="/icon.png"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Activated="Window_Activated_Refresh"
         >
 
+    <Window.Resources>
+        <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White"/>
+            <GradientStop Color="#FF02F3D2" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
     <!--Extrnal Grid-->
-    <Grid>
+    <Grid Background="#FF232226">
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>
             <RowDefinition Height="40*"/>
@@ -19,20 +26,20 @@
         </Grid.RowDefinitions>
 
         <!--Internal, Upper Grid-->
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+        <Grid Background="#FF232226" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Choose level:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="cooper black" FontSize="20"/>
+            <Label Content="Choose level:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="cooper black" FontSize="20" Foreground="White"/>
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource EngineerCollectionForFilterKey}}"
-                      SelectedValue="{Binding Level, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged_FilterEngineerByLevel" FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center"/>
+                      SelectedValue="{Binding Level, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged_FilterEngineerByLevel" FontFamily="cooper black" FontSize="15" VerticalContentAlignment="Center" />
         </Grid>
 
-        <Label Grid.Row ="1" Content="Double click to update engineer, right click to assign task to engineer" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center"/>
+        <Label Grid.Row ="1" Content="Double click to update engineer, right click to assign task to engineer" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Comic Sans MS" FontSize="14"/>
 
         <!--List-->
-        <ListView Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask">
+        <ListView Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
@@ -40,7 +47,7 @@
             </ListView.View>
         </ListView>
 
-        <Button FontSize="20" Content="Add new engineer" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" FontFamily="Cooper Black" Margin="0,1,0,0"/>
+        <Button FontSize="20" Content="Add new engineer" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" FontFamily="Cooper Black" Margin="0,1,0,0" Background="{StaticResource myLinearGradient}"/>
 
     </Grid>
 

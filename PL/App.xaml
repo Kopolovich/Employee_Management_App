@@ -9,5 +9,6 @@
         <local:StatusCollection x:Key="StatusCollectionKey" />
         <local:ConvertIdToContent x:Key="ConverIdToContentKey"/>
         <local:ConvertIdToIsEnabled x:Key="ConvertIdToIsEnabledKey"/>
+        <local:ConverDateToText x:Key="ConverDateToTextKey"/>
     </Application.Resources>
 </Application>

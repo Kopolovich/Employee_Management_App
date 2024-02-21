@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Engineer"
         mc:Ignorable="d"
-        Title="EngineerWindow" Height="500" Width="500"
+        Title="EngineerWindow" Height="500" Width="500" Icon="/icon.png"
         DataContext="{Binding CurrentEngineer, RelativeSource={RelativeSource Self}, Mode=TwoWay}">
 
     <Window.Resources>
@@ -16,18 +16,16 @@
             <Setter Property="Grid.Column" Value="0"/>
             <Setter Property="Height" Value="45" />
             <Setter Property="Width" Value="82" />
+            <Setter Property="Foreground" Value="#FFFFFFFF" />
             <Setter Property="HorizontalAlignment" Value="Right"/>
-
-
         </Style>
+
+        <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White"/>
+            <GradientStop Color="#FF02F3D2" Offset="1"/>
+        </LinearGradientBrush>
     </Window.Resources>
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFF8F9F9"/>
-                <GradientStop Color="#FF85BFE0" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid Background="#FF232226">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200*"/>
             <ColumnDefinition Width="250*"/>
@@ -60,6 +58,6 @@
                   ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" RenderTransformOrigin="0.5,0.5" Grid.Row="4" />
         <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
                  Text="{Binding Cost, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="5" Height="23" Grid.ColumnSpan="2" Margin="216,0,0,0"/>
-        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConverIdToContentKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1"/>
+        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConverIdToContentKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1" Background="{StaticResource myLinearGradient}"/>
     </Grid>
 </Window>

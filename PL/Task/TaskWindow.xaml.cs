@@ -25,11 +25,13 @@ public partial class TaskWindow : Window
     {
         InitializeComponent();
         if (id == 0)
-            CurrentTask = new();
+            CurrentTask = new();            
         else
             try
             {
                 CurrentTask = s_bl.Task.Read(id);
+                DependenciesToAdd = (List<BO.TaskInList>)s_bl.Task.ReadAll(item => item.Id != CurrentTask.Id 
+                && (CurrentTask.Dependencies == null || !CurrentTask.Dependencies.Contains(new BO.TaskInList() { Id = item.Id, Alias = item.Alias, Description = item.Description, Status = item.Status}) )).ToList();
             }
             catch (Exception ex)
             {
@@ -47,6 +49,10 @@ public partial class TaskWindow : Window
     // Using a DependencyProperty as the backing store for CurrentEngineer.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CurrentTaskProperty =
         DependencyProperty.Register("CurrentTask", typeof(BO.Task), typeof(TaskWindow), new PropertyMetadata(null));
+
+    public BO.TaskInList? DependencyToAdd { get; set; } = null;
+
+    public List<BO.TaskInList> DependenciesToAdd { get; set; } = [];
 
     private void Button_Click_AddOrUpdateTask(object sender, RoutedEventArgs e)
     {
@@ -74,6 +80,20 @@ public partial class TaskWindow : Window
                 MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
             }
 
+
+        }
+    }
+
+    private void Click_DeleteDependecy(object sender, RoutedEventArgs e)
+    {
+        Button btn = (Button)sender;
+        if (btn.DataContext is BO.TaskInList)
+        {
+
+            BO.TaskInList deleteme = (BO.TaskInList)btn.DataContext;
+            CurrentTask.Dependencies!.Remove(deleteme);
+            btn.IsEnabled = false;
+            btn.Content = "Deleted";
 
         }
     }

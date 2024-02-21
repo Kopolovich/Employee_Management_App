@@ -5,18 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" >
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFF8F9F9"/>
-                <GradientStop Color="#FF85BFE0" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-        <Button Content="Admin" HorizontalAlignment="Left" Margin="218,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="125" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_ShowAdminWindow"/>
-        <Button Content="Engineer" HorizontalAlignment="Left" Margin="400,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="125" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_ShowEngineerUserWindow"/>
-        <Button Content="init DB" HorizontalAlignment="Left" Margin="134,342,0,0" VerticalAlignment="Top" Height="42" Width="126" Click="Button_Click_Init_DB" FontFamily="cooper black" BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333"/>
-        <Button Content="Reset" HorizontalAlignment="Left" Margin="304,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="124" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_Reset_DB"/>
-        <Button Content="Reset to planning stage" HorizontalAlignment="Left" Margin="472,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="200" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333"/>
+        Title="ICode Pro" Height="450" Width="800"
+        Icon="/icon.png">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key ="myLinearGradient"
+            EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White"/>
+            <GradientStop Color="#FF02F3D2" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
+    <Grid Background="#FF232226">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="250*"/>
+            <RowDefinition Height="250*"/>
+        </Grid.RowDefinitions>
+        <Button Content="Admin" HorizontalAlignment="Left" Margin="218,22,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="125" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_ShowAdminWindow" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
+        <Button Content="Engineer" HorizontalAlignment="Left" Margin="400,22,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="125" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_ShowEngineerUserWindow" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
+        <Button Content="init DB" HorizontalAlignment="Left" Margin="134,121,0,0" VerticalAlignment="Top" Height="42" Width="126" Click="Button_Click_Init_DB" FontFamily="cooper black" BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
+        <Button Content="Reset" HorizontalAlignment="Left" Margin="304,121,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="124" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_Reset_DB" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
+        <Button Content="Reset to planning stage" HorizontalAlignment="Left" Margin="472,121,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="200" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
+        <Image HorizontalAlignment="Left" Height="203" Margin="264,0,0,0" VerticalAlignment="Center" Width="204" Source="/logo.jpeg"/>
     </Grid>
 </Window>

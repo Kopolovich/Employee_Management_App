@@ -57,20 +57,6 @@
     <EngineerId xsi:nil="true" />
   </Task>
   <Task>
-    <Id>1004</Id>
-    <Complexity>Beginner</Complexity>
-    <CreatedAtDate>2023-05-25T00:00:00+03:00</CreatedAtDate>
-    <Description>Optimize budget with cost-benefit analysis</Description>
-    <Alias>I57</Alias>
-    <RequiredEffortTime>P6D</RequiredEffortTime>
-    <IsMilestone xsi:nil="true" />
-    <StartDate xsi:nil="true" />
-    <ScheduledDate>2024-02-19T14:50:15.7277833+02:00</ScheduledDate>
-    <DeadlineDate xsi:nil="true" />
-    <CompleteDate xsi:nil="true" />
-    <EngineerId xsi:nil="true" />
-  </Task>
-  <Task>
     <Id>1005</Id>
     <Complexity>Expert</Complexity>
     <CreatedAtDate>2024-01-09T00:00:00+02:00</CreatedAtDate>
@@ -253,20 +239,6 @@
     <EngineerId xsi:nil="true" />
   </Task>
   <Task>
-    <Id>1019</Id>
-    <Complexity>Beginner</Complexity>
-    <CreatedAtDate>2023-11-07T00:00:00+02:00</CreatedAtDate>
-    <Description>Conduct post-project evaluations for improvement</Description>
-    <Alias>V78</Alias>
-    <RequiredEffortTime>P5D</RequiredEffortTime>
-    <IsMilestone xsi:nil="true" />
-    <StartDate xsi:nil="true" />
-    <ScheduledDate>2024-03-09T14:50:15.7277833+02:00</ScheduledDate>
-    <DeadlineDate xsi:nil="true" />
-    <CompleteDate xsi:nil="true" />
-    <EngineerId xsi:nil="true" />
-  </Task>
-  <Task>
     <Id>1011</Id>
     <Complexity>Beginner</Complexity>
     <CreatedAtDate>2023-11-06T00:00:00+02:00</CreatedAtDate>
@@ -279,5 +251,33 @@
     <DeadlineDate xsi:nil="true" />
     <CompleteDate xsi:nil="true" />
     <EngineerId>204604906</EngineerId>
+  </Task>
+  <Task>
+    <Id>1004</Id>
+    <Complexity>Beginner</Complexity>
+    <CreatedAtDate>2023-05-25T00:00:00+03:00</CreatedAtDate>
+    <Description>Optimize budget with cost-benefit analysis</Description>
+    <Alias>I57</Alias>
+    <RequiredEffortTime>P6D</RequiredEffortTime>
+    <IsMilestone xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <ScheduledDate>2024-02-19T14:50:15.7277833+02:00</ScheduledDate>
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
+  </Task>
+  <Task>
+    <Id>1019</Id>
+    <Complexity>Beginner</Complexity>
+    <CreatedAtDate>2023-11-07T00:00:00+02:00</CreatedAtDate>
+    <Description>Conduct post-project evaluations for improvement</Description>
+    <Alias>V78</Alias>
+    <RequiredEffortTime>P5D</RequiredEffortTime>
+    <IsMilestone xsi:nil="true" />
+    <StartDate xsi:nil="true" />
+    <ScheduledDate>2024-03-09T14:50:15.7277833+02:00</ScheduledDate>
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId xsi:nil="true" />
   </Task>
 </ArrayOfTask>
