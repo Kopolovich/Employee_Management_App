@@ -22,16 +22,33 @@ namespace PL.Task;
 public partial class TaskListWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-    public TaskListWindow()
+    public TaskListWindow(int state = 0, int id = 0)
     {
-        InitializeComponent();
+        State = state; //state = 0: admin, state = 1: engineer
+        EngineerId = id;
+        InitializeComponent();     
     }
 
     private void Window_Activated_Refresh(object sender, EventArgs e)
     {
-        TaskList = s_bl.Task.ReadAll();
+        //admin can see all tasks
+        if (State == 0)
+            TaskList = s_bl.Task.ReadAll();
+        //engineer can only see the available tasks for him to choose from
+        else
+            TaskList = from taskInEngineer in s_bl.Task.ReadTasksForEngineer(EngineerId)
+                       let TaskInList = new BO.TaskInList()
+                       {
+                           Id = taskInEngineer.Id,
+                           Alias = taskInEngineer.Alias,
+                           Description = s_bl.Task.Read(taskInEngineer.Id).Description,
+                           Status = s_bl.Task.Read(taskInEngineer.Id).Status
+                       }
+                       select TaskInList;
     }
 
+    public int State { get; set; }
+    public int EngineerId { get; set; }
     public BO.EngineerExperienceForFilter Level { get; set; } = BO.EngineerExperienceForFilter.All;
     public IEnumerable<BO.TaskInList> TaskList
     {
@@ -50,9 +67,27 @@ public partial class TaskListWindow : Window
     {
         BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
         if (task != null)
-            new TaskWindow(task.Id).ShowDialog();
+        {
+            if(State == 0) 
+                new TaskWindow(task.Id).ShowDialog();
+            else
+            {
+                new TaskWindow(task.Id, 2, EngineerId).ShowDialog();
+                Close();
+            }
+                
+        }
+            
     }
 
+    private void MouseRight_assignEngineer(object sender, MouseButtonEventArgs e)
+    {
+        BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
+        if (task != null && State == 0) 
+            new EngineerListWindow(task.Id).ShowDialog();
+    }
+
+    #region filters
     private void Click_filterByTime(object sender, RoutedEventArgs e)
     {
         MenuItem? menuItem = sender as MenuItem;
@@ -104,4 +139,6 @@ public partial class TaskListWindow : Window
     {
         TaskList = s_bl.Task.ReadAll();
     }
+
+    #endregion
 }

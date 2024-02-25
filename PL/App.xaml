@@ -4,11 +4,17 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <local:EngineerCollection x:Key="EngineerCollectionKey" />
-        <local:EngineerCollectionForFilter x:Key="EngineerCollectionForFilterKey" />
-        <local:StatusCollection x:Key="StatusCollectionKey" />
-        <local:ConvertIdToContent x:Key="ConverIdToContentKey"/>
+        <local:EngineerCollection x:Key="EngineerCollectionKey"/>
+        <local:EngineerCollectionForFilter x:Key="EngineerCollectionForFilterKey"/>
+        <local:StatusCollection x:Key="StatusCollectionKey"/>
+        <local:ConvertStateToContentTask x:Key="ConvertStateToContentTaskKey"/>
+        <local:ConvertStateToContentEngineer x:Key="ConvertStateToContentEngineerKey"/>
         <local:ConvertIdToIsEnabled x:Key="ConvertIdToIsEnabledKey"/>
-        <local:ConverDateToText x:Key="ConverDateToTextKey"/>
+        <local:ConvertDateToText x:Key="ConverDateToTextKey"/>
+        <local:ConvertStateToVisibility x:Key="ConvertStateToVisibilityKey"/>
+        <local:ConvertStateToIsEnabled x:Key="ConvertStateToIsEnabledKey"/>
+        <local:ConvertIdToContent x:Key="ConvertIdToContentKey"/>
+        <local:ConvertTaskToIsEnabled x:Key="ConvertTaskToIsEnabledKey"/>
+        <local:ConvertEnableIsDisable x:Key="ConvertEnableIsDisableKey"/>
     </Application.Resources>
 </Application>

@@ -98,7 +98,8 @@ internal class TaskImplementation : ITask
                 Alias = boTask.Alias,
                 Status = boTask.Status
             }
-            );
+            
+            ).OrderBy(item => item.Id);
         }
 
         return (
@@ -111,7 +112,7 @@ internal class TaskImplementation : ITask
             Alias = boTask.Alias,
             Status = boTask.Status
         }
-        );
+        ).OrderBy(item => item.Id);
 
     }
 
@@ -152,8 +153,8 @@ internal class TaskImplementation : ITask
             }
 
             //Checking if updated task contains a new scheduled date
-            if (task.ScheduledDate != null && task.ScheduledDate != _dal.Task.Read(task.Id)!.ScheduledDate)
-                CheckScheduledDate(task.Id, (DateTime)task.ScheduledDate);
+            //if (task.ScheduledDate != null && task.ScheduledDate != _dal.Task.Read(task.Id)!.ScheduledDate)
+            //    CheckScheduledDate(task.Id, (DateTime)task.ScheduledDate);
 
             //updating dependencies
             List<BO.TaskInList>? currentDependencies = Read(task.Id).Dependencies;
@@ -289,8 +290,8 @@ internal class TaskImplementation : ITask
     /// <exception cref="BO.BlInvalidValueException"> if date is invalid </exception>
     void CheckScheduledDate(int id, DateTime startDate)
     {
-        if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution) 
-            throw new BO.BlUpdatingImpossibleException("Can not update scheduled task date after the project start date was declared");
+        //if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution) 
+        //    throw new BO.BlUpdatingImpossibleException("Can not update scheduled task date after the project start date was declared");
         
         BO.Task task = Read(id);
         IEnumerable<DO.Task?> depenedOnTasks = from item in task.Dependencies 

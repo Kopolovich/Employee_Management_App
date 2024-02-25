@@ -5,8 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="EngineerUserWindow" Height="450" Width="800">
-    <Grid>
-        
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Title="EngineerUserWindow" Height="450" Width="800" Icon="/icon.png"
+        Activated="Window_Activated_Refresh">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White"/>
+            <GradientStop Color="#FF02F3D2" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+    <Grid Background="#FF232226" RenderTransformOrigin="0.103,-0.22">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="50*"/>
+        </Grid.RowDefinitions>
+        <Image HorizontalAlignment="Center" Height="203" Margin="0,52,0,0" VerticalAlignment="Top" Width="204" Source="/logo.jpeg"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Hello engineer" Foreground="White" HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe Print"/>
+        <Label Grid.Column="1" Grid.Row="0" Content="Current Task:" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="30" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0"/>
+        <Label Grid.Column="1" Grid.Row="0" Content="{Binding CurrentTask, Mode=TwoWay}" Foreground ="#FF02F3D2" FontFamily="Comic Sans MS" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Bottom"/>
+        <Button Grid.Column="1" Grid.Row="1" Content="Done!" Width="80" Height="30" Margin="100,10,320,105" Background="{StaticResource myLinearGradient}" 
+                FontFamily="Segoe Print" FontWeight="Bold" Click="Button_Click_UpdateCompletedTask" IsEnabled="{Binding CurrentTask, Mode=TwoWay, Converter={StaticResource ConvertTaskToIsEnabledKey}}" x:Name="DoneBtn"/>
+        <Button Grid.Column="1" Grid.Row="1" Content="Choose a new task" Width="200" Height="30" Margin="225,10,75,105" Background="{StaticResource myLinearGradient}" 
+                FontFamily="Segoe Print" FontWeight="Bold" Click="Button_Click_ChooseNewTask" IsEnabled="{Binding ElementName=DoneBtn, Path=IsEnabled, Converter={StaticResource ConvertEnableIsDisableKey}}"/>
     </Grid>
 </Window>

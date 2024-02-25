@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Task;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,10 +21,10 @@ namespace PL.Engineer
     public partial class EngineerListWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public EngineerListWindow()
+        public EngineerListWindow(int taskId = 0)
         {
+            TaskId = taskId;
             InitializeComponent();
-            //EngineerList = s_bl.Engineer.ReadAll();
         }
 
         public IEnumerable<BO.Engineer> EngineerList
@@ -36,6 +37,8 @@ namespace PL.Engineer
             DependencyProperty.Register("EngineerList", typeof(IEnumerable<BO.Engineer>), typeof(EngineerListWindow), new PropertyMetadata(null));
 
         public BO.EngineerExperienceForFilter Level { get; set; } = BO.EngineerExperienceForFilter.All;
+
+        public int TaskId { get; set; } = 0;
 
         private void ComboBox_SelectionChanged_FilterEngineerByLevel(object sender, SelectionChangedEventArgs e)
         {
@@ -53,19 +56,53 @@ namespace PL.Engineer
         {
             BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
             if (engineer != null)
-                new EngineerWindow(engineer.Id).ShowDialog();
+            {
+                if(TaskId == 0)
+                    new EngineerWindow(engineer.Id).ShowDialog();
+                else
+                {
+                    try
+                    {
+                        BO.Task currentTask = s_bl.Task.Read(TaskId);
+                        s_bl.Engineer.AssignTaskToEngineer(engineer.Id, new BO.TaskInEngineer() { Id = currentTask.Id, Alias = currentTask.Alias });
+                        MessageBox.Show("Engineer successfully assigned to task", "", MessageBoxButton.OK);
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
+                    }
+                    Close();
+
+                }
+                    
+            }
+                
         }
 
         private void Window_Activated_Refresh(object sender, EventArgs e)
         {
-            EngineerList = s_bl.Engineer.ReadAll();
+            try 
+            {
+                if (TaskId == 0)
+                    EngineerList = s_bl.Engineer.ReadAll();
+                else
+                {
+                    BO.Task currentTask = s_bl.Task.Read(TaskId);
+                    EngineerList = s_bl.Engineer.ReadAll(engineer => engineer.Level >= currentTask.Complexity && engineer.Task == null);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
+            }
         }
 
         private void MouseRight_assignTask(object sender, EventArgs e)
         {
             BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
-            if (engineer != null)
-                new AssignTaskToEngineerWindow(engineer.Id).ShowDialog();
+            if (engineer != null && TaskId == 0)
+                new TaskListWindow(1, engineer.Id).ShowDialog();
         }
     }
 }

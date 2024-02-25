@@ -11,6 +11,7 @@
         >
 
     <Window.Resources>
+        
         <Style x:Key="myLabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Foreground" Value="#FFFFFFFF" />
@@ -23,7 +24,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
-        
+
         <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="White"/>
             <GradientStop Color="#FF02F3D2" Offset="1"/>
@@ -33,29 +34,29 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Vertical" Grid.Column="0">
                     <TextBlock Text= "{Binding Id, StringFormat='Id: {0}'}" />
                     <TextBlock Text="{Binding Alias, StringFormat='Alias: {0}'}" />
                     <TextBlock Text="{Binding Description, StringFormat='Description: {0}'}"/>
-                    <TextBlock Text="{Binding Status, StringFormat='Status: {0}'}"/>
-                    <TextBlock Text=""/>
+                    <TextBlock Text="{Binding Status, StringFormat='Status: {0}'}" Padding="0,0,0,20"/>
                 </StackPanel>
 
-                <Button Content="delete" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Click_DeleteDependecy"/>
+                <Button IsEnabled="{Binding State, Mode=TwoWay, Converter={StaticResource ConvertStateToIsEnabledKey}}" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="100,0,0,0" Click="Button_Click_DeleteDependency">
+                    <Image Source="/Task/bin.png" Height="40" Width="40"/>
+                </Button>
             </Grid>
-     
-            
-
-            </DataTemplate>
+        </DataTemplate>
+        
     </Window.Resources>
 
-
-
+    
     <TabControl Margin="0,0,0,0">
-        <TabItem Header="General details" Background="{StaticResource myLinearGradient}">
+        
+        <!--#region first tab - general details -->
+        <TabItem Header="General details"  Background="{StaticResource myLinearGradient}">
             <Grid Background="#FF232226">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100*"/>
@@ -63,6 +64,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30*"/>
+                    <RowDefinition Height="70*"/>
                     <RowDefinition Height="70*"/>
                     <RowDefinition Height="70*"/>
                     <RowDefinition Height="70*"/>
@@ -91,17 +93,20 @@
                 <Label Content="Actual completion date" Style="{StaticResource myLabelStyle}" Margin="10,0,0,0" RenderTransformOrigin="0.5,1.975" Grid.Row="10" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255" Height="45"/>
                 <Label Content="Deliverables" Style="{StaticResource myLabelStyle}" Margin="10,0,0,0" RenderTransformOrigin="0.5,1.975" Grid.Row="11" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255" Height="45"/>
                 <Label Content="Remareks" Style="{StaticResource myLabelStyle}" Margin="10,0,0,0" RenderTransformOrigin="0.5,1.975" Grid.Row="12" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="255" Height="45"/>
-                <Label Content="Complexity" Style="{StaticResource myLabelStyle}" Margin="0,6,0,0" RenderTransformOrigin="0.5,1.975" Grid.Row="13" Grid.RowSpan="2" Width="254" VerticalAlignment="Top" Foreground="White" Height="45"/>
-
+                <Label Content="Complexity" Style="{StaticResource myLabelStyle}" Margin="12,6,0,0" RenderTransformOrigin="0.5,1.975" Grid.Row="13" Grid.RowSpan="2" Width="254" VerticalAlignment="Top" Foreground="White" Height="45" Grid.ColumnSpan="2" HorizontalAlignment="Left"/>
+                <Label Content="Engineer" Style="{StaticResource myLabelStyle}" Margin="12,6,0,0" RenderTransformOrigin="0.5,1.975" Grid.Row="14" Grid.RowSpan="2" Width="254" VerticalAlignment="Top" Foreground="White" Height="45" Grid.ColumnSpan="2" HorizontalAlignment="Left"/>
+                
                 <TextBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
                 Text="{Binding CurrentTask.Id, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
                 IsEnabled="False" Height="23"/>
 
                 <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                Text="{Binding CurrentTask.Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                Text="{Binding CurrentTask.Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23" 
+                IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}"/>
 
                 <TextBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                Text="{Binding CurrentTask.Alias, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                Text="{Binding CurrentTask.Alias, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"
+                IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}"/>
 
                 <TextBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
                 Text="{Binding CurrentTask.CreatedAtDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true , Converter={StaticResource ConverDateToTextKey}}" IsEnabled="False" Height="23"/>
@@ -110,55 +115,63 @@
                 Text="{Binding CurrentTask.Status, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsEnabled="False" Height="23"/>
 
                 <TextBox Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                Text="{Binding CurrentTask.RequiredEffortTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                Text="{Binding CurrentTask.RequiredEffortTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"
+                IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}"/>
 
                 <DatePicker Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-                SelectedDate="{Binding CurrentTask.ScheduledDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                SelectedDate="{Binding CurrentTask.ScheduledDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23" IsEnabled="False"/>
 
                 <DatePicker Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-                SelectedDate="{Binding CurrentTask.StartDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                SelectedDate="{Binding CurrentTask.StartDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23" IsEnabled="False"/>
 
                 <DatePicker Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-                SelectedDate="{Binding CurrentTask.ForecastDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                SelectedDate="{Binding CurrentTask.ForecastDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23" IsEnabled="False"/>
 
                 <DatePicker Grid.Column="1" Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
-                SelectedDate="{Binding CurrentTask.CompleteDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"  Height="23"/>
+                SelectedDate="{Binding CurrentTask.CompleteDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23" IsEnabled="False"/>
 
                 <TextBox Grid.Column="1" Grid.Row="11" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                Text="{Binding CurrentTask.Deliverables, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                Text="{Binding CurrentTask.Deliverables, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"
+                IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}"/>
 
                 <TextBox Grid.Column="1" Grid.Row="12" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                Text="{Binding CurrentTask.Remarks, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"/>
+                Text="{Binding CurrentTask.Remarks, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"
+                IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}"/>
 
                 <ComboBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170" Height="23"
                 SelectedValue="{Binding CurrentTask.Complexity, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" RenderTransformOrigin="0.5,0.5" Grid.Row="13" />
+                ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" RenderTransformOrigin="0.5,0.5" Grid.Row="13"
+                IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}"/>
 
-                <Button Content="{Binding CurrentTask.Id, Mode=OneTime, Converter={StaticResource ConverIdToContentKey}}" HorizontalAlignment="Left" Margin="45,0,0,0" VerticalAlignment="Center" 
-                        Height="31" Width="80" Grid.Row="14" Grid.Column="1" RenderTransformOrigin="0.217,0.639" Background="{StaticResource myLinearGradient}" Click="Button_Click_AddOrUpdateTask"/>
-            </Grid>
+                <TextBox Grid.Row="14" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+                Text="{Binding CurrentTask.Engineer.Name, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Height="23"
+                IsEnabled="False"/>
 
-        </TabItem>
-        <TabItem Header="Previos tasks" Background="{StaticResource myLinearGradient}">
-            <Grid Background="#FF232226">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="150*"/>
-                    <RowDefinition Height="70*"/>
-                </Grid.RowDefinitions>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Comic Sans MS" FontSize="16" Content="List of tasks that current task depends on:" Foreground="White"/>
-                <ListBox Background="#FF232226" Foreground ="#25A1B0" FontFamily="Comic Sans MS" ItemsSource="{Binding CurrentTask.Dependencies, Mode=TwoWay}" ItemTemplate="{StaticResource DependencyTemplate}" Grid.Row="1"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="2">
-                    <Label Content="Add dependent task" Foreground="White" FontFamily="Comic Sans MS" FontSize="16" />
-                    <ComboBox SelectedValue="{Binding DependencyToAdd, Mode=TwoWay}" ItemsSource="{Binding DependenciesToAdd, Mode=TwoWay}" VerticalAlignment="top" Width="200" Margin="5" Height="22"/>
-                    <Button Background="{StaticResource myLinearGradient}" VerticalAlignment="top" Width="80" Height="22" Margin="15,5,5,5" Content="Add"/>
-                </StackPanel>
-
-
-
-
+                <Button Content="{Binding State, Mode=TwoWay, Converter={StaticResource ConvertStateToContentTaskKey}}" HorizontalAlignment="Left" Margin="45,0,0,0" VerticalAlignment="Center" 
+                        Height="31" Width="80" Grid.Row="15" Grid.Column="1" RenderTransformOrigin="0.217,0.639" Background="{StaticResource myLinearGradient}" Click="Button_Click_AddOrUpdateTask"/>
             </Grid>
         </TabItem>
+        <!--#endregion-->
+
+        <!--#region second tab - previos tasks -->
+            <TabItem Header="Previos tasks" Background="{StaticResource myLinearGradient}">
+                <Grid Background="#FF232226">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="150*"/>
+                        <RowDefinition Height="70*"/>
+                    </Grid.RowDefinitions>
+                    <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Comic Sans MS" FontSize="16" Content="List of tasks that current task depends on:" Foreground="White"/>
+                    <ListBox Background="#FF232226" Foreground ="#25A1B0" FontFamily="Comic Sans MS" ItemsSource="{Binding CurrentTaskDependencies, Mode=TwoWay}" ItemTemplate="{StaticResource DependencyTemplate}" Grid.Row="1"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2">
+                        <Label Content="Add dependent task" Foreground="White" FontFamily="Comic Sans MS" FontSize="16" />
+                        <ComboBox IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}" SelectedValue="{Binding DependencyToAdd, Mode=TwoWay}" ItemsSource="{Binding DependenciesToAdd, Mode=TwoWay}" VerticalAlignment="top" Width="200" Margin="5" Height="22"/>
+                        <Button IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}" Background="{StaticResource myLinearGradient}" VerticalAlignment="top" Width="80" Height="22" Margin="15,5,5,5" Content="Add" Click="Button_Click_AddDependency"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <!--#endregion-->
+
     </TabControl>
 
 

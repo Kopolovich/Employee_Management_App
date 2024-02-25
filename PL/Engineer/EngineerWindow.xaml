@@ -58,6 +58,6 @@
                   ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" RenderTransformOrigin="0.5,0.5" Grid.Row="4" />
         <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
                  Text="{Binding Cost, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="5" Height="23" Grid.ColumnSpan="2" Margin="216,0,0,0"/>
-        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConverIdToContentKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1" Background="{StaticResource myLinearGradient}"/>
+        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConvertStateToContentEngineerKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1" Background="{StaticResource myLinearGradient}"/>
     </Grid>
 </Window>

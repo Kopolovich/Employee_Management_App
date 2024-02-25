@@ -32,7 +32,19 @@ internal class Tools
             }
             else
             {
-                str += $"{property.Name}: {value}\n";
+                str += $"{property.Name}: ";
+
+                if (value != null && value.ToString()!.Length > 40)
+                {
+
+                    int splitIndex = value.ToString()!.LastIndexOf(' ', 40);
+
+                    string line1 = value.ToString()!.Substring(0, splitIndex);
+                    string line2 = value.ToString()!.Substring(splitIndex+1);
+                    str += (line1 + "\n" + line2 + "\n");
+                }
+                else
+                    str += $"{value}\n";
             }
         }
 

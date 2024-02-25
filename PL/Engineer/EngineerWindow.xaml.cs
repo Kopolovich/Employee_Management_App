@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Task;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,7 +76,8 @@ namespace PL.Engineer
                     
                     if(mbResult == MessageBoxResult.Yes)
                     {
-                        new AssignTaskToEngineerWindow(CurrentEngineer.Id).ShowDialog();
+                        new TaskListWindow(1, CurrentEngineer.Id).ShowDialog();
+                        //new AssignTaskToEngineerWindow(CurrentEngineer.Id).ShowDialog();
                     }
 
                     Close();
