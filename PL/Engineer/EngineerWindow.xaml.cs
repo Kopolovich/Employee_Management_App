@@ -34,17 +34,14 @@ namespace PL.Engineer
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message,"error", MessageBoxButton.OK);
-                }
-           
+                }           
         }
-
 
         public BO.Engineer CurrentEngineer
         {
             get { return (BO.Engineer)GetValue(CurrentEngineerProperty); }
             set { SetValue(CurrentEngineerProperty, value); }
         }
-
         // Using a DependencyProperty as the backing store for CurrentEngineer.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CurrentEngineerProperty =
             DependencyProperty.Register("CurrentEngineer", typeof(BO.Engineer), typeof(EngineerWindow), new PropertyMetadata(null));
@@ -77,7 +74,6 @@ namespace PL.Engineer
                     if(mbResult == MessageBoxResult.Yes)
                     {
                         new TaskListWindow(1, CurrentEngineer.Id).ShowDialog();
-                        //new AssignTaskToEngineerWindow(CurrentEngineer.Id).ShowDialog();
                     }
 
                     Close();
@@ -85,12 +81,8 @@ namespace PL.Engineer
                 catch(Exception ex)
                 { 
                     MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
-                }
-                
-        
+                }              
             }
         }
-
-       
     }
 }

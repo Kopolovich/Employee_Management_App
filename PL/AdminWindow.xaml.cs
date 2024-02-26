@@ -45,6 +45,7 @@ namespace PL
             {
                 s_bl.CreateProjectSchedule(DateTime.Now);
                 MessageBox.Show("Scheduled start dates have been assigned to all tasks! \nGoodLuck!", "", MessageBoxButton.OK);
+                //add method in bl that returns scheduled project finish date
             }
             catch (Exception ex)
             {

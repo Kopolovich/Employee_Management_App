@@ -22,29 +22,51 @@ namespace PL;
 public partial class EngineerUserWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    
+    /// <summary>
+    /// ctor - initializes current engineer 
+    /// </summary>
+    /// <param name="id"> id of engineer user </param>
     public EngineerUserWindow(int id)
     {
         InitializeComponent();
-        CurrentEngineer = s_bl.Engineer.Read(id);   
+        try
+        {
+            CurrentEngineer = s_bl.Engineer.Read(id);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
+        }
     }
 
+    /// <summary>
+    /// refreshes current engineer to get access to his current task
+    /// </summary>
+    /// <param name="sender"> wpf control that activated the event </param>
+    /// <param name="e"> event args </param>
     private void Window_Activated_Refresh(object sender, EventArgs e)
     {
         CurrentEngineer = s_bl.Engineer.Read(CurrentEngineer.Id);
-        if (CurrentEngineer.Task != null)
+        
+        if (CurrentEngineer.Task != null) //if engineer is currently working on a task
         {
             BO.Task task = s_bl.Task.Read(CurrentEngineer.Task.Id);
-            CurrentTask = new BO.TaskInList()
+            CurrentTask = new BO.TaskInList() //creating taskInList entity
             {
                 Id = task.Id,
                 Alias = task.Alias,
                 Description = task.Description,
-                Status = task.Status,
+                Status = task.Status
             };
         }
-        else CurrentTask = null;
+
+        else CurrentTask = null; 
     }
 
+    /// <summary>
+    /// Current engineer property
+    /// </summary>
     public BO.Engineer CurrentEngineer
     {
         get { return (BO.Engineer)GetValue(CurrentEngineerProperty); }
@@ -55,6 +77,9 @@ public partial class EngineerUserWindow : Window
     public static readonly DependencyProperty CurrentEngineerProperty =
         DependencyProperty.Register("CurrentEngineer", typeof(BO.Engineer), typeof(EngineerUserWindow), new PropertyMetadata(null));
 
+    /// <summary>
+    /// Current task that engineer is working on
+    /// </summary>
     public BO.TaskInList? CurrentTask
     {
         get { return (BO.TaskInList)GetValue(CurrentTaskProperty); }
@@ -65,6 +90,11 @@ public partial class EngineerUserWindow : Window
     public static readonly DependencyProperty CurrentTaskProperty =
         DependencyProperty.Register("CurrentTask", typeof(BO.TaskInList), typeof(EngineerUserWindow), new PropertyMetadata(null));
 
+    /// <summary>
+    /// updating that engineer completed his task
+    /// </summary>
+    /// <param name="sender"> wpf control that activated the event </param>
+    /// <param name="e"> event args </param>
     private void Button_Click_UpdateCompletedTask(object sender, RoutedEventArgs e)
     {
         BO.Task task = s_bl.Task.Read(CurrentTask!.Id);
@@ -73,12 +103,14 @@ public partial class EngineerUserWindow : Window
         CurrentTask = null;
     }
 
+    /// <summary>
+    /// letting engineer choose a new task to work on
+    /// </summary>
+    /// <param name="sender"> wpf control that activated the event </param>
+    /// <param name="e"> event args </param>
     private void Button_Click_ChooseNewTask(object sender, RoutedEventArgs e)
     {
-        
-        new TaskListWindow(1, CurrentEngineer.Id).ShowDialog();
-
+         new TaskListWindow(1, CurrentEngineer.Id).ShowDialog(); //opens task list window in choosing mode
     }
-
 
 }

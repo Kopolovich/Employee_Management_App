@@ -23,8 +23,11 @@ namespace PL
             InitializeComponent(); 
         }
 
-     
-
+        /// <summary>
+        /// initalizing data base
+        /// </summary>
+        /// <param name="sender"> wpf control that activated the event </param>
+        /// <param name="e"> event args </param>
         private void Button_Click_Init_DB(object sender, RoutedEventArgs e)
         {
             MessageBoxResult mbResult = MessageBox.Show("Are you sure you want to initialize the Data Base? \n all existing data will be permanently deleted", "", MessageBoxButton.YesNo);
@@ -32,6 +35,11 @@ namespace PL
                 s_bl.Initialize();
         }
 
+        /// <summary>
+        /// Reseting data base
+        /// </summary>
+        /// <param name="sender"> wpf control that activated the event </param>
+        /// <param name="e"> event args </param>
         private void Button_Click_Reset_DB(object sender, RoutedEventArgs e)
         {
             MessageBoxResult mbResult = MessageBox.Show("Are you sure you want to reset the Data? \n all existing data will be permanently deleted", "", MessageBoxButton.YesNo);
@@ -46,7 +54,7 @@ namespace PL
 
         private void Button_Click_ShowEngineerUserWindow(object sender, RoutedEventArgs e)
         {
-            new EngineerUserWindow(268522587).Show();
+            new EngineerUserWindow(345697515).Show();
         }
     }
 }

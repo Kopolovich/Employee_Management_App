@@ -31,7 +31,7 @@ public partial class TaskWindow : Window
         //window in state of admin adding new task
         if (id == 0)
         {
-            CurrentTask = new();
+            CurrentTask = new() { CreatedAtDate = DateTime.Now };
             DependenciesToAdd = s_bl.Task.ReadAll().ToList();
             State = 0;
         }
@@ -64,8 +64,9 @@ public partial class TaskWindow : Window
         InitializeComponent();
     }
 
-    public int State { get; set; } = 0;
-    public int EngineerId { get; set; } = 0;
+    
+    public int State { get; set; } = 0; //Differentiation between different situations
+    public int EngineerId { get; set; } = 0; //if the window is in the state of choosing a task for an engineer
 
     public BO.Task CurrentTask
     {
@@ -77,28 +78,33 @@ public partial class TaskWindow : Window
     public static readonly DependencyProperty CurrentTaskProperty =
         DependencyProperty.Register("CurrentTask", typeof(BO.Task), typeof(TaskWindow), new PropertyMetadata(null));
 
+    //collection of task existing dependecies
     public ObservableCollection<BO.TaskInList>? CurrentTaskDependencies
     {
         get { return (ObservableCollection<BO.TaskInList>)GetValue(CurrentTaskDependenciesProperty); }
         set { SetValue(CurrentTaskDependenciesProperty, value); }
     }
-
     // Using a DependencyProperty as the backing store for CurrentTaskDependencies.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CurrentTaskDependenciesProperty =
         DependencyProperty.Register("CurrentTaskDependencies", typeof(ObservableCollection<BO.TaskInList>), typeof(TaskWindow), new PropertyMetadata(null));
 
+    //list of dependecies that can be added to task
     public List<BO.TaskInList> DependenciesToAdd
     {
         get { return (List<BO.TaskInList>)GetValue(DependenciesToAddProperty); }
         set { SetValue(DependenciesToAddProperty, value); }
     }
-
     // Using a DependencyProperty as the backing store for CurrentEngineer.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty DependenciesToAddProperty =
         DependencyProperty.Register("DependenciesToAdd", typeof(List<BO.TaskInList>), typeof(TaskWindow), new PropertyMetadata(null));
 
-    public BO.TaskInList? DependencyToAdd { get; set; } = null;
+    public BO.TaskInList? DependencyToAdd { get; set; } = null; //chosen dependency to add
 
+    /// <summary>
+    /// adds/updates/assignes task 
+    /// </summary>
+    /// <param name="sender"> wpf control that activated the event </param>
+    /// <param name="e"> event args </param>
     private void Button_Click_AddOrUpdateTask(object sender, RoutedEventArgs e)
     {
         Button? btn = sender! as Button;
@@ -106,53 +112,54 @@ public partial class TaskWindow : Window
         {
             try
             {
+                //updating dependencies in current task according to changes
                 if (CurrentTaskDependencies != null)
                 {
                     if (!CurrentTaskDependencies.Any())
                         CurrentTask.Dependencies = null;
                     else
                         CurrentTask.Dependencies = CurrentTaskDependencies.ToList();
-                }
-
-                MessageBoxResult mbResult = MessageBoxResult.No;
+                }               
 
                 if (btn.Content.ToString() == "Add")
                 {               
                     s_bl.Task.Create(CurrentTask);
-                    //mbResult = MessageBox.Show($"Task added successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
                     MessageBox.Show($"Task added successfully!" ,"", MessageBoxButton.OK);
                 }
 
                 else if(btn.Content.ToString() == "Update")
                 {
                     s_bl.Task.Update(CurrentTask);
-                    mbResult = MessageBox.Show($"Task updated successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
+                    MessageBoxResult mbResult = MessageBox.Show($"Task updated successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
+                    if (mbResult == MessageBoxResult.Yes)                    
+                        new EngineerListWindow(CurrentTask.Id).ShowDialog();
+                    
                 }
                 else
                 {
                     s_bl.Engineer.AssignTaskToEngineer(EngineerId, new BO.TaskInEngineer() { Id = CurrentTask.Id, Alias = CurrentTask.Alias });
                     MessageBox.Show($"Task assigned, Good luck!");
-                }
-
-                if (mbResult == MessageBoxResult.Yes)
-                {
-                    new EngineerListWindow(CurrentTask.Id).ShowDialog();
-                }
-                
+                }       
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
             }
+
             Close();
         }
     }
 
+    /// <summary>
+    /// removing existing dependency from CurrentTaskDependencies
+    /// </summary>
+    /// <param name="sender"> wpf control that activated the event </param>
+    /// <param name="e"> event args </param>
     private void Button_Click_DeleteDependency(object sender, RoutedEventArgs e)
     {
         Button btn = (Button)sender;
 
-        if (btn.DataContext is BO.TaskInList && State!=2)
+        if (btn.DataContext is BO.TaskInList && State != 2)
         {
             BO.TaskInList deleteMe = (BO.TaskInList)btn.DataContext;
             CurrentTaskDependencies!.Remove(deleteMe);
@@ -162,6 +169,11 @@ public partial class TaskWindow : Window
         }
     }
 
+    /// <summary>
+    /// adding new dependency to CurrentTaskDependencies
+    /// </summary>
+    /// <param name="sender"> wpf control that activated the event </param>
+    /// <param name="e"> event args </param>
     private void Button_Click_AddDependency(object sender, RoutedEventArgs e)
     {
         if (DependencyToAdd != null)

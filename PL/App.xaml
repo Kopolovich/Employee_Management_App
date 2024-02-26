@@ -10,7 +10,6 @@
         <local:ConvertStateToContentTask x:Key="ConvertStateToContentTaskKey"/>
         <local:ConvertStateToContentEngineer x:Key="ConvertStateToContentEngineerKey"/>
         <local:ConvertIdToIsEnabled x:Key="ConvertIdToIsEnabledKey"/>
-        <local:ConvertDateToText x:Key="ConverDateToTextKey"/>
         <local:ConvertStateToVisibility x:Key="ConvertStateToVisibilityKey"/>
         <local:ConvertStateToIsEnabled x:Key="ConvertStateToIsEnabledKey"/>
         <local:ConvertIdToContent x:Key="ConvertIdToContentKey"/>

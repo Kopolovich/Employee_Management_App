@@ -109,7 +109,7 @@
                 IsEnabled="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToIsEnabledKey}}"/>
 
                 <TextBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                Text="{Binding CurrentTask.CreatedAtDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true , Converter={StaticResource ConverDateToTextKey}}" IsEnabled="False" Height="23"/>
+                Text="{Binding CurrentTask.CreatedAtDate, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsEnabled="False" Height="23"/>
 
                 <TextBox Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
                 Text="{Binding CurrentTask.Status, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsEnabled="False" Height="23"/>

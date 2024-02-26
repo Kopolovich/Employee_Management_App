@@ -29,6 +29,11 @@ public partial class TaskListWindow : Window
         InitializeComponent();     
     }
 
+    /// <summary>
+    /// refreshes task list to show changes 
+    /// </summary>
+    /// <param name="sender"> wpf control that activated the event </param>
+    /// <param name="e"> event args </param>
     private void Window_Activated_Refresh(object sender, EventArgs e)
     {
         //admin can see all tasks
@@ -47,22 +52,25 @@ public partial class TaskListWindow : Window
                        select TaskInList;
     }
 
-    public int State { get; set; }
-    public int EngineerId { get; set; }
-    public BO.EngineerExperienceForFilter Level { get; set; } = BO.EngineerExperienceForFilter.All;
+    public int State { get; set; } //Differentiation between different situations
+    public int EngineerId { get; set; } //if the window is in the state of choosing a task for an engineer
+    
     public IEnumerable<BO.TaskInList> TaskList
     {
         get { return (IEnumerable<BO.TaskInList>)GetValue(TaskListProperty); }
         set { SetValue(TaskListProperty, value); }
     }
-
     public static readonly DependencyProperty TaskListProperty =
         DependencyProperty.Register("TaskList", typeof(IEnumerable<BO.TaskInList>), typeof(TaskListWindow), new PropertyMetadata(null));
 
+
+    // to open task window in adding mode
     private void Button_Click_OpenTaskWindow_Add(object sender, RoutedEventArgs e)
     {
         new TaskWindow().ShowDialog();
     }
+
+    // to open task window in updating or choosing task
     private void ListView_DoubleClick_UpdateTask(object sender, RoutedEventArgs e)
     {
         BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
@@ -80,6 +88,7 @@ public partial class TaskListWindow : Window
             
     }
 
+    //for admin only, opens engineer list window to choose engineer to assign to task
     private void MouseRight_assignEngineer(object sender, MouseButtonEventArgs e)
     {
         BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
