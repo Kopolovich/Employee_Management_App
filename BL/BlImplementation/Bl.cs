@@ -11,16 +11,16 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 internal class Bl : IBl
 {
-    public ITask Task => new TaskImplementation();
+    public ITask Task => new TaskImplementation(this);
 
-    public IEngineer Engineer => new EngineerImplementation();
+    public IEngineer Engineer => new EngineerImplementation(this);
 
     /// <summary>
-    /// Method to automatically create project schedule
+    /// Method to automatically create project schedule, returns scheduled finish date for project
     /// </summary>
     /// <param name="projectStartDate"> project start date </param>
     /// <exception cref="BO.BlInvalidValueException"> if can not plan project schedule because not all tasks have required effort time assigned </exception>
-    public void CreateProjectSchedule(DateTime projectStartDate)
+    public DateTime CreateProjectSchedule(DateTime projectStartDate)
     {
         if (GetProjectStatus() == ProjectStatus.InExecution)
             throw new BO.BlCreationImpossibleException("Can not create project schedule while project is in Execution stage");
@@ -37,6 +37,9 @@ internal class Bl : IBl
         
         //updating project start date in config
         Dal.Config.ProjectStartDate = projectStartDate;
+
+        //finding maximal planned finish date of tasks
+        return (DateTime)tasks.Max(task => Task.Read(task.Id).ForecastDate)!;
     }
 
     void RecursiveProjectSchedule(int id, DateTime projectStartDate) 
@@ -52,7 +55,7 @@ internal class Bl : IBl
 
         if (startDate == null) throw new BO.BlInvalidValueException("Forecast date is null");
             Task.AssignScheduledDateToTask(task.Id, (DateTime)startDate);
-    }
+    }     
 
     /// <summary>
     /// Help method to find task's earliest possible start date
@@ -105,5 +108,32 @@ internal class Bl : IBl
         return Dal.Config.ProjectStartDate != null ? ProjectStatus.InExecution : ProjectStatus.InPlanning;
     }
 
+
+    private static DateTime s_Clock = DateTime.Now.Date;
+    public DateTime Clock { get { return s_Clock; } private set { s_Clock = value; } }
+    public void AddDay()
+    {
+        Clock.AddDays(1);
+    }
+
+    public void AddWeek()
+    {
+        Clock.AddDays(7);
+    }
+
+    public void AddMonth()
+    {
+        Clock.AddMonths(1);
+    }
+
+    public void AddYear()
+    {
+        Clock.AddYears(1);
+    }
+
+    public void ResetClock()
+    {
+        Clock = DateTime.Now.Date;
+    }
 }
 

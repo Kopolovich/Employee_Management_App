@@ -19,17 +19,20 @@
     <!--Extrnal Grid-->
     <Grid Background="#FF232226">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
+            <RowDefinition Height="50*"/>
             <RowDefinition Height="500*"/>
-            <RowDefinition Height="40*"/>
+            <RowDefinition Height="70*"/>
         </Grid.RowDefinitions>
 
         <!--Internal, Upper Grid-->
         <Grid Background="#FF232226" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="{Binding EngineerId, Mode=OneTime, Converter={StaticResource ConvertIdToContentTaskKey}}" 
+                   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Comic Sans MS" FontSize="14"/>
 
             <Menu Visibility="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToVisibilityKey}}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{StaticResource myLinearGradient}">
                 <MenuItem Header="Filter by:" Height="26" Width="122" RenderTransformOrigin="0.502,0.61" FontFamily="Cooper Black" FontSize="16" >
@@ -55,8 +58,8 @@
             </ListView.View>
         </ListView>
 
-        <Button FontSize="20" Content="Add new task" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="200"  
-                FontFamily="Cooper Black" Click="Button_Click_OpenTaskWindow_Add" Background="{StaticResource myLinearGradient}" Visibility="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToVisibilityKey}}"/>
+        <Button FontSize="20" Content="Add new task" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200"  
+                FontFamily="Cooper Black" Click="Button_Click_OpenTaskWindow_Add" Background="{StaticResource myLinearGradient}" Visibility="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToVisibilityKey}}" Margin="0,5,0,0"/>
 
     </Grid>
 </Window>

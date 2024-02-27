@@ -101,7 +101,7 @@ public partial class TaskWindow : Window
     public BO.TaskInList? DependencyToAdd { get; set; } = null; //chosen dependency to add
 
     /// <summary>
-    /// adds/updates/assignes task 
+    /// adds/updates/assigns task 
     /// </summary>
     /// <param name="sender"> wpf control that activated the event </param>
     /// <param name="e"> event args </param>
@@ -119,27 +119,29 @@ public partial class TaskWindow : Window
                         CurrentTask.Dependencies = null;
                     else
                         CurrentTask.Dependencies = CurrentTaskDependencies.ToList();
-                }               
+                }
 
                 if (btn.Content.ToString() == "Add")
-                {               
+                {
                     s_bl.Task.Create(CurrentTask);
-                    MessageBox.Show($"Task added successfully!" ,"", MessageBoxButton.OK);
+                    MessageBox.Show("Task added successfully!", "", MessageBoxButton.OK);
                 }
 
-                else if(btn.Content.ToString() == "Update")
+                else if (btn.Content.ToString() == "Update")
                 {
                     s_bl.Task.Update(CurrentTask);
-                    MessageBoxResult mbResult = MessageBox.Show($"Task updated successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
-                    if (mbResult == MessageBoxResult.Yes)                    
+                    MessageBoxResult mbResult = MessageBox.Show("Task updated successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
+                    if (mbResult == MessageBoxResult.Yes)
                         new EngineerListWindow(CurrentTask.Id).ShowDialog();
-                    
+
                 }
-                else
+                else if (btn.Content.ToString() == "Choose Task")
                 {
                     s_bl.Engineer.AssignTaskToEngineer(EngineerId, new BO.TaskInEngineer() { Id = CurrentTask.Id, Alias = CurrentTask.Alias });
-                    MessageBox.Show($"Task assigned, Good luck!");
-                }       
+                    MessageBox.Show("Task assigned, Good luck!", "", MessageBoxButton.OK);
+                }
+                else
+                    Close();
             }
             catch (Exception ex)
             {

@@ -40,12 +40,10 @@ namespace PL
 
         private void Button_Click_CreateSchedule(object sender, RoutedEventArgs e)
         {
-
             try
             {
-                s_bl.CreateProjectSchedule(DateTime.Now);
-                MessageBox.Show("Scheduled start dates have been assigned to all tasks! \nGoodLuck!", "", MessageBoxButton.OK);
-                //add method in bl that returns scheduled project finish date
+                DateTime finishDate =  s_bl.CreateProjectSchedule(DateTime.Now);
+                MessageBox.Show($"Scheduled start dates have been assigned to all tasks!\nplanned date to complete project: {finishDate.ToShortDateString()}  \nGoodLuck!", "", MessageBoxButton.OK);
             }
             catch (Exception ex)
             {

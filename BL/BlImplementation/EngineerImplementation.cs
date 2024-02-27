@@ -8,10 +8,16 @@ using System.Text.RegularExpressions;
 
 internal class EngineerImplementation : IEngineer
 {
-    private DalApi.IDal _dal = DalApi.Factory.Get;
-    private TaskImplementation _iTask = new TaskImplementation();
-    private IBl _bl = new Bl();
+    private readonly Bl _bl;
+    private TaskImplementation _iTask;
+    internal EngineerImplementation(Bl bl)
+    {
+        _bl = bl;
+        _iTask = new TaskImplementation(bl);
+    } 
 
+    private DalApi.IDal _dal = DalApi.Factory.Get;
+    
     /// <summary>
     /// adding new engineer to dal
     /// </summary>
@@ -101,7 +107,7 @@ internal class EngineerImplementation : IEngineer
     /// updates existing engineer
     /// </summary>
     /// <param name="engineer"> updated logic engineer entity </param>
-    /// <exception cref="BO.BlNullPropertyException"> if recieved engineer is null </exception>
+    /// <exception cref="BO.BlNullPropertyException"> if received engineer is null </exception>
     /// <exception cref="BO.BlInvalidValueException"> if one or more of updated engineer's props contain invalid values </exception>
     /// <exception cref="BO.BlDoesNotExistException"> if engineer does not exist in dal </exception>
     /// <exception cref="BO.BlAlreadyExistsException"> the Create method that is called in dal Update method might throw an exception </exception>
@@ -216,7 +222,7 @@ internal class EngineerImplementation : IEngineer
             Description = dTask.Description,
             CreatedAtDate = dTask.CreatedAtDate,
             RequiredEffortTime = dTask.RequiredEffortTime,
-            StartDate = DateTime.Now,
+            StartDate = _bl.Clock,
             ScheduledDate = dTask.ScheduledDate,
             CompleteDate = dTask.CompleteDate,
             Deliverables = dTask.Deliverables,

@@ -37,6 +37,7 @@ public partial class EngineerUserWindow : Window
         catch (Exception ex)
         {
             MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
+            Close();
         }
     }
 
@@ -113,4 +114,9 @@ public partial class EngineerUserWindow : Window
          new TaskListWindow(1, CurrentEngineer.Id).ShowDialog(); //opens task list window in choosing mode
     }
 
+    private void Double_Click_showTaskDetails(object sender, MouseButtonEventArgs e)
+    {
+        if (CurrentTask != null)
+            new TaskWindow(CurrentTask.Id, 3).ShowDialog();
+    }
 }

@@ -15,5 +15,6 @@
         <local:ConvertIdToContent x:Key="ConvertIdToContentKey"/>
         <local:ConvertTaskToIsEnabled x:Key="ConvertTaskToIsEnabledKey"/>
         <local:ConvertEnableIsDisable x:Key="ConvertEnableIsDisableKey"/>
+        <local:ConvertIdToContentTask x:Key="ConvertIdToContentTaskKey"/>
     </Application.Resources>
 </Application>

@@ -23,8 +23,21 @@ namespace PL
             InitializeComponent(); 
         }
 
+
+
+        public DateTime CurrentTime
+        {
+            get { return (DateTime)GetValue(CurrentTimeProperty); }
+            set { SetValue(CurrentTimeProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CurrentTimeProperty =
+            DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow), new PropertyMetadata(null));
+
+            
+
         /// <summary>
-        /// initalizing data base
+        /// initializing data base
         /// </summary>
         /// <param name="sender"> wpf control that activated the event </param>
         /// <param name="e"> event args </param>
@@ -36,7 +49,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Reseting data base
+        /// Resetting data base
         /// </summary>
         /// <param name="sender"> wpf control that activated the event </param>
         /// <param name="e"> event args </param>
@@ -54,7 +67,39 @@ namespace PL
 
         private void Button_Click_ShowEngineerUserWindow(object sender, RoutedEventArgs e)
         {
-            new EngineerUserWindow(345697515).Show();
+            new EngineerUserWindow(279660300).Show();
         }
+
+        private void Window_Activated_Refresh(object sender, EventArgs e)
+        {
+            CurrentTime = s_bl.Clock;
+        }
+
+        private void Button_Click_ResetClock(object sender, RoutedEventArgs e)
+        {
+            s_bl.ResetClock();
+        }
+
+        private void Button_Click_AddDay(object sender, RoutedEventArgs e)
+        {
+            s_bl.AddDay();
+        }
+
+        private void Button_Click_AddWeek(object sender, RoutedEventArgs e)
+        {
+            s_bl.AddWeek();
+        }
+
+        private void Button_Click_AddMonth(object sender, RoutedEventArgs e)
+        {
+            s_bl.AddMonth();
+        }
+
+        private void Button_Click_AddYear(object sender, RoutedEventArgs e)
+        {
+            s_bl.AddYear();
+        }
+
+        
     }
 }

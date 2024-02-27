@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 internal class TaskImplementation : ITask
 {
     private DalApi.IDal _dal = DalApi.Factory.Get;
-    private IBl _bl = new Bl();
+    private readonly Bl _bl;
+    internal TaskImplementation(Bl bl) => _bl = bl;
 
     /// <summary>
     /// adding new task to dal
@@ -36,7 +37,8 @@ internal class TaskImplementation : ITask
                    Alias = task.Alias,
                    RequiredEffortTime = task.RequiredEffortTime,
                    Deliverables = task.Deliverables,
-                   Remarks = task.Remarks
+                   Remarks = task.Remarks,
+                   CreatedAtDate = _bl.Clock
             });
 
         // Creating dependencies in dal for all tasks that new task depends on
@@ -120,7 +122,7 @@ internal class TaskImplementation : ITask
     /// Updates existing task
     /// </summary>
     /// <param name="task"> updated logic task entity </param>
-    /// <exception cref="BO.BlNullPropertyException"> if recieved task is null </exception>
+    /// <exception cref="BO.BlNullPropertyException"> if received task is null </exception>
     /// <exception cref="BO.BlInvalidValueException"> if one or more of updated task's props contain invalid values </exception>
     /// <exception cref="BO.BlDoesNotExistException"> if task does not exist in dal </exception>
     public void Update(BO.Task? task)
@@ -144,7 +146,7 @@ internal class TaskImplementation : ITask
                     throw new BO.BlUpdatingImpossibleException("Can not finish working on task before the project start date was declared");
             }
 
-            //checking if trying to update required effort time while project is in excution
+            //checking if trying to update required effort time while project is in execution
             if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
             {
                 if (task.RequiredEffortTime != null && task.RequiredEffortTime != Read(task.Id).RequiredEffortTime )
@@ -367,10 +369,10 @@ internal class TaskImplementation : ITask
     }
 
     /// <summary>
-    /// Private help method to calculate forcast date
+    /// Private help method to calculate forecast date
     /// </summary>
     /// <param name="doTask"> task </param>
-    /// <returns> forcast date </returns>
+    /// <returns> forecast date </returns>
     DateTime? GetForcast(DO.Task doTask)
     {
         DateTime? forcast = null;

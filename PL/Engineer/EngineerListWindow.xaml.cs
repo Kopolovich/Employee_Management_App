@@ -105,9 +105,14 @@ namespace PL.Engineer
         //if window is in regular mode, right click to assign task to engineer
         private void MouseRight_assignTask(object sender, EventArgs e)
         {
-            BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
-            if (engineer != null && TaskId == 0)
-                new TaskListWindow(1, engineer.Id).ShowDialog();
+            if (s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+                MessageBox.Show("Can not assign task to engineer while project is still in planning", "", MessageBoxButton.OK);
+            else
+            {
+                BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
+                if (engineer != null && TaskId == 0)
+                    new TaskListWindow(1, engineer.Id).ShowDialog();
+            }           
         }
     }
 }

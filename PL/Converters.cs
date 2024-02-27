@@ -15,6 +15,8 @@ class ConvertStateToContentTask : IValueConverter
             return "Add";
         else if ((int)value == 2)
             return "Choose Task";
+        else if((int)value == 3)
+            return "Close";
         else
             return "Update";
     }
@@ -94,7 +96,7 @@ class ConvertStateToIsEnabled : IValueConverter
 }
 
 /// <summary>
-/// for engineer window, changing content according to window state
+/// for engineer list window, changing content according to window state
 /// </summary>
 class ConvertIdToContent : IValueConverter
 {
@@ -102,6 +104,23 @@ class ConvertIdToContent : IValueConverter
     {
         return (int)value == 0 ? "Double click to update engineer, right click to assign task to engineer" 
                                     : "Double click to choose an engineer for your task";
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
+/// for task list window, changing content according to window state
+/// </summary>
+class ConvertIdToContentTask : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (int)value == 0 ? "Double click to update task, right click to assign engineer to task"
+                                    : "Double click to choose a task for your engineer";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -127,7 +146,7 @@ class ConvertTaskToIsEnabled : IValueConverter
 }
 
 /// <summary>
-/// for engineer user window, to toggle enablity between 2 buttons
+/// for engineer user window, to toggle inability between 2 buttons
 /// </summary>
 class ConvertEnableIsDisable : IValueConverter
 {

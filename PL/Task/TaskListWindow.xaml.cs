@@ -84,16 +84,20 @@ public partial class TaskListWindow : Window
                 Close();
             }
                 
-        }
-            
+        }            
     }
 
     //for admin only, opens engineer list window to choose engineer to assign to task
     private void MouseRight_assignEngineer(object sender, MouseButtonEventArgs e)
     {
-        BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
-        if (task != null && State == 0) 
-            new EngineerListWindow(task.Id).ShowDialog();
+        if(s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+            MessageBox.Show("Can not assign engineer to task while project is still in planning", "", MessageBoxButton.OK);
+        else
+        {
+            BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
+            if (task != null && State == 0)
+                new EngineerListWindow(task.Id).ShowDialog();
+        }
     }
 
     #region filters
