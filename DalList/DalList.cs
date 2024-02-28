@@ -23,11 +23,14 @@ sealed internal class DalList : IDal
 
     public IDependency Dependency => new DependencyImplementation();
 
+    public IUser User => new UserImplementation();
+
     public void Reset()
     {
         DataSource.Tasks.Clear();
         DataSource.Engineers.Clear();
         DataSource.Dependencies.Clear();
+        DataSource.Users.Clear();
 
         DataSource.Config.ProjectStartDate = null;
         DataSource.Config.NextDependencyId = DataSource.Config.StartDependencyId;

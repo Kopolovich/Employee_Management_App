@@ -5,37 +5,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="ICode Pro" Height="450" Width="800"
+        Title="ICode Pro" Height="450" Width="800"        
         Icon="/icon.png" Activated="Window_Activated_Refresh"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-
-    <Window.Resources>
-        <LinearGradientBrush x:Key ="myLinearGradient"
-            EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="White"/>
-            <GradientStop Color="#FF02F3D2" Offset="1"/>
-        </LinearGradientBrush>
-    </Window.Resources>
-
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        >
+    
     <Grid Background="#FF232226">
         <Grid.RowDefinitions>
-            <RowDefinition Height="250*"/>
-            <RowDefinition Height="250*"/>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="150*"/>
+        </Grid.ColumnDefinitions>
 
-        <Image HorizontalAlignment="Left" Height="203" Margin="264,0,0,0" VerticalAlignment="Center" Width="204" Source="/logo.jpeg"/>
-        <Label Content="{Binding CurrentTime, Mode=TwoWay}" Foreground="White" FontSize="30" Padding="5,5,5,5" FontFamily="Impact" Height="40" Width="150" Margin="11,14,639,163"/>
-        <!--<Label Content="7/27/2024" Foreground="White" FontSize="30" Padding="5,5,5,5" FontFamily="Segoe UI Black" Margin="10,-7,-10,7"/>-->
-        <Menu HorizontalAlignment="Center" VerticalAlignment="Center" Background="{StaticResource myLinearGradient}"/>
-        <!--<Button Content="add" Padding="0,0,0,5" BorderBrush="Transparent" FontSize="20" FontWeight="Bold" Foreground="White" Background="Transparent" FontFamily="Impact" Margin="68,54,671,132" RenderTransformOrigin="0.5,1.096"/>-->
-        <Button Content="reset" FontSize="20" FontWeight="Bold" Foreground="White" Background="Transparent" FontFamily="Impact" Margin="11,42,732,124" BorderBrush="Transparent" RenderTransformOrigin="0.5,1.096" Click="Button_Click_ResetClock"/>
+        <Image Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Height="203" VerticalAlignment="Top" Width="204" Source="/logo.jpeg" Margin="0,6,0,0"/>
+        <Label Content="{Binding CurrentTime, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="45" Padding="5,5,5,5" FontFamily="Impact" Margin="48,74,48,76" />
+        <Label Content="17/02/2024" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="45" Padding="5,5,5,5" FontFamily="Impact" Height="79" Width="230" />
 
-        <Button Content="Admin" HorizontalAlignment="Left" Margin="218,22,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="125" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_ShowAdminWindow" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
-        <Button Content="Engineer" HorizontalAlignment="Left" Margin="400,22,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="125" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_ShowEngineerUserWindow" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
-        <Button Content="init DB" HorizontalAlignment="Left" Margin="134,121,0,0" VerticalAlignment="Top" Height="42" Width="126" Click="Button_Click_Init_DB" FontFamily="cooper black" BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
-        <Button Content="Reset" HorizontalAlignment="Left" Margin="304,121,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.862,0.517" Height="42" Width="124" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_Reset_DB" Background="{StaticResource myLinearGradient}" Grid.Row="1"/>
+        <Menu Height="50" Width="50" Margin="270,57,0,110" Background="Transparent">
+            <MenuItem Height="50" Width="50">
+                <MenuItem Header="hour">
+                    
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Image x:Name="plus" Source="/plus.png" Height="25" Width="27" Margin="284,69,9,123"/>
 
-       
+
+        <Button Content="init DB" Grid.Row="2" Height="42" Width="126" Click="Button_Click_Init_DB" FontFamily="cooper black" BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Background="{StaticResource myLinearGradient}" />
+        <Button Content="Reset" Grid.Row="3" Height="42" Width="124" FontFamily="cooper black"  BorderBrush="#FF333333" BorderThickness="2,2,2,2" Foreground="#FF333333" Click="Button_Click_Reset_DB" Background="{StaticResource myLinearGradient}"/>
+
+        <StackPanel HorizontalAlignment="Left" Grid.Column="1" Orientation="Horizontal" Margin="109,217,0,0" Grid.RowSpan="2">
+            <Label Content="User Id" Foreground="white" FontFamily="Comic Sans MS" FontSize="14" Height="29" Margin="0,0,5,0"/>
+            <TextBox Text="{Binding User.Id, Mode=TwoWay}" Width="176" Height="31" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="101,54,109,54" Grid.RowSpan="3">
+            <Label Content="Password" Foreground="white" FontFamily="Comic Sans MS" FontSize="14" Height="29" Margin="0,0,5,0"/>
+            <local:BindablePasswordBox Password="{Binding User.Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="176" Height="31"/>
+        </StackPanel>
+        <Button Content="Log in" Grid.Row="3" Grid.Column="1" Background="Transparent" Foreground="#FF02F3D2" FontFamily="Comic Sans MS" FontSize="14" BorderBrush="Transparent" Margin="230,0,191,27" RenderTransformOrigin="0.484,0.722" Click="Button_Click_LogIn"/>
+        <Button Content="Create an account" Grid.Row="4" Grid.Column="1" Background="Transparent" Foreground="White" FontFamily="Comic Sans MS" FontSize="12" BorderBrush="Transparent" VerticalContentAlignment="Top" Margin="190,0,150,25"/>
+
 
     </Grid>
 </Window>

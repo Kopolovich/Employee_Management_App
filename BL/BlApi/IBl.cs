@@ -5,6 +5,7 @@ public interface IBl
 {
     public ITask Task { get; }
     public IEngineer Engineer { get; }
+    public IUser User { get; }
     public ProjectStatus GetProjectStatus();
     public DateTime CreateProjectSchedule(DateTime projectStartDate);
     public void Reset();

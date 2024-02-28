@@ -7,3 +7,8 @@ public enum EngineerExperience
 {
     Beginner, AdvancedBeginner, Intermediate, Advanced, Expert
 }
+
+public enum UserRole
+{
+    Admin, Engineer
+}

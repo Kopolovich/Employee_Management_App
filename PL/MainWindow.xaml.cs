@@ -20,7 +20,8 @@ namespace PL
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         public MainWindow()
         {
-            InitializeComponent(); 
+            User = new();
+            InitializeComponent();            
         }
 
 
@@ -34,7 +35,19 @@ namespace PL
         public static readonly DependencyProperty CurrentTimeProperty =
             DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow), new PropertyMetadata(null));
 
-            
+
+
+
+        public BO.User User
+        {
+            get { return (BO.User)GetValue(UserProperty); }
+            set { SetValue(UserProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for User.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UserProperty =
+            DependencyProperty.Register("User", typeof(BO.User), typeof(MainWindow), new PropertyMetadata(null));
+
+
 
         /// <summary>
         /// initializing data base
@@ -100,6 +113,9 @@ namespace PL
             s_bl.AddYear();
         }
 
-        
+        private void Button_Click_LogIn(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(User.Password, "", MessageBoxButton.OK);
+        }
     }
 }

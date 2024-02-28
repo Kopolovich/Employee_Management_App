@@ -26,6 +26,8 @@ sealed internal class DalXml : IDal
 
     public IDependency Dependency => new DependencyImplementation();
 
+    public IUser User => new UserImplementation();
+
     public void Reset()
     {
         IEnumerable<DO.Task?> tasks = Task.ReadAll();

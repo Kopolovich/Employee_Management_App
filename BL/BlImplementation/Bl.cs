@@ -15,6 +15,8 @@ internal class Bl : IBl
 
     public IEngineer Engineer => new EngineerImplementation(this);
 
+    public IUser User => new UserImplementation(this);
+
     /// <summary>
     /// Method to automatically create project schedule, returns scheduled finish date for project
     /// </summary>
