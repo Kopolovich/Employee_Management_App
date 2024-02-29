@@ -160,3 +160,38 @@ class ConvertEnableIsDisable : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+/// <summary>
+/// for log in and create account, to convert id = 0 to empty string
+/// </summary>
+class ConvertIdToString: IValueConverter
+{
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (int)value == 0 ? "" : value.ToString();
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        int id;
+        int.TryParse((string)value, out id);
+        return id == 0 ? 0 : id;
+    }
+}
+
+
+/// <summary>
+/// for radio buttons in create account window to bind user's role
+/// </summary>
+class ConvertRoleToIsChecked : IValueConverter
+{
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (BO.UserRole)value == BO.UserRole.Admin ? true : false;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (bool)value ? BO.UserRole.Admin : BO.UserRole.Engineer;
+    }
+}

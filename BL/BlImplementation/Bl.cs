@@ -115,22 +115,22 @@ internal class Bl : IBl
     public DateTime Clock { get { return s_Clock; } private set { s_Clock = value; } }
     public void AddDay()
     {
-        Clock.AddDays(1);
+        Clock = Clock.AddDays(1);
     }
 
     public void AddWeek()
     {
-        Clock.AddDays(7);
+        Clock = Clock.AddDays(7);
     }
 
     public void AddMonth()
     {
-        Clock.AddMonths(1);
+        Clock = Clock.AddMonths(1);
     }
 
     public void AddYear()
     {
-        Clock.AddYears(1);
+        Clock = Clock.AddYears(1);
     }
 
     public void ResetClock()

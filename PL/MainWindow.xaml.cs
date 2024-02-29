@@ -1,4 +1,5 @@
-﻿using PL.Engineer;
+﻿using BlApi;
+using PL.Engineer;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,8 +25,6 @@ namespace PL
             InitializeComponent();            
         }
 
-
-
         public DateTime CurrentTime
         {
             get { return (DateTime)GetValue(CurrentTimeProperty); }
@@ -34,9 +33,6 @@ namespace PL
         // Using a DependencyProperty as the backing store for CurrentTime.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CurrentTimeProperty =
             DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow), new PropertyMetadata(null));
-
-
-
 
         public BO.User User
         {
@@ -73,49 +69,83 @@ namespace PL
                 s_bl.Reset();
         }
 
-        private void Button_Click_ShowAdminWindow(object sender, RoutedEventArgs e)
-        {
-            new AdminWindow().Show();
-        }
-
-        private void Button_Click_ShowEngineerUserWindow(object sender, RoutedEventArgs e)
-        {
-            new EngineerUserWindow(279660300).Show();
-        }
-
         private void Window_Activated_Refresh(object sender, EventArgs e)
         {
             CurrentTime = s_bl.Clock;
+            User = new();
+            User.Password = string.Empty;
         }
 
         private void Button_Click_ResetClock(object sender, RoutedEventArgs e)
         {
             s_bl.ResetClock();
+            CurrentTime = s_bl.Clock;
         }
 
         private void Button_Click_AddDay(object sender, RoutedEventArgs e)
         {
             s_bl.AddDay();
+            CurrentTime = s_bl.Clock;
         }
 
         private void Button_Click_AddWeek(object sender, RoutedEventArgs e)
         {
             s_bl.AddWeek();
+            CurrentTime = s_bl.Clock;
         }
 
         private void Button_Click_AddMonth(object sender, RoutedEventArgs e)
         {
             s_bl.AddMonth();
+            CurrentTime = s_bl.Clock;
         }
 
         private void Button_Click_AddYear(object sender, RoutedEventArgs e)
         {
             s_bl.AddYear();
+            CurrentTime = s_bl.Clock;
         }
 
         private void Button_Click_LogIn(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(User.Password, "", MessageBoxButton.OK);
+            if(User.Id == 0 || User.Id < 100000000 || User.Id > 999999999)
+                MessageBox.Show("Please enter a valid Id containing 9 digits to log in", "", MessageBoxButton.OK);
+            else if(User.Password == null || User.Password.Length < 6 || User.Password.Length > 14)
+                MessageBox.Show("Please enter a valid password containing between 6 and 14 characters to log in", "", MessageBoxButton.OK);
+            else
+            {
+                BO.User existingUser = new();
+                try
+                {
+                    existingUser = s_bl.User.Read(User.Id);
+                }
+                catch
+                {
+                    MessageBoxResult mbResult = MessageBox.Show($"User with Id: {User.Id} does not exist \nWould you like to create an account?", "", MessageBoxButton.YesNo);
+                    if (mbResult == MessageBoxResult.Yes)
+                    {
+                        new CreateAccountWindow().ShowDialog();
+                    }
+                }
+
+                if (existingUser.Password == s_bl.User.HashPassword(User.Password))
+                {
+                    if (existingUser.Role == BO.UserRole.Admin)
+                        new AdminWindow().ShowDialog();
+                    else
+                        new EngineerUserWindow(existingUser.Id).Show();
+                }
+                else
+                {
+                    MessageBox.Show("Incorrect password", "", MessageBoxButton.OK);
+                }
+            }
+            
+        }
+
+        private void Button_Click_CreateAccount(object sender, RoutedEventArgs e)
+        {
+            new CreateAccountWindow().ShowDialog();
         }
     }
 }

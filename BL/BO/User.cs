@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace BO;
 
+/// <summary>
+/// user entity
+/// "Id" -  Id of user
+/// "Password" - user's password
+/// "UserRole" - role of user in project (admin/engineer)
+/// </summary>
 public class User
 {
     public int Id { get; set; } 

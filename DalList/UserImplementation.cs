@@ -4,16 +4,16 @@ using DO;
 using System.Linq;
 
 /// <summary>
-/// Implementation of CRUD methods for Engineer entity
+/// Implementation of CRUD methods for User entity
 /// </summary>
 internal class UserImplementation : IUser
 {
     /// <summary>
-    /// adding new Engineer to collection
+    /// adding new User to collection
     /// </summary>
-    /// <param name="item">refernce to new item to add</param>
-    /// <returns>Id of new Engineer</returns>
-    /// <exception cref="Exception">if requested Engineer already exists</exception>
+    /// <param name="item">reference to new item to add</param>
+    /// <returns>Id of new User</returns>
+    /// <exception cref="DalAlreadyExistsException">if requested User already exists</exception>
     public int Create(User item)
     {
         if (Read(item.Id) != null)
@@ -26,10 +26,10 @@ internal class UserImplementation : IUser
     }
 
     /// <summary>
-    /// deletes requested Engineer from collection
+    /// deletes requested User from collection
     /// </summary>
-    /// <param name="id">id of Engineer to delete</param>
-    /// <exception cref="Exception">if requested Engineer not found </exception>
+    /// <param name="id">id of User to delete</param>
+    /// <exception cref="Exception">if requested User not found </exception>
     public void Delete(int id)
     {
         User? found = Read(id);
@@ -40,10 +40,10 @@ internal class UserImplementation : IUser
     }
 
     /// <summary>
-    /// retrievs requested Engineer
+    /// retrieves requested User
     /// </summary>
-    /// <param name="id">id of Engineer to retrieve</param>
-    /// <returns>retrieved Engineer</returns>
+    /// <param name="id">id of User to retrieve</param>
+    /// <returns> retrieved User </returns>
     public User? Read(int id)
     {
         return DataSource.Users.FirstOrDefault(x => x.Id == id);
@@ -51,7 +51,7 @@ internal class UserImplementation : IUser
 
 
     /// <summary>
-    /// retrievs requested engineer by filter
+    /// retrieves requested User by filter
     /// </summary>
     /// <param name="filter">Func type delegate, boolian function to filter</param>
     /// <returns>first item in collection that matches the filter</returns>
@@ -62,9 +62,9 @@ internal class UserImplementation : IUser
 
 
     /// <summary>
-    /// retreives collection of Engineers
+    /// retrieves collection of Users
     /// </summary>
-    /// <returns>copy of collection of Engineers</returns>
+    /// <returns>copy of collection of Users</returns>
     public IEnumerable<User> ReadAll(Func<User, bool>? filter = null)
     {
         if (filter == null)
@@ -73,12 +73,11 @@ internal class UserImplementation : IUser
             return DataSource.Users.Where(filter);
     }
 
-
     /// <summary>
-    /// updates existing Engineer
+    /// updates existing User
     /// </summary>
-    /// <param name="item">updated Engineer</param>
-    /// <exception cref="Exception">if requested Engineer not found </exception>
+    /// <param name="item">updated Users</param>
+    /// <exception cref="Exception">if requested User not found </exception>
     public void Update(User item)
     {
         User? found = Read(item.Id);

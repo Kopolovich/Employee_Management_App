@@ -17,6 +17,8 @@
     <None Remove="icon.png" />
     <None Remove="logo.jpeg" />
     <None Remove="plus.png" />
+    <None Remove="refresh.jpeg" />
+    <None Remove="refresh.png" />
     <None Remove="Task\bin.png" />
   </ItemGroup>
 
@@ -28,6 +30,7 @@
     <Resource Include="icon.png" />
     <Resource Include="logo.jpeg" />
     <Resource Include="plus.png" />
+    <Resource Include="refresh.png" />
     <Resource Include="Task\bin.png" />
   </ItemGroup>
 

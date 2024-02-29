@@ -13,10 +13,10 @@ internal class UserImplementation : IUser
     readonly string s_users_xml = "users";
 
     /// <summary>
-    /// adding new Task to XML file
+    /// adding new User to XML file
     /// </summary>
-    /// <param name="item">refernce to new item to add</param>
-    /// <returns>Id of new Task</returns>
+    /// <param name="item">reference to new item to add</param>
+    /// <returns>Id of new User</returns>
     public int Create(User item)
     {
         List<User> users = XMLTools.LoadListFromXMLSerializer<User>(s_users_xml); //deserialize
@@ -32,10 +32,10 @@ internal class UserImplementation : IUser
     }
 
     /// <summary>
-    /// deletes requested Task from XML file
+    /// deletes requested User from XML file
     /// </summary>
-    /// <param name="id">id of Task to delete</param>
-    /// <exception cref="DalDoesNotExistException">if requested Task not found </exception>
+    /// <param name="id">id of User to delete</param>
+    /// <exception cref="DalDoesNotExistException">if requested User not found </exception>
     public void Delete(int id)
     {
         List<User> users = XMLTools.LoadListFromXMLSerializer<User>(s_users_xml); //deserialize
@@ -50,10 +50,10 @@ internal class UserImplementation : IUser
     }
 
     /// <summary>
-    /// retrievs requested Task from XML file
+    /// retrieves requested User from XML file
     /// </summary>
-    /// <param name="id">id of Task to retrieve</param>
-    /// <returns>retrieved Task</returns>
+    /// <param name="id">id of User to retrieve</param>
+    /// <returns>retrieved User</returns>
     public User? Read(int id)
     {
         List<User> users = XMLTools.LoadListFromXMLSerializer<User>(s_users_xml); //deserialize
@@ -61,7 +61,7 @@ internal class UserImplementation : IUser
     }
 
     /// <summary>
-    /// retrievs requested task by filter from XML file
+    /// retrieves requested User by filter from XML file
     /// </summary>
     /// <param name="filter">Func type delegate, boolian function to filter</param>
     /// <returns>first item in list that matches the filter</returns>
@@ -72,9 +72,9 @@ internal class UserImplementation : IUser
     }
 
     /// <summary>
-    /// retreives collection of Tasks from XML file
+    /// retrieves collection of Users from XML file
     /// </summary>
-    /// <returns>copy of collection of Tasks</returns>
+    /// <returns>copy of collection of Users</returns>
     public IEnumerable<User> ReadAll(Func<User, bool>? filter = null)
     {
         List<User> users = XMLTools.LoadListFromXMLSerializer<User>(s_users_xml); //deserialize
@@ -86,10 +86,10 @@ internal class UserImplementation : IUser
     }
 
     /// <summary>
-    /// updates existing Task from XML file
+    /// updates existing User from XML file
     /// </summary>
-    /// <param name="item">updated Task</param>
-    /// <exception cref="DalDoesNotExistException">if requested Task not found </exception>
+    /// <param name="item">updated User</param>
+    /// <exception cref="DalDoesNotExistException">if requested User not found </exception>
     public void Update(User item)
     {
         List<User> users = XMLTools.LoadListFromXMLSerializer<User>(s_users_xml); //deserialize
