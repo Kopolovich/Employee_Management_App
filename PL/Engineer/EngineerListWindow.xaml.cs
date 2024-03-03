@@ -107,11 +107,18 @@ namespace PL.Engineer
         {
             if (s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
                 MessageBox.Show("Can not assign task to engineer while project is still in planning", "", MessageBoxButton.OK);
+            
             else
             {
                 BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
                 if (engineer != null && TaskId == 0)
-                    new TaskListWindow(1, engineer.Id).ShowDialog();
+                {
+                    if (engineer.Task != null)
+                        MessageBox.Show("Can not assign a new task to engineer before he finishes working on his current task", "", MessageBoxButton.OK);
+                    else
+                        new TaskListWindow(1, engineer.Id).ShowDialog();
+                }
+                    
             }           
         }
     }

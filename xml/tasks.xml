@@ -15,20 +15,6 @@
     <EngineerId xsi:nil="true" />
   </Task>
   <Task>
-    <Id>1002</Id>
-    <Complexity>Expert</Complexity>
-    <CreatedAtDate>2023-12-22T00:00:00+02:00</CreatedAtDate>
-    <Description>Coordinate teams for effective communication</Description>
-    <Alias>N53</Alias>
-    <RequiredEffortTime>P5D</RequiredEffortTime>
-    <IsMilestone xsi:nil="true" />
-    <StartDate xsi:nil="true" />
-    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
-    <DeadlineDate xsi:nil="true" />
-    <CompleteDate xsi:nil="true" />
-    <EngineerId xsi:nil="true" />
-  </Task>
-  <Task>
     <Id>1004</Id>
     <Complexity>Advanced</Complexity>
     <CreatedAtDate>2023-06-30T00:00:00+03:00</CreatedAtDate>
@@ -108,20 +94,6 @@
     <IsMilestone xsi:nil="true" />
     <StartDate xsi:nil="true" />
     <ScheduledDate>2024-03-07T14:00:27.519733+02:00</ScheduledDate>
-    <DeadlineDate xsi:nil="true" />
-    <CompleteDate xsi:nil="true" />
-    <EngineerId xsi:nil="true" />
-  </Task>
-  <Task>
-    <Id>1011</Id>
-    <Complexity>Intermediate</Complexity>
-    <CreatedAtDate>2023-04-21T00:00:00+03:00</CreatedAtDate>
-    <Description>Build and maintain stakeholder relationships</Description>
-    <Alias>S87</Alias>
-    <RequiredEffortTime>P3D</RequiredEffortTime>
-    <IsMilestone xsi:nil="true" />
-    <StartDate xsi:nil="true" />
-    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
     <DeadlineDate xsi:nil="true" />
     <CompleteDate xsi:nil="true" />
     <EngineerId xsi:nil="true" />
@@ -275,6 +247,34 @@
     <RequiredEffortTime>P1D</RequiredEffortTime>
     <IsMilestone xsi:nil="true" />
     <StartDate>2024-02-29T00:00:00+02:00</StartDate>
+    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate>2024-03-03T19:57:43.4872424+02:00</CompleteDate>
+    <EngineerId>327130464</EngineerId>
+  </Task>
+  <Task>
+    <Id>1002</Id>
+    <Complexity>Expert</Complexity>
+    <CreatedAtDate>2023-12-22T00:00:00+02:00</CreatedAtDate>
+    <Description>Coordinate teams for effective communication</Description>
+    <Alias>N53</Alias>
+    <RequiredEffortTime>P5D</RequiredEffortTime>
+    <IsMilestone xsi:nil="true" />
+    <StartDate>2024-03-03T00:00:00+02:00</StartDate>
+    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate>2024-03-03T19:58:05.5401704+02:00</CompleteDate>
+    <EngineerId>327130464</EngineerId>
+  </Task>
+  <Task>
+    <Id>1011</Id>
+    <Complexity>Intermediate</Complexity>
+    <CreatedAtDate>2023-04-21T00:00:00+03:00</CreatedAtDate>
+    <Description>Build and maintain stakeholder relationships</Description>
+    <Alias>S87</Alias>
+    <RequiredEffortTime>P3D</RequiredEffortTime>
+    <IsMilestone xsi:nil="true" />
+    <StartDate>2024-03-03T00:00:00+02:00</StartDate>
     <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
     <DeadlineDate xsi:nil="true" />
     <CompleteDate xsi:nil="true" />

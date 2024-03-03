@@ -19,6 +19,9 @@
         <local:ConvertIdToContentTask x:Key="ConvertIdToContentTaskKey"/>
         <local:ConvertIdToString x:Key="ConvertIdToStringKey"/>
         <local:ConvertRoleToIsChecked x:Key="ConvertRoleToIsCheckedKey"/>
+        <local:ConvertStartDateToWidth x:Key="ConvertStartDateToWidthKey"/>
+        <local:ConvertDurationToWidth x:Key="ConvertDurationToWidthKey"/>
+        <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
 
         <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="White"/>

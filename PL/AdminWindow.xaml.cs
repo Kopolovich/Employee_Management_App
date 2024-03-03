@@ -50,5 +50,10 @@ namespace PL
                 MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
             }
         }
+
+        private void Button_Click_ShowGanttWindow(object sender, RoutedEventArgs e)
+        {
+            new GanttChartWindow().Show();
+        }
     }
 }

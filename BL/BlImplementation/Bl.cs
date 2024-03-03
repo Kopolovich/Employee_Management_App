@@ -113,6 +113,9 @@ internal class Bl : IBl
 
     private static DateTime s_Clock = DateTime.Now.Date;
     public DateTime Clock { get { return s_Clock; } private set { s_Clock = value; } }
+
+    public DateTime? ProjectStartDate { get { return Dal.Config.ProjectStartDate; }}
+
     public void AddDay()
     {
         Clock = Clock.AddDays(1);

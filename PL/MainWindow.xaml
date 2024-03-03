@@ -50,7 +50,7 @@
 
         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Orientation="Horizontal" Margin="109,217,0,0" Grid.RowSpan="2">
             <Label Content="User Id" Foreground="white" FontFamily="Comic Sans MS" FontSize="14" Height="29" Margin="0,0,5,0"/>
-            <TextBox Text="{Binding User.Id, Mode=TwoWay, Converter={StaticResource ConvertIdToStringKey}}" Width="176" Height="31" />
+            <TextBox Text="{Binding User.Id, Mode=TwoWay, Converter={StaticResource ConvertIdToStringKey}}" VerticalContentAlignment="Center" Width="176" Height="31" />
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="101,54,109,54" Grid.RowSpan="3">
             <Label Content="Password" Foreground="white" FontFamily="Comic Sans MS" FontSize="14" Height="29" Margin="0,0,5,0"/>

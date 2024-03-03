@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System.Drawing;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Effects;
 
 namespace PL;
 
@@ -193,5 +195,67 @@ class ConvertRoleToIsChecked : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return (bool)value ? BO.UserRole.Admin : BO.UserRole.Engineer;
+    }
+}
+
+
+/// <summary>
+/// for Gantt chart, to locate task in chart according to scheduled start date
+/// </summary>
+class ConvertStartDateToWidth : IValueConverter
+{
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return ((DateTime)value - s_bl.ProjectStartDate!).Value.Days * 70;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+
+/// <summary>
+/// for Gantt chart, to define width of task rectangle according to required effort time
+/// </summary>
+class ConvertDurationToWidth : IValueConverter
+{
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return ((TimeSpan)value).Days * 70;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+
+/// <summary>
+/// for Gantt chart, to define color of task rectangle according to status of task
+/// </summary>
+class ConvertStatusToColor : IValueConverter
+{
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        switch ((BO.Status)value)
+        {
+            case BO.Status.Scheduled:
+                return "#5271FF";
+            case BO.Status.OnTrack:
+                return "#BF9EFF";
+            case BO.Status.Done:
+                return "#5CE1E6";
+            default:
+                return null;
+        };
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -119,6 +119,30 @@ internal class TaskImplementation : ITask
     }
 
     /// <summary>
+    /// reads collection of all tasks
+    /// </summary>
+    /// <param name="filter"> optional filter to filter tasks </param>
+    /// <returns> collection of logic task entities </returns>
+    public IEnumerable<BO.Task> ReadAllFullTasks(Func<BO.Task, bool>? filter = null)
+    {
+        if (filter != null)
+        {
+            return (
+            from DO.Task doTask in _dal.Task.ReadAll()
+            let boTask = Read(doTask.Id) //using Read method to create logic entity
+            where filter(boTask)
+            select boTask
+            ).OrderBy(item => item.Id);
+        }
+
+        return (
+        from DO.Task doTask in _dal.Task.ReadAll()
+        let boTask = Read(doTask.Id) //using Read method to create logic entity
+        select boTask
+        ).OrderBy(item => item.Id);
+    }
+
+    /// <summary>
     /// Updates existing task
     /// </summary>
     /// <param name="task"> updated logic task entity </param>

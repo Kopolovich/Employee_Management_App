@@ -192,7 +192,7 @@ internal class EngineerImplementation : IEngineer
 
         //checking if engineer is still working on different task
         BO.TaskInEngineer? oldTask = Read(engineerId).Task;
-        if (oldTask != null && _iTask.Read(oldTask.Id).Status != BO.Status.Done)
+        if (oldTask != null)
             throw new BO.BlUpdatingImpossibleException("Can not assign a new task to engineer before he finishes working on his current task");
 
         //checking if task exists

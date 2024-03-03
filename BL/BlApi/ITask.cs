@@ -45,4 +45,6 @@ public interface ITask
     public void AssignScheduledDateToTask(int id, DateTime startDate);
 
     public IEnumerable<BO.TaskInEngineer> ReadTasksForEngineer(int id);
+
+    public IEnumerable<BO.Task> ReadAllFullTasks(Func<BO.Task, bool>? filter = null);
 }

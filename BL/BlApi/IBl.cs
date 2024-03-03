@@ -11,6 +11,8 @@ public interface IBl
     public void Reset();
     public void Initialize();
 
+    public DateTime? ProjectStartDate { get; }
+
     #region Clock
     public DateTime Clock { get;}
     public void AddDay();
