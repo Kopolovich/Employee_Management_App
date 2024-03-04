@@ -8,6 +8,7 @@ public interface IBl
     public IUser User { get; }
     public ProjectStatus GetProjectStatus();
     public DateTime CreateProjectSchedule(DateTime projectStartDate);
+    public List<DateTime> GetProjectDates();
     public void Reset();
     public void Initialize();
 

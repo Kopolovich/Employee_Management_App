@@ -17,7 +17,7 @@ public enum EngineerExperienceForFilter
 /// </summary>
 public enum Status
 {
-    Unscheduled, Scheduled, OnTrack, Done
+    Unscheduled, Scheduled, OnTrack, Late, Done
 }
 
 /// <summary>

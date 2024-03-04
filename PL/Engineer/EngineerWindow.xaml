@@ -19,11 +19,6 @@
             <Setter Property="Foreground" Value="#FFFFFFFF" />
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
-
-        <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="White"/>
-            <GradientStop Color="#FF02F3D2" Offset="1"/>
-        </LinearGradientBrush>
     </Window.Resources>
     <Grid Background="#FF232226">
         <Grid.ColumnDefinitions>

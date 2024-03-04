@@ -28,10 +28,10 @@ internal class Bl : IBl
             throw new BO.BlCreationImpossibleException("Can not create project schedule while project is in Execution stage");
         
         //reading tasks and saving in sorted list
-        List<BO.TaskInList> tasks = Task.ReadAll().OrderBy(item => item.Id).ToList();
+        List<BO.Task> tasks = Task.ReadAllFullTasks().OrderBy(item => item.Id).ToList();
         
         //making sure all tasks have required effort time assigned
-        if (tasks.Any(task => Task.Read(task.Id).RequiredEffortTime == null))
+        if (tasks.Any(task => task.RequiredEffortTime == null))
             throw new BO.BlInvalidValueException("Can not plan project schedule if not all tasks have required effort time assigned");
         
         //for each task, finding the earliest possible date and assigning to task
@@ -41,7 +41,7 @@ internal class Bl : IBl
         Dal.Config.ProjectStartDate = projectStartDate;
 
         //finding maximal planned finish date of tasks
-        return (DateTime)tasks.Max(task => Task.Read(task.Id).ForecastDate)!;
+        return (DateTime)tasks.Max(task => task.ForecastDate)!;
     }
 
     void RecursiveProjectSchedule(int id, DateTime projectStartDate) 
@@ -83,6 +83,31 @@ internal class Bl : IBl
         //finding maximal planned finish date of previous tasks
         return previousTasks.Max(task => task.ForecastDate);
 
+    }
+
+    /// <summary>
+    /// method for gantt chart, to get project dates
+    /// </summary>
+    /// <returns> list of all dates between project start date and scheduled finish date </returns>
+    public List<DateTime> GetProjectDates()
+    {
+        List<BO.Task> tasks = Task.ReadAllFullTasks().ToList();
+
+        DateTime firstDate = (DateTime)Dal.Config.ProjectStartDate!;
+
+        //finding maximal planned finish date of tasks
+        DateTime lastDate = (DateTime)tasks.Max(task => task.ForecastDate)!;
+
+        List<DateTime> projectDates = [];
+
+        projectDates.Add(firstDate);
+        while(firstDate != lastDate) 
+        {
+            firstDate = firstDate.AddDays(1);
+            projectDates.Add(firstDate);
+        }
+
+        return projectDates;
     }
 
     /// <summary>

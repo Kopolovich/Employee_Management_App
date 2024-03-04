@@ -207,7 +207,7 @@ class ConvertStartDateToWidth : IValueConverter
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return ((DateTime)value - s_bl.ProjectStartDate!).Value.Days * 70;
+        return ((DateTime)value - s_bl.ProjectStartDate!).Value.Days * 80;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -224,7 +224,7 @@ class ConvertDurationToWidth : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return ((TimeSpan)value).Days * 70;
+        return ((TimeSpan)value).Days * 80;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -247,6 +247,8 @@ class ConvertStatusToColor : IValueConverter
                 return "#5271FF";
             case BO.Status.OnTrack:
                 return "#BF9EFF";
+            case BO.Status.Late:
+                return "#FF5F4A";
             case BO.Status.Done:
                 return "#5CE1E6";
             default:
@@ -259,3 +261,39 @@ class ConvertStatusToColor : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+
+/// <summary>
+/// for tooltip in Gantt chart
+/// </summary>
+class ConvertEngineerToText : IValueConverter
+{
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (BO.EngineerInTask)value == null ? "Not assigned" : $"Assigned to: {((BO.EngineerInTask)value).Name}";
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+
+//public class ConvertStartDateToWidth : IMultiValueConverter
+//{
+//    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+//    public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+//    {             
+//        DateTime scheduled = (values[0] != null && values[0] != DependencyProperty.UnsetValue) ? System.Convert.ToDateTime(values[0]) : DateTime.MinValue;
+//        DateTime? started = (values[0] != null && values[1] != DependencyProperty.UnsetValue) ? System.Convert.ToDateTime(values[1]) : null;
+//        DateTime max = started == null ? scheduled : (DateTime)started;
+//        int result = (max - s_bl.ProjectStartDate!).Value.Days * 80;
+//        return result;
+//    }
+
+//    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+//    {
+//        throw new NotImplementedException();
+//    }
+//}

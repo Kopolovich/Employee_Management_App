@@ -24,7 +24,7 @@
        
         <Image Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Height="203" VerticalAlignment="Top" Width="204" Source="/logo.jpeg" Margin="0,6,0,0"/>
 
-        <Label Content="{Binding CurrentTime, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Height="79" Width="230" FontSize="45" Padding="5,5,5,5" FontFamily="Impact" Margin="48,74,48,76" />
+        <Label Content="{Binding CurrentTime, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="White" Height="79" Width="230" FontSize="45" Padding="5,5,5,5" FontFamily="Impact" Margin="48,74,48,76" />
         
         <ToggleButton Name="button">
             <ToggleButton.Template>
@@ -56,8 +56,8 @@
             <Label Content="Password" Foreground="white" FontFamily="Comic Sans MS" FontSize="14" Height="29" Margin="0,0,5,0"/>
             <local:BindablePasswordBox Password="{Binding User.Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="176" Height="31"/>
         </StackPanel>
-        <Button Content="Log in" Grid.Row="3" Grid.Column="1" Background="Transparent" Foreground="#FF02F3D2" FontFamily="Comic Sans MS" FontSize="14" BorderBrush="Transparent" Margin="230,0,191,27" RenderTransformOrigin="0.484,0.722" Click="Button_Click_LogIn"/>
-        <Button Content="Create an account" Grid.Row="4" Grid.Column="1" Background="Transparent" Foreground="White" FontFamily="Comic Sans MS" FontSize="12" BorderBrush="Transparent" VerticalContentAlignment="Top" Margin="190,0,150,25" Click="Button_Click_CreateAccount"/>
+        <TextBlock Text="Log in" Grid.Row="3" Grid.Column="1" Background="Transparent" Foreground="#FF02F3D2" FontFamily="Comic Sans MS" FontSize="14"  Margin="230,0,191,27" RenderTransformOrigin="0.484,0.722" MouseLeftButtonUp="Button_Click_LogIn"/>
+        <TextBlock Text="Create an account" TextAlignment="Center" TextDecorations="Underline" Grid.Row="4" Grid.Column="1" Background="Transparent" Foreground="White" FontFamily="Comic Sans MS" FontSize="12" Margin="200,0,166,27" MouseLeftButtonUp="Button_Click_CreateAccount"/>
 
 
     </Grid>

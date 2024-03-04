@@ -9,27 +9,86 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Icon="/icon.png">
     
-    <Grid>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="100*"/>
+                <RowDefinition Height="10*"/>
+            </Grid.RowDefinitions>
+
+            <!--Project dates-->
+            <ItemsControl Grid.Row="0" Margin="22,0,0,0" ItemsSource="{Binding Dates}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Gray" Width="80">
+                            <Label HorizontalContentAlignment="Center" FontFamily="Comic Sans MS" VerticalAlignment="Center" Content="{Binding  Date, StringFormat=d}" />
+                        </Border>                        
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!--Chart - tasks-->
+            <ScrollViewer Grid.Row="1" FlowDirection="RightToLeft" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ItemsControl  Grid.Row="1" ItemsSource="{Binding TaskList}">
+                    <ItemsControl.ItemTemplate>                        
+                        <DataTemplate>
+                            <StackPanel Margin="0,5,0,0" FlowDirection="LeftToRight" Orientation="Horizontal">
+                                <StackPanel.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock Text="{Binding Engineer, Converter = {StaticResource ConvertEngineerToTextKey}}"/>
+                                    </ToolTip>
+                                </StackPanel.ToolTip>
+                                <Rectangle Margin="5,0,0,0" Width="{Binding ScheduledDate, Mode=OneWay, Converter={StaticResource ConvertStartDateToWidthKey}}" Stroke="Transparent"></Rectangle>
+                                <Grid>
+                                    <Rectangle Width="{Binding RequiredEffortTime, Mode=OneWay, Converter={StaticResource ConvertDurationToWidthKey}}" Height="25" Fill="{Binding Status, Mode=OneWay, Converter={StaticResource ConvertStatusToColorKey}}" >
+                                        <Rectangle.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock Text="{Binding Path=Engineer.Name}"/>
+                                            </ToolTip>
+                                        </Rectangle.ToolTip>
+                                    </Rectangle>
+                                    <Label FontFamily="Comic Sans MS" Content="{Binding Id}"/>
+                                </Grid>
+                                <Expander FontFamily="Comic Sans MS" ExpandDirection ="Right">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Alias:"/>
+                                        <Label Content="{Binding Alias}" />
+                                        <Label Content="Depends on:" />
+                                        <ItemsControl ItemsSource="{Binding Dependencies}" >
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Id, StringFormat=' {0}'}" VerticalAlignment="Center" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Expander>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!--Colors -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Background="#5271FF" Text="Scheduled" FontFamily="Comic Sans MS" Padding="3,3,3,3" Foreground="White" Margin="3,3,3,3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Background="#BF9EFF" Text="On Track" FontFamily="Comic Sans MS" Padding="3,3,3,3" Foreground="Black" Margin="3,3,3,3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Background="#5CE1E6" Text="Done" FontFamily="Comic Sans MS" Padding="3,3,3,3" Foreground="Black" Margin="3,3,3,3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Background="#FF5F4A" Text="Late" FontFamily="Comic Sans MS" Padding="3,3,3,3" Foreground="Black" Margin="3,3,3,3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
         
-        <ListBox ItemsSource="{Binding TaskList}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Rectangle Width="{Binding ScheduledDate, Mode=OneWay, Converter={StaticResource ConvertStartDateToWidthKey}}" Stroke="Transparent"></Rectangle>
-                        <Grid>
-                            <Rectangle Width="{Binding RequiredEffortTime, Mode=OneWay, Converter={StaticResource ConvertDurationToWidthKey}}" Height="25" Fill="{Binding Status, Mode=OneWay, Converter={StaticResource ConvertStatusToColorKey}}"></Rectangle>
-                            <Label Content="{Binding Id}"></Label>
-                        </Grid>
-                        <Expander ExpandDirection ="Right">
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Alias:"/>
-                                <Label Content="{Binding Alias}"/>
-                                <Label Content="Depends on:"/>
-                            </StackPanel>                          
-                        </Expander>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
+    
 </Window>

@@ -7,14 +7,6 @@
         mc:Ignorable="d"
         Title="AdminWindow" Height="450" Width="800" Icon="/icon.png">
 
-    <Window.Resources>
-        <LinearGradientBrush x:Key ="myLinearGradient"
-        EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="White"/>
-            <GradientStop Color="#FF02F3D2" Offset="1"/>
-        </LinearGradientBrush>
-    </Window.Resources>
-
     <Grid Background="#FF232226">
         <Button Content="View engineer list " HorizontalAlignment="Left" Margin="85,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowEngineerListWindow" Background="{StaticResource myLinearGradient}"/>
         <Button Content="View Task list " HorizontalAlignment="Left" Margin="243,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowTaskListWindow" Background="{StaticResource myLinearGradient}"/>

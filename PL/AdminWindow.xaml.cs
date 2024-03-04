@@ -53,7 +53,10 @@ namespace PL
 
         private void Button_Click_ShowGanttWindow(object sender, RoutedEventArgs e)
         {
-            new GanttChartWindow().Show();
+            if(s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+                MessageBox.Show("Can not show Gantt chart before project schedule is created", "", MessageBoxButton.OK);
+            else   
+                new GanttChartWindow().Show();
         }
     }
 }

@@ -9,13 +9,6 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Activated="Window_Activated_Refresh"
         >
 
-    <Window.Resources>
-        <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="White"/>
-            <GradientStop Color="#FF02F3D2" Offset="1"/>
-        </LinearGradientBrush>
-    </Window.Resources>
-
     <!--Extrnal Grid-->
     <Grid Background="#FF232226">
         <Grid.RowDefinitions>

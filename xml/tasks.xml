@@ -15,34 +15,6 @@
     <EngineerId xsi:nil="true" />
   </Task>
   <Task>
-    <Id>1004</Id>
-    <Complexity>Advanced</Complexity>
-    <CreatedAtDate>2023-06-30T00:00:00+03:00</CreatedAtDate>
-    <Description>Optimize budget with cost-benefit analysis</Description>
-    <Alias>I64</Alias>
-    <RequiredEffortTime>P1D</RequiredEffortTime>
-    <IsMilestone xsi:nil="true" />
-    <StartDate xsi:nil="true" />
-    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
-    <DeadlineDate xsi:nil="true" />
-    <CompleteDate xsi:nil="true" />
-    <EngineerId xsi:nil="true" />
-  </Task>
-  <Task>
-    <Id>1006</Id>
-    <Complexity>Expert</Complexity>
-    <CreatedAtDate>2023-12-17T00:00:00+02:00</CreatedAtDate>
-    <Description>Use project management tools for task tracking</Description>
-    <Alias>P14</Alias>
-    <RequiredEffortTime>P3D</RequiredEffortTime>
-    <IsMilestone xsi:nil="true" />
-    <StartDate xsi:nil="true" />
-    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
-    <DeadlineDate xsi:nil="true" />
-    <CompleteDate xsi:nil="true" />
-    <EngineerId xsi:nil="true" />
-  </Task>
-  <Task>
     <Id>1007</Id>
     <Complexity>Advanced</Complexity>
     <CreatedAtDate>2024-02-14T00:00:00+02:00</CreatedAtDate>
@@ -275,6 +247,34 @@
     <RequiredEffortTime>P3D</RequiredEffortTime>
     <IsMilestone xsi:nil="true" />
     <StartDate>2024-03-03T00:00:00+02:00</StartDate>
+    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate>2024-03-04T12:42:51.0107158+02:00</CompleteDate>
+    <EngineerId>327130464</EngineerId>
+  </Task>
+  <Task>
+    <Id>1006</Id>
+    <Complexity>Expert</Complexity>
+    <CreatedAtDate>2023-12-17T00:00:00+02:00</CreatedAtDate>
+    <Description>Use project management tools for task tracking</Description>
+    <Alias>P14</Alias>
+    <RequiredEffortTime>P3D</RequiredEffortTime>
+    <IsMilestone xsi:nil="true" />
+    <StartDate>2024-03-04T00:00:00+02:00</StartDate>
+    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate>2024-03-04T15:35:36.4661541+02:00</CompleteDate>
+    <EngineerId>327130464</EngineerId>
+  </Task>
+  <Task>
+    <Id>1004</Id>
+    <Complexity>Advanced</Complexity>
+    <CreatedAtDate>2023-06-30T00:00:00+03:00</CreatedAtDate>
+    <Description>Optimize budget with cost-benefit analysis</Description>
+    <Alias>I64</Alias>
+    <RequiredEffortTime>P1D</RequiredEffortTime>
+    <IsMilestone xsi:nil="true" />
+    <StartDate>2024-03-04T00:00:00+02:00</StartDate>
     <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
     <DeadlineDate xsi:nil="true" />
     <CompleteDate xsi:nil="true" />

@@ -11,7 +11,7 @@
         >
 
     <Window.Resources>
-        
+
         <Style x:Key="myLabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Foreground" Value="#FFFFFFFF" />
@@ -24,11 +24,6 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
-
-        <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="White"/>
-            <GradientStop Color="#FF02F3D2" Offset="1"/>
-        </LinearGradientBrush>
 
         <DataTemplate x:Key="DependencyTemplate" >
             <Grid>

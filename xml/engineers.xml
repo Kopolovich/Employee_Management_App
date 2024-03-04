@@ -29,17 +29,17 @@
     <Name>Dina Klein</Name>
   </Engineer>
   <Engineer>
-    <Id>327130464</Id>
-    <Level>Expert</Level>
-    <Email>estirphoto@gmail.com</Email>
-    <Cost>500</Cost>
-    <Name>Esti Rosen</Name>
-  </Engineer>
-  <Engineer>
     <Id>279660300</Id>
     <Level>AdvancedBeginner</Level>
     <Email>DaniLevi@gmail.com</Email>
     <Cost>125</Cost>
     <Name>Dani Levi</Name>
+  </Engineer>
+  <Engineer>
+    <Id>327130464</Id>
+    <Level>Expert</Level>
+    <Email>estirphoto@gmail.com</Email>
+    <Cost>5000</Cost>
+    <Name>Esti Rosen</Name>
   </Engineer>
 </ArrayOfEngineer>

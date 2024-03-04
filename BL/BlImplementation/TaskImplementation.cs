@@ -200,7 +200,7 @@ internal class TaskImplementation : ITask
                                     .Select (item => item)
                                     .ToList();
 
-            dependenciesToDelete.ForEach(dependency => _dal.Dependency.Delete(dependency.Id));
+            dependenciesToDelete.ForEach(dependency => _dal.Dependency.Delete(dependency!.Id));
             dependenciesToAdd.ForEach(dependency => _dal.Dependency.Create(new DO.Dependency()
             {
                 DependentTask = task.Id,
@@ -338,20 +338,26 @@ internal class TaskImplementation : ITask
     BO.Status GetStatus(DO.Task doTask)
     {
         BO.Status currentStatus = BO.Status.Unscheduled;
-        switch (doTask.ScheduledDate, doTask.StartDate, doTask.CompleteDate)
+        switch (doTask.ScheduledDate, doTask.StartDate, doTask.CompleteDate, doTask.RequiredEffortTime)
         {
-            case var (scheduled, started, completed) when scheduled != null && started == null:
+            case var (scheduled, started, completed, time) when (scheduled != null && completed == null && scheduled + time < _bl.Clock)
+                                                            || (GetDependencies(doTask.Id).Any(item => item.Status == BO.Status.Late)):
+                currentStatus = BO.Status.Late;
+                break;
+
+            case var (scheduled, started, completed, time) when scheduled != null && started == null:
                 currentStatus = BO.Status.Scheduled;
                 break;
 
-            case var (scheduled, started, completed) when started != null && completed == null:
+            case var (scheduled, started, completed, time) when started != null && completed == null:
                 currentStatus = BO.Status.OnTrack;
                 break;
 
-            case var (scheduled, started, completed) when completed != null:
+            case var (scheduled, started, completed, time) when completed != null:
                 currentStatus = BO.Status.Done;
                 break;
         }
+
         return currentStatus;
     }
 

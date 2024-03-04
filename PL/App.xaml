@@ -2,8 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PL"
-             StartupUri="MainWindow.xaml"
-             >
+             StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
         <local:EngineerCollection x:Key="EngineerCollectionKey"/>
         <local:EngineerCollectionForFilter x:Key="EngineerCollectionForFilterKey"/>
@@ -22,10 +22,12 @@
         <local:ConvertStartDateToWidth x:Key="ConvertStartDateToWidthKey"/>
         <local:ConvertDurationToWidth x:Key="ConvertDurationToWidthKey"/>
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
+        <local:ConvertEngineerToText x:Key="ConvertEngineerToTextKey"/>
 
         <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="White"/>
             <GradientStop Color="#FF02F3D2" Offset="1"/>
         </LinearGradientBrush>
     </Application.Resources>
+    
 </Application>
