@@ -71,9 +71,9 @@ public partial class TaskListWindow : Window
     }
 
     // to open task window in updating or choosing task
-    private void ListView_DoubleClick_UpdateTask(object sender, RoutedEventArgs e)
+    private void ListBox_DoubleClick_UpdateTask(object sender, RoutedEventArgs e)
     {
-        BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
+        BO.TaskInList? task = (sender as ListBox)?.SelectedItem as BO.TaskInList;
         if (task != null)
         {
             if(State == 0) 
@@ -94,7 +94,7 @@ public partial class TaskListWindow : Window
             MessageBox.Show("Can not assign engineer to task while project is still in planning", "", MessageBoxButton.OK);
         else
         {
-            BO.TaskInList? task = (sender as ListView)?.SelectedItem as BO.TaskInList;
+            BO.TaskInList? task = (sender as ListBox)?.SelectedItem as BO.TaskInList;
             if (task != null && State == 0)
                 new EngineerListWindow(task.Id).ShowDialog();
         }
@@ -154,4 +154,5 @@ public partial class TaskListWindow : Window
     }
 
     #endregion
+
 }

@@ -26,26 +26,26 @@ internal class Tools
                     str += $"- {item}\n";
                 }
             }
-            if(value is BO.TaskInEngineer task)
+            if (value is BO.TaskInEngineer task)
             {
                 str += $"{property.Name}: Id: {task.Id} Alias: {task.Alias}\n";
             }
-            else
+            else if (obj is BO.TaskInList && property.Name == "Description") //for engineer user window
             {
                 str += $"{property.Name}: ";
 
-                //if (value != null && value.ToString()!.Length > 40)
-                //{
-
-                //    int splitIndex = value.ToString()!.LastIndexOf(' ', 40);
-
-                //    string line1 = value.ToString()!.Substring(0, splitIndex);
-                //    string line2 = value.ToString()!.Substring(splitIndex+1);
-                //    str += (line1 + "\n" + line2 + "\n");
-                //}
-                //else
+                if (value != null && value.ToString()!.Length > 40)
+                {
+                    int splitIndex = value.ToString()!.LastIndexOf(' ', 40);
+                    string line1 = value.ToString()!.Substring(0, splitIndex);
+                    string line2 = value.ToString()!.Substring(splitIndex + 1);
+                    str += (line1 + "\n" +  line2 + "\n");
+                }
+                else
                     str += $"{value}\n";
             }
+            else
+                str += $"{property.Name}: {value}\n";
         }
 
         return str;

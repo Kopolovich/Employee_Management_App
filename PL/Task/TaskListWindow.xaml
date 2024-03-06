@@ -41,15 +41,9 @@
             </Menu>
         </Grid>
 
-        <!--List-->
-        <ListView Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="1" ItemsSource="{Binding TaskList}" 
-                  FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateTask" MouseRightButtonUp="MouseRight_assignEngineer">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <!--List of tasks-->
+        <ListBox Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="1" ItemsSource="{Binding TaskList}" 
+                  FontFamily="Comic Sans MS" MouseDoubleClick="ListBox_DoubleClick_UpdateTask" MouseRightButtonUp="MouseRight_assignEngineer"/>
 
         <Button FontSize="20" Content="Add new task" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200"  
                 FontFamily="Cooper Black" Click="Button_Click_OpenTaskWindow_Add" Background="{StaticResource myLinearGradient}" Visibility="{Binding State, Mode=OneTime, Converter={StaticResource ConvertStateToVisibilityKey}}" Margin="0,5,0,0"/>

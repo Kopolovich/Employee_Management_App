@@ -5,6 +5,8 @@
              StartupUri="MainWindow.xaml">
     
     <Application.Resources>
+        
+        <!--converters-->
         <local:EngineerCollection x:Key="EngineerCollectionKey"/>
         <local:EngineerCollectionForFilter x:Key="EngineerCollectionForFilterKey"/>
         <local:StatusCollection x:Key="StatusCollectionKey"/>
@@ -24,10 +26,36 @@
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
         <local:ConvertEngineerToText x:Key="ConvertEngineerToTextKey"/>
 
+        <!-- gradient backround for buttons -->
         <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="White"/>
             <GradientStop Color="#FF02F3D2" Offset="1"/>
         </LinearGradientBrush>
+
+        <!-- style for text boxes to show error message for validation errors -->
+        <Style x:Key="Validation" TargetType="TextBox">
+            <Setter Property="Padding" Value="2 1"/>
+            <Setter Property="Validation.ErrorTemplate" >
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder/>
+                            <ItemsControl 
+                                Margin="0 2 0 0"
+                                FontSize="9"
+                                ItemsSource="{Binding}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Foreground="Red" Text="{Binding ErrorContent}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style> 
+            
     </Application.Resources>
     
 </Application>

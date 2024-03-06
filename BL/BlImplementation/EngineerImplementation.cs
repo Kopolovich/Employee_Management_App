@@ -31,8 +31,14 @@ internal class EngineerImplementation : IEngineer
         {
             if (engineer == null)
                 throw new BO.BlNullPropertyException("Engineer is null");
-            if (engineer.Id <= 0 || engineer.Name == "" || engineer.Cost <= 0 || !CheckEmail(engineer.Email!))
-                throw new BO.BlInvalidValueException("Engineer with invalid values");
+            if (engineer.Id <= 0)
+                throw new BO.BlInvalidValueException("Engineer with invalid Id");
+            if (!CheckEmail(engineer.Email!))
+                throw new BO.BlInvalidValueException("Engineer with invalid Email address");
+            if (engineer.Name == "")
+                throw new BO.BlInvalidValueException("Engineer with no name");
+            if (engineer.Cost <= 0 )
+                throw new BO.BlInvalidValueException("Engineer with invalid cost");
 
             //adding engineer using dal Create method
             _dal.Engineer.Create(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
@@ -117,8 +123,14 @@ internal class EngineerImplementation : IEngineer
         {
             if (engineer == null)
                 throw new BO.BlNullPropertyException("Engineer is null");
-            if (engineer.Id <= 0 || engineer.Name == "" || engineer.Cost <= 0 || !CheckEmail(engineer.Email!))
-                throw new BO.BlInvalidValueException("Engineer with invalid values");
+            if (engineer.Id <= 0)
+                throw new BO.BlInvalidValueException("Engineer with invalid Id");
+            if (!CheckEmail(engineer.Email!))
+                throw new BO.BlInvalidValueException("Engineer with invalid Email address");
+            if (engineer.Name == "")
+                throw new BO.BlInvalidValueException("Engineer with no name");
+            if (engineer.Cost <= 0)
+                throw new BO.BlInvalidValueException("Engineer with invalid cost");
 
             //making sure the updated level is not lower than current level
             DO.Engineer? doEngineer = _dal.Engineer.Read(engineer.Id);

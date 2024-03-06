@@ -3,12 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.Engineer"
+        xmlns:local="clr-namespace:PL.Engineer" xmlns:validationrules="clr-namespace:PL.ValidationRules"
         mc:Ignorable="d"
         Title="EngineerWindow" Height="500" Width="500" Icon="/icon.png"
         DataContext="{Binding CurrentEngineer, RelativeSource={RelativeSource Self}, Mode=TwoWay}">
 
     <Window.Resources>
+        
+        <!--style for labels-->
         <Style x:Key="myLabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="22" />
             <Setter Property="FontFamily" Value="Bahnschrift SemiBold" />
@@ -19,8 +21,11 @@
             <Setter Property="Foreground" Value="#FFFFFFFF" />
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
+        
     </Window.Resources>
+    
     <Grid Background="#FF232226">
+  
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200*"/>
             <ColumnDefinition Width="250*"/>
@@ -34,25 +39,83 @@
             <RowDefinition Height="70*"/>
             <RowDefinition Height="70*"/>
         </Grid.RowDefinitions>
+        
         <Label Content="Id" Style="{StaticResource myLabelStyle}"  Margin="140,15,0,5" Width="82" HorizontalAlignment="Left" Grid.Row="1"/>
         <Label Content="Name" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,13,0,7" Grid.Row="2" HorizontalAlignment="Left"/>
         <Label Content="Email" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,16,0,4" Grid.Row="3" HorizontalAlignment="Left"/>
         <Label Content="Level" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,15,0,6" HorizontalAlignment="Left" Grid.Row="4"/>
         <Label Content="Cost" Style="{StaticResource myLabelStyle}" RenderTransformOrigin="0.5,1.975" Margin="140,14,0,6" Grid.Row="5" HorizontalAlignment="Left"/>
-        
 
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                 Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
-                 IsEnabled="{Binding Id, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}" Grid.Row="1" Height="23"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170" Height="23"
-                 Text="{Binding Name, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="2"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170" Height="23"
-                 Text="{Binding Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="3"/>
+        <!--id text box-->
+        <TextBox x:Name="idBox" Style="{StaticResource Validation}" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
+                 IsEnabled="{Binding Id, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}" Grid.Row="1" Height="23">
+            <TextBox.Text>
+                <Binding Path="Id" Mode="TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource ConvertIdToStringKey}">
+                    <Binding.ValidationRules>
+                        <validationrules:IdValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
+        <!--name text box-->
+        <TextBox x:Name="nameBox" Style="{StaticResource Validation}" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170" Height="23" Grid.Row="2">
+            <TextBox.Text>
+                <Binding Path="Name" Mode="TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" UpdateSourceTrigger="PropertyChanged" >
+                    <Binding.ValidationRules>
+                        <validationrules:StringValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        
+        <!--email text box-->
+        <TextBox Style="{StaticResource Validation}" x:Name="emailBox" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170" Height="23" Grid.Row="3">
+                <TextBox.Text>
+                <Binding Path="Email" Mode="TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" UpdateSourceTrigger="PropertyChanged" >
+                        <Binding.ValidationRules>
+                            <validationrules:EmailValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+            </TextBox.Text>
+        </TextBox>
+        
+        <!--level combobox-->
         <ComboBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170" Height="23"
                   SelectedValue="{Binding Level, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
                   ItemsSource="{Binding Source={StaticResource EngineerCollectionKey}}" RenderTransformOrigin="0.5,0.5" Grid.Row="4" />
-        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170"
-                 Text="{Binding Cost, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="5" Height="23" Grid.ColumnSpan="2" Margin="216,0,0,0"/>
-        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConvertStateToContentEngineerKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1" Background="{StaticResource myLinearGradient}"/>
+
+        <!--cost text box-->
+        <TextBox Style="{StaticResource Validation}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="170" Grid.Row="5" Height="23" Grid.ColumnSpan="2" Margin="216,0,0,0" x:Name="costBox">
+            <TextBox.Text>
+                <Binding Path="Cost" Mode="TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" UpdateSourceTrigger="PropertyChanged" >
+                    <Binding.ValidationRules>
+                        <validationrules:CostValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
+        <!--add or update button-->
+        <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConvertStateToContentEngineerKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1" Background="{StaticResource myLinearGradient}">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=costBox, Path=(Validation.HasError)}" Value="true">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=emailBox, Path=(Validation.HasError)}" Value="true">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=idBox, Path=(Validation.HasError)}" Value="true">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=nameBox, Path=(Validation.HasError)}" Value="true">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </Window>

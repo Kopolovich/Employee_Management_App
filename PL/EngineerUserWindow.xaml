@@ -19,18 +19,19 @@
             <RowDefinition Height="50*"/>
         </Grid.RowDefinitions>
         <Image HorizontalAlignment="Center" Height="203" Margin="0,52,0,0" VerticalAlignment="Top" Width="204" Source="/logo.jpeg"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe Print">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="Hello {0}">
-                    <Binding Path="CurrentEngineer.Name"/>
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
+        <TextBlock Text="{Binding CurrentEngineer.Name, StringFormat='Hello {0}'}" Grid.Column="0" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe Print"/>
+        
         <Label Grid.Column="1" Grid.Row="0" Content="Current Task:" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="30" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0"/>
-        <Label Grid.Column="1" Grid.Row="0" Content="{Binding CurrentTask, Mode=TwoWay}" Foreground ="#FF02F3D2" FontFamily="Comic Sans MS" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Bottom" MouseDoubleClick="Double_Click_showTaskDetails"/>
-        <Button Grid.Column="1" Grid.Row="1" Content="Done!" Width="80" Height="30" Margin="100,10,320,105" Background="{StaticResource myLinearGradient}" 
+
+        <ScrollViewer Grid.Column="1" Grid.Row="0"  HorizontalScrollBarVisibility ="Auto" VerticalScrollBarVisibility="Disabled">
+            <Label Content="{Binding CurrentTask, Mode=TwoWay}" Foreground ="#FF02F3D2" FontFamily="Comic Sans MS" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Bottom" MouseDoubleClick="Double_Click_showTaskDetails" 
+            ToolTip="Double click to view all task details"/>
+        </ScrollViewer>
+   
+        
+        <Button Padding="0 0 5 10" Grid.Column="1" Grid.Row="1" Content="Done!" Width="80" Height="30" Margin="100,40,320,75" Background="{StaticResource myLinearGradient}" 
                 FontFamily="Segoe Print" FontWeight="Bold" Click="Button_Click_UpdateCompletedTask" IsEnabled="{Binding CurrentTask, Mode=TwoWay, Converter={StaticResource ConvertTaskToIsEnabledKey}}" x:Name="DoneBtn"/>
-        <Button Grid.Column="1" Grid.Row="1" Content="Choose a new task" Width="200" Height="30" Margin="225,10,75,105" Background="{StaticResource myLinearGradient}" 
+        <Button Padding="0 0 5 10" Grid.Column="1" Grid.Row="1" Content="Choose a new task" Width="200" Height="30" Margin="225,40,75,75" Background="{StaticResource myLinearGradient}" 
                 FontFamily="Segoe Print" FontWeight="Bold" Click="Button_Click_ChooseNewTask" IsEnabled="{Binding ElementName=DoneBtn, Path=IsEnabled, Converter={StaticResource ConvertEnableIsDisableKey}}"/>
     </Grid>
 </Window>

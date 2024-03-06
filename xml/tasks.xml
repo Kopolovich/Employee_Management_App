@@ -29,20 +29,6 @@
     <EngineerId xsi:nil="true" />
   </Task>
   <Task>
-    <Id>1008</Id>
-    <Complexity>Intermediate</Complexity>
-    <CreatedAtDate>2023-03-29T00:00:00+03:00</CreatedAtDate>
-    <Description>Choose appropriate technologies and methodologies</Description>
-    <Alias>O38</Alias>
-    <RequiredEffortTime>P9D</RequiredEffortTime>
-    <IsMilestone xsi:nil="true" />
-    <StartDate xsi:nil="true" />
-    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
-    <DeadlineDate xsi:nil="true" />
-    <CompleteDate xsi:nil="true" />
-    <EngineerId xsi:nil="true" />
-  </Task>
-  <Task>
     <Id>1009</Id>
     <Complexity>Beginner</Complexity>
     <CreatedAtDate>2023-11-08T00:00:00+02:00</CreatedAtDate>
@@ -275,6 +261,20 @@
     <RequiredEffortTime>P1D</RequiredEffortTime>
     <IsMilestone xsi:nil="true" />
     <StartDate>2024-03-04T00:00:00+02:00</StartDate>
+    <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
+    <DeadlineDate xsi:nil="true" />
+    <CompleteDate xsi:nil="true" />
+    <EngineerId>327130464</EngineerId>
+  </Task>
+  <Task>
+    <Id>1008</Id>
+    <Complexity>Intermediate</Complexity>
+    <CreatedAtDate>2023-03-29T00:00:00+03:00</CreatedAtDate>
+    <Description>Choose appropriate technologies and methodologies</Description>
+    <Alias>O38</Alias>
+    <RequiredEffortTime>P9D</RequiredEffortTime>
+    <IsMilestone xsi:nil="true" />
+    <StartDate>2024-03-06T00:00:00+02:00</StartDate>
     <ScheduledDate>2024-02-27T14:00:27.519733+02:00</ScheduledDate>
     <DeadlineDate xsi:nil="true" />
     <CompleteDate xsi:nil="true" />

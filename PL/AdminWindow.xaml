@@ -8,10 +8,10 @@
         Title="AdminWindow" Height="450" Width="800" Icon="/icon.png">
 
     <Grid Background="#FF232226">
-        <Button Content="View engineer list " HorizontalAlignment="Left" Margin="85,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowEngineerListWindow" Background="{StaticResource myLinearGradient}"/>
-        <Button Content="View Task list " HorizontalAlignment="Left" Margin="243,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowTaskListWindow" Background="{StaticResource myLinearGradient}"/>
-        <Button Content="Gantt chart " HorizontalAlignment="Left" Margin="400,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Background="{StaticResource myLinearGradient}" Click="Button_Click_ShowGanttWindow"/>
-        <Button Content="Create project schedule" HorizontalAlignment="Left" Margin="553,318,0,0" VerticalAlignment="Top" Height="26" Width="169" Click="Button_Click_CreateSchedule" Background="{StaticResource myLinearGradient}"/>
+        <Button Content="View engineer list" FontFamily="Comic Sans MS" HorizontalAlignment="Left" Margin="85,318,0,0" VerticalAlignment="Top" Height="26" Width="119" Click="Button_Click_ShowEngineerListWindow" Background="{StaticResource myLinearGradient}"/>
+        <Button Content="View Task list" FontFamily="Comic Sans MS" HorizontalAlignment="Left" Margin="249,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Click="Button_Click_ShowTaskListWindow" Background="{StaticResource myLinearGradient}"/>
+        <Button Content="Gantt chart" FontFamily="Comic Sans MS" HorizontalAlignment="Left" Margin="402,318,0,0" VerticalAlignment="Top" Height="26" Width="104" Background="{StaticResource myLinearGradient}" Click="Button_Click_ShowGanttWindow"/>
+        <Button Content="Create project schedule" FontFamily="Comic Sans MS" HorizontalAlignment="Left" Margin="553,318,0,0" VerticalAlignment="Top" Height="26" Width="169" Click="Button_Click_CreateSchedule" Background="{StaticResource myLinearGradient}"/>
         <Image HorizontalAlignment="Left" Height="203" Margin="295,44,0,0" VerticalAlignment="Top" Width="204" Source="/logo.jpeg"/>
     </Grid>
 </Window>

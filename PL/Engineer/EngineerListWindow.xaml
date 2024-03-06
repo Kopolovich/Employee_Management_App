@@ -33,13 +33,7 @@
         <Label Grid.Row ="1" Content="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertIdToContentKey}}" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Comic Sans MS" FontSize="14"/>
 
         <!--List-->
-        <ListView Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListView_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <ListBox Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListBox_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask"/>
 
         <Button FontSize="20" Content="Add new engineer" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" 
                 FontFamily="Cooper Black" Margin="0,1,0,0" Background="{StaticResource myLinearGradient}" IsEnabled="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}"/>

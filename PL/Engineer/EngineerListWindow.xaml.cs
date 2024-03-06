@@ -77,9 +77,9 @@ namespace PL.Engineer
         }
 
         //opening engineer window to update or assigning engineer to task
-       private void ListView_DoubleClick_UpdateEngineer(object sender, RoutedEventArgs e)
+       private void ListBox_DoubleClick_UpdateEngineer(object sender, RoutedEventArgs e)
         {
-            BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
+            BO.Engineer? engineer = (sender as ListBox)?.SelectedItem as BO.Engineer;
             if (engineer != null)
             {
                 if(TaskId == 0) //update engineer by admin
@@ -110,7 +110,7 @@ namespace PL.Engineer
             
             else
             {
-                BO.Engineer? engineer = (sender as ListView)?.SelectedItem as BO.Engineer;
+                BO.Engineer? engineer = (sender as ListBox)?.SelectedItem as BO.Engineer;
                 if (engineer != null && TaskId == 0)
                 {
                     if (engineer.Task != null)
