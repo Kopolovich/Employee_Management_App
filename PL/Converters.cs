@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -122,7 +123,7 @@ class ConvertIdToContentTask : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return (int)value == 0 ? "Double click to update task, right click to assign engineer to task"
-                                    : "Double click to choose a task for your engineer";
+                                    : "Double click to choose a task";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -279,21 +280,35 @@ class ConvertEngineerToText : IValueConverter
     }
 }
 
+/// <summary>
+/// for recycling bin
+/// </summary>
+class ConvertListToText : IValueConverter
+{
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (int)value == 0 ? "No items in recycling bin" : "";       
+    }
 
-//public class ConvertStartDateToWidth : IMultiValueConverter
-//{
-//    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-//    public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-//    {             
-//        DateTime scheduled = (values[0] != null && values[0] != DependencyProperty.UnsetValue) ? System.Convert.ToDateTime(values[0]) : DateTime.MinValue;
-//        DateTime? started = (values[0] != null && values[1] != DependencyProperty.UnsetValue) ? System.Convert.ToDateTime(values[1]) : null;
-//        DateTime max = started == null ? scheduled : (DateTime)started;
-//        int result = (max - s_bl.ProjectStartDate!).Value.Days * 80;
-//        return result;
-//    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
 
-//    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
-//    {
-//        throw new NotImplementedException();
-//    }
-//}
+/// <summary>
+/// for recycling bin in task list window
+/// </summary>
+class ConvertProjectStatusToVisibility : IValueConverter
+{
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return ((int)value == 0 && s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning) ? Visibility.Visible : Visibility.Hidden;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}

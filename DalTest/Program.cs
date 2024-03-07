@@ -359,7 +359,7 @@ namespace DalTest
                     int engId;
                     engineerId = int.TryParse(Console.ReadLine(), out engId) ? engId : null;
 
-                    DO.Task? task = new(0, level, DateTime.Now, description, alias, requiredEffortTime,
+                    DO.Task? task = new(0, level, DateTime.Now, true, description, alias, requiredEffortTime,
                         isMilestone, startDate, scheduledDate, null, completeDate, deliverables, remarks, engineerId);
                     return task;
                 }
@@ -384,7 +384,7 @@ namespace DalTest
                     Console.WriteLine("enter a name:");
                     string? name = Console.ReadLine();
 
-                    Engineer engineer = new(id, level, email, cost, name);
+                    Engineer engineer = new(id, level, true, email, cost, name);
                     return engineer; 
                 }
                 Dependency createNewDependency()
@@ -456,7 +456,7 @@ namespace DalTest
                     int engId;
                     engineerId = int.TryParse(Console.ReadLine(), out engId) ? engId : oldTask.EngineerId;
 
-                    DO.Task? task = new(oldTask.Id, level, oldTask.CreatedAtDate, description, alias, requiredEffortTime,
+                    DO.Task? task = new(oldTask.Id, level, oldTask.CreatedAtDate, true, description, alias, requiredEffortTime,
                         isMilestone, startDate, scheduledDate, null, completeDate, deliverables, remarks, engineerId);
                     return task;
                 }
@@ -483,7 +483,7 @@ namespace DalTest
                     string? name = Console.ReadLine();
                     if(name == "") name = oldEngineer.Name;
 
-                    Engineer engineer = new(oldEngineer.Id, level, email, cost, name); //creating new engineer with updated details
+                    Engineer engineer = new(oldEngineer.Id, level, true, email, cost, name); //creating new engineer with updated details
                     return engineer;
                 }
                 Dependency createUpdatedDependecy(Dependency oldDependency)

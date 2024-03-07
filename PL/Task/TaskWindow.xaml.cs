@@ -41,9 +41,7 @@ public partial class TaskWindow : Window
             try
             {
                 CurrentTask = s_bl.Task.Read(id);
-                DependenciesToAdd = s_bl.Task.ReadAll(item => item.Id != CurrentTask.Id
-                && (CurrentTask.Dependencies == null ||
-                !CurrentTask.Dependencies.Any(dep => dep.Id == item.Id))).ToList();
+                DependenciesToAdd = s_bl.Task.GetDependenciesToAdd(CurrentTask.Id);
                 if (state != 0) State = state;
                 else State = 1;
             }
@@ -130,9 +128,17 @@ public partial class TaskWindow : Window
                 else if (btn.Content.ToString() == "Update")
                 {
                     s_bl.Task.Update(CurrentTask);
-                    MessageBoxResult mbResult = MessageBox.Show("Task updated successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
-                    if (mbResult == MessageBoxResult.Yes)
-                        new EngineerListWindow(CurrentTask.Id).ShowDialog();
+                    if(s_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
+                    {
+                        MessageBoxResult mbResult = MessageBox.Show("Task updated successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
+                        if (mbResult == MessageBoxResult.Yes)
+                            new EngineerListWindow(CurrentTask.Id).ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Task updated successfully!", "", MessageBoxButton.OK);
+                    }
+                 
 
                 }
                 else if (btn.Content.ToString() == "Choose Task")
@@ -159,11 +165,11 @@ public partial class TaskWindow : Window
     /// <param name="e"> event args </param>
     private void Button_Click_DeleteDependency(object sender, RoutedEventArgs e)
     {
-        Button btn = (Button)sender;
+        TextBlock tb = (TextBlock)sender;
 
-        if (btn.DataContext is BO.TaskInList && State != 2)
+        if (tb.DataContext is BO.TaskInList && State != 2)
         {
-            BO.TaskInList deleteMe = (BO.TaskInList)btn.DataContext;
+            BO.TaskInList deleteMe = (BO.TaskInList)tb.DataContext;
             CurrentTaskDependencies!.Remove(deleteMe);
             DependenciesToAdd = s_bl.Task.ReadAll(item => item.Id != CurrentTask.Id
                 && (CurrentTaskDependencies == null ||
@@ -192,5 +198,4 @@ public partial class TaskWindow : Window
             }          
         }           
     }
-
 }

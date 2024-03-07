@@ -58,17 +58,23 @@ namespace PL.Engineer
             {
                 try
                 {
-                    MessageBoxResult mbResult;
+                    MessageBoxResult mbResult = MessageBoxResult.No;
                     if (btn.Content.ToString() == "Add")
                     {
                         s_bl.Engineer.Create(CurrentEngineer);
-                        mbResult = MessageBox.Show($"Engineer added successfully! \nWould you like to assign a task to this engineer?", "", MessageBoxButton.YesNo);
+                        if (s_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
+                            mbResult = MessageBox.Show($"Engineer added successfully! \nWould you like to assign a task to this engineer?", "", MessageBoxButton.YesNo);
+                        else
+                            MessageBox.Show($"Engineer added successfully!", "", MessageBoxButton.OK);
                     }
 
                     else
                     {
                         s_bl.Engineer.Update(CurrentEngineer);
-                        mbResult = MessageBox.Show($"Engineer updated successfully! \nWould you like to assign a task to this engineer?", "", MessageBoxButton.YesNo);
+                        if (s_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
+                            mbResult = MessageBox.Show($"Engineer updated successfully! \nWould you like to assign a task to this engineer?", "", MessageBoxButton.YesNo);
+                        else
+                            MessageBox.Show($"Engineer updated successfully!", "", MessageBoxButton.OK);
                     }
                     
                     if(mbResult == MessageBoxResult.Yes)

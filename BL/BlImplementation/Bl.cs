@@ -41,6 +41,7 @@ internal class Bl : IBl
         Dal.Config.ProjectStartDate = projectStartDate;
 
         //finding maximal planned finish date of tasks
+        tasks = Task.ReadAllFullTasks().ToList();
         return (DateTime)tasks.Max(task => task.ForecastDate)!;
     }
 

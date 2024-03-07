@@ -1,0 +1,27 @@
+﻿<Window x:Class="PL.Task.TaskRecyclingBin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.Task"
+        mc:Ignorable="d"
+        Title="Recycling Bin" Height="450" Width="600"
+        Icon="/icon.png"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    
+    <Grid Background="#FF232226">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="30*"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Background="Transparent" Content="{Binding TaskList.Count, Mode=OneWay, Converter={StaticResource ConvertListToTextKey}}" FontFamily="Comic Sans MS" FontSize="15" Foreground="white" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <ListBox Grid.Row="1" Foreground ="#25A1B0" FontFamily="Comic Sans MS" Background="Transparent" ItemsSource="{Binding TaskList, Mode=TwoWay}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Delete" FontFamily="Comic Sans MS" FontSize="15" Height="34" Margin="10" Padding="5" Background="{StaticResource myLinearGradient}" Click="Button_Click_DeleteTask"/>
+            <Button Content="Recover" FontFamily="Comic Sans MS" FontSize="15" Height="34" Margin="10" Padding="5" Background="{StaticResource myLinearGradient}" Click="Button_Click_RecoverTask"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

@@ -8,6 +8,26 @@
         Title="EngineerListWindow" Height="640" Width="800" Icon="/icon.png"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Activated="Window_Activated_Refresh"
         >
+    <Window.Resources>
+        <DataTemplate x:Key="engineerTemplate" >
+            <StackPanel Orientation="Horizontal">
+
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                    <TextBlock Text= "{Binding Id, StringFormat='Id: {0}'}" />
+                    <TextBlock Text="{Binding Name, StringFormat='Alias: {0}'}" />
+                    <TextBlock Text="{Binding Email, StringFormat='Description: {0}'}"/>
+                    <TextBlock Text="{Binding Level, StringFormat='Status: {0}'}"/>
+                    <TextBlock Text="{Binding Cost, StringFormat='Cost: {0}'}"/>
+                    <TextBlock Text="{Binding Task.Id, StringFormat='Current task: {0}'}" Padding="0,0,0,20"/>
+                </StackPanel>
+
+                <TextBlock Cursor="Hand" Grid.Column="2" Margin = "5 0 0 0" Background="Transparent"  VerticalAlignment="Center" HorizontalAlignment="Center" MouseLeftButtonUp="Button_Click_DeleteEngineer">
+                    <Image Source="/Task/bin.png" Height="40" Width="40" Margin="10 0 0 0"/>
+                </TextBlock>
+
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
 
     <!--Extrnal Grid-->
     <Grid Background="#FF232226">
@@ -15,7 +35,7 @@
             <RowDefinition Height="40*"/>
             <RowDefinition Height="40*"/>
             <RowDefinition Height="500*"/>
-            <RowDefinition Height="40*"/>
+            <RowDefinition Height="90*"/>
         </Grid.RowDefinitions>
 
         <!--Internal, Upper Grid-->
@@ -33,11 +53,16 @@
         <Label Grid.Row ="1" Content="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertIdToContentKey}}" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Comic Sans MS" FontSize="14"/>
 
         <!--List-->
-        <ListBox Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" FontFamily="Comic Sans MS" MouseDoubleClick="ListBox_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask"/>
+        <ListBox Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" ItemTemplate="{StaticResource engineerTemplate}" FontFamily="Comic Sans MS" MouseDoubleClick="ListBox_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask"/>
 
-        <Button FontSize="20" Content="Add new engineer" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" 
+        <Button  FontSize="20" Content="Add new engineer" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" 
                 FontFamily="Cooper Black" Margin="0,1,0,0" Background="{StaticResource myLinearGradient}" IsEnabled="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}"/>
 
+        <TextBlock Grid.Row="3" HorizontalAlignment="Right" Margin="0 0 5 0" Padding="3 3 3 3" 
+                  IsEnabled="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}" MouseLeftButtonUp="Click_RecyclingBin"
+                  ToolTip="Recycling bin" Cursor="Hand">
+           <Image Source="/Task/recycleBin.PNG"/>
+        </TextBlock>
     </Grid>
 
 </Window>

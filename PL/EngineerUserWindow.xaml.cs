@@ -111,7 +111,10 @@ public partial class EngineerUserWindow : Window
     /// <param name="e"> event args </param>
     private void Button_Click_ChooseNewTask(object sender, RoutedEventArgs e)
     {
-         new TaskListWindow(1, CurrentEngineer.Id).ShowDialog(); //opens task list window in choosing mode
+        if (s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+            MessageBox.Show("Can not assign task to engineer while project is still in planning", "", MessageBoxButton.OK);
+        else
+            new TaskListWindow(1, CurrentEngineer.Id).ShowDialog(); //opens task list window in choosing mode
     }
 
     private void Double_Click_showTaskDetails(object sender, MouseButtonEventArgs e)

@@ -1,6 +1,7 @@
 ﻿using PL.Task;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,11 +38,24 @@ namespace PL.Engineer
             try
             {
                 if (TaskId == 0)
-                    EngineerList = s_bl.Engineer.ReadAll();
+                {
+                    IEnumerable<BO.Engineer> EngineerListTemp = s_bl.Engineer.ReadAll();
+                    EngineerList = new ObservableCollection<BO.Engineer>();
+                    foreach (var engineer in EngineerListTemp)
+                    {
+                        EngineerList.Add(engineer);
+                    }
+                }
+                    
                 else
                 {
                     BO.Task currentTask = s_bl.Task.Read(TaskId);
-                    EngineerList = s_bl.Engineer.ReadAll(engineer => engineer.Level >= currentTask.Complexity && engineer.Task == null);
+                    IEnumerable<BO.Engineer> EngineerListTemp = s_bl.Engineer.ReadAll(engineer => engineer.Level >= currentTask.Complexity && engineer.Task == null);
+                    EngineerList = new ObservableCollection<BO.Engineer>();
+                    foreach (var engineer in EngineerListTemp)
+                    {
+                        EngineerList.Add(engineer);
+                    }
                 }
             }
             catch (Exception ex)
@@ -50,13 +64,13 @@ namespace PL.Engineer
             }
         }
 
-        public IEnumerable<BO.Engineer> EngineerList
+        public ObservableCollection<BO.Engineer> EngineerList
         {
-            get { return (IEnumerable<BO.Engineer>)GetValue(EngineerListProperty); }
+            get { return (ObservableCollection<BO.Engineer>)GetValue(EngineerListProperty); }
             set { SetValue(EngineerListProperty, value); }
         }
         public static readonly DependencyProperty EngineerListProperty =
-            DependencyProperty.Register("EngineerList", typeof(IEnumerable<BO.Engineer>), typeof(EngineerListWindow), new PropertyMetadata(null));
+            DependencyProperty.Register("EngineerList", typeof(ObservableCollection<BO.Engineer>), typeof(EngineerListWindow), new PropertyMetadata(null));
 
         //selected level to filter by
         public BO.EngineerExperienceForFilter Level { get; set; } = BO.EngineerExperienceForFilter.All;
@@ -66,8 +80,14 @@ namespace PL.Engineer
         //updating engineer list according to selected filter
         private void ComboBox_SelectionChanged_FilterEngineerByLevel(object sender, SelectionChangedEventArgs e)
         {
-            EngineerList = (Level == BO.EngineerExperienceForFilter.All) ?
-                s_bl.Engineer.ReadAll() : s_bl.Engineer.ReadAll(item => item.Level == (BO.EngineerExperience)Level);
+            List<BO.Engineer> EngineerListTemp = (Level == BO.EngineerExperienceForFilter.All) ?
+                s_bl.Engineer.ReadAll().ToList() : s_bl.Engineer.ReadAll(item => item.Level == (BO.EngineerExperience)Level).ToList();
+
+            EngineerList = new ObservableCollection<BO.Engineer>();
+            foreach (var engineer in EngineerListTemp)
+            {
+                EngineerList.Add(engineer);
+            }
         }
 
         //opening engineer window in adding mode
@@ -120,6 +140,32 @@ namespace PL.Engineer
                 }
                     
             }           
+        }
+
+        private void Button_Click_DeleteEngineer(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock tb = (TextBlock)sender;
+
+            if (TaskId == 0 && tb.DataContext is BO.Engineer)
+            {
+                try
+                {
+                    BO.Engineer deleteMe = (BO.Engineer)tb.DataContext;
+                    s_bl.Engineer.Delete(deleteMe.Id);
+                    EngineerList.Remove(deleteMe);
+                }              
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
+                }
+            }          
+
+        }
+
+        private void Click_RecyclingBin(object sender, MouseButtonEventArgs e)
+        {
+            new EngineerRecyclingBin().ShowDialog();
         }
     }
 }

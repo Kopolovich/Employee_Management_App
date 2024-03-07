@@ -15,7 +15,7 @@
 
             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="109,217,0,0">
                 <Label Content="User Id" Foreground="white" FontFamily="Comic Sans MS" FontSize="14" Height="29" Margin="0,0,5,0"/>
-                <TextBox Text="{Binding User.Id, Mode=TwoWay, Converter={StaticResource ConvertIdToStringKey}}" Width="176" Height="31" />
+                <TextBox Text="{Binding User.Id, Mode=TwoWay, Converter={StaticResource ConvertIdToStringKey}}" VerticalContentAlignment="Center" Width="176" Height="31" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Width="253" Margin="15,15,0,0">
@@ -32,8 +32,8 @@
                 </RadioButton>
             </WrapPanel>
 
-            <Button Content="Create account" Background="Transparent" Foreground="#FF02F3D2" FontFamily="Comic Sans MS" FontSize="14" BorderBrush="Transparent" 
-                    Margin="0,15,135,0" Click="Button_Click_CreateAccount" Width="110" HorizontalAlignment="Right"/>
+            <TextBlock Text="Create account" Background="Transparent" Foreground="#FF02F3D2" FontFamily="Comic Sans MS" FontSize="14" 
+                    Margin="0,15,135,0" MouseLeftButtonUp="Button_Click_CreateAccount" Width="110" HorizontalAlignment="Right" Cursor="Hand"/>
         </StackPanel>
 
     </Grid>

@@ -41,7 +41,7 @@ internal class EngineerImplementation : IEngineer
                 throw new BO.BlInvalidValueException("Engineer with invalid cost");
 
             //adding engineer using dal Create method
-            _dal.Engineer.Create(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
+            _dal.Engineer.Create(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, true, engineer.Email, engineer.Cost, engineer.Name));
 
         }
         catch (DO.DalAlreadyExistsException ex)
@@ -67,7 +67,7 @@ internal class EngineerImplementation : IEngineer
 
         //finding current task that engineer is working on
         DO.Task? currentTask = (from DO.Task dTask in dTasks
-                               where _iTask.Read(dTask.Id).Status == BO.Status.OnTrack
+                               where dTask.IsActive && _iTask.Read(dTask.Id).Status == BO.Status.OnTrack
                                select dTask).FirstOrDefault();                               
 
         //defining task in engineer help entity to contain current task info
@@ -96,16 +96,29 @@ internal class EngineerImplementation : IEngineer
         if(filter != null)
         {
             return (
-             from DO.Engineer doEngineer in _dal.Engineer.ReadAll()
+             from DO.Engineer doEngineer in _dal.Engineer.ReadAll(engineer => engineer.IsActive)
              let boEngineer = Read(doEngineer.Id) //using Read method to create logic entity
              where filter(boEngineer)
              select boEngineer
              );
         }
         return (
-            from DO.Engineer doEngineer in _dal.Engineer.ReadAll()
+            from DO.Engineer doEngineer in _dal.Engineer.ReadAll(engineer => engineer.IsActive)
             let boEngineer = Read(doEngineer.Id) //using Read method to create logic entity
             select boEngineer 
+            );
+    }
+
+    /// <summary>
+    /// reads collection of all inactive engineers
+    /// </summary>
+    /// <returns> collection of logic engineer entities </returns>
+    public IEnumerable<BO.Engineer> ReadAllNotActive()
+    {
+        return (
+            from DO.Engineer doEngineer in _dal.Engineer.ReadAll(engineer => !engineer.IsActive)
+            let boEngineer = Read(doEngineer.Id) //using Read method to create logic entity
+            select boEngineer
             );
     }
 
@@ -139,14 +152,7 @@ internal class EngineerImplementation : IEngineer
             if (doEngineer.Level > (DO.EngineerExperience)engineer.Level)
                 throw new BO.BlInvalidValueException("It is not possible to lower the experience level of an engineer");
 
-            //if (_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning && engineer.Task != null)
-            //    throw new BO.BlUpdatingImpossibleException("Can not assign task to engineer while project is still in planning");
-            
-            //if possible, assign task to engineer
-            //if (_bl.GetProjectStatus() == BO.ProjectStatus.InExecution && engineer.Task != null)
-            //    AssignTaskToEngineer(engineer, engineer.Task);
-
-            _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, engineer.Email, engineer.Cost, engineer.Name));
+            _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, true, engineer.Email, engineer.Cost, engineer.Name));
                       
         }
 
@@ -178,9 +184,24 @@ internal class EngineerImplementation : IEngineer
             if (boTask.Status == BO.Status.OnTrack)
                 throw new BO.BlDeletionImpossibleException("Can not delete engineer that is currently working on a task");
         }
+
         try
         {
-            _dal.Engineer.Delete(id);
+            DO.Engineer? doEngineer = _dal.Engineer.Read(id);
+            if (doEngineer!.IsActive)
+            {
+                _dal.Engineer.Update(new DO.Engineer()
+                {
+                    Id = id,
+                    Name = doEngineer.Name,
+                    Email = doEngineer.Email,
+                    Cost = doEngineer.Cost,
+                    Level = doEngineer.Level,
+                    IsActive = false
+                });
+            }
+            else
+                _dal.Engineer.Delete(id);
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -239,8 +260,26 @@ internal class EngineerImplementation : IEngineer
             CompleteDate = dTask.CompleteDate,
             Deliverables = dTask.Deliverables,
             Remarks = dTask.Remarks,
-            EngineerId = engineerId
+            EngineerId = engineerId,
+            IsActive = dTask.IsActive,
         });
+    }
+
+    /// <summary>
+    /// reactivates engineer
+    /// </summary>
+    /// <param name="engineer"> engineer to recover </param>
+    public void RecoverEngineer(BO.Engineer engineer)
+    {
+        _dal.Engineer.Update(new DO.Engineer()
+        {
+            Id = engineer.Id,
+            Name = engineer.Name,
+            Email = engineer.Email,
+            Cost = engineer.Cost,
+            Level = (DO.EngineerExperience)engineer.Level,
+            IsActive = true
+        }) ;
     }
 
     #region Help methods

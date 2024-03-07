@@ -51,6 +51,13 @@ sealed internal class DalXml : IDal
                 Engineer.Delete(engineer.Id);
         }
 
+        IEnumerable<User?> users = User.ReadAll(user => user.Role == UserRole.Engineer);
+        if (users.Count() != 0)
+        {
+            foreach (var user in users)
+                User.Delete(user.Id);
+        }
+
         XMLTools.RemoveStartDate("data-config", "ProjectStartDate");
         XMLTools.ResetNextId("data-config", "NextTaskId");
         XMLTools.ResetNextId("data-config", "NextDependencyId");

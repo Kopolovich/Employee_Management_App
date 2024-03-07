@@ -118,6 +118,17 @@ namespace PL
                 try
                 {
                     existingUser = s_bl.User.Read(User.Id);
+                    if (existingUser.Password == s_bl.User.HashPassword(User.Password))
+                    {
+                        if (existingUser.Role == BO.UserRole.Admin)
+                            new AdminWindow().ShowDialog();
+                        else
+                            new EngineerUserWindow(existingUser.Id).Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Incorrect password", "", MessageBoxButton.OK);
+                    }
                 }
                 catch
                 {
@@ -126,19 +137,7 @@ namespace PL
                     {
                         new CreateAccountWindow().ShowDialog();
                     }
-                }
-
-                if (existingUser.Password == s_bl.User.HashPassword(User.Password))
-                {
-                    if (existingUser.Role == BO.UserRole.Admin)
-                        new AdminWindow().ShowDialog();
-                    else
-                        new EngineerUserWindow(existingUser.Id).Show();
-                }
-                else
-                {
-                    MessageBox.Show("Incorrect password", "", MessageBoxButton.OK);
-                }
+                }        
             }
             
         }

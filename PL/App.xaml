@@ -25,6 +25,8 @@
         <local:ConvertDurationToWidth x:Key="ConvertDurationToWidthKey"/>
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
         <local:ConvertEngineerToText x:Key="ConvertEngineerToTextKey"/>
+        <local:ConvertListToText x:Key="ConvertListToTextKey"/>
+        <local:ConvertProjectStatusToVisibility x:Key="ConvertProjectStatusToVisibilityKey"/>
 
         <!-- gradient backround for buttons -->
         <LinearGradientBrush x:Key ="myLinearGradient" EndPoint="0.5,1" StartPoint="0.5,0">

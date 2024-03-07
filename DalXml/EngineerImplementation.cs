@@ -16,7 +16,7 @@ internal class EngineerImplementation : IEngineer
     /// <summary>
     /// adding new Engineer to XML file
     /// </summary>
-    /// <param name="item">refernce to new item to add</param>
+    /// <param name="item">reference to new item to add</param>
     /// <returns>Id of new Engineer</returns>
     /// <exception cref="DalAlreadyExistsException">if requested Engineer already exists</exception>
     public int Create(Engineer item)
@@ -30,9 +30,10 @@ internal class EngineerImplementation : IEngineer
             XElement level = new XElement("Level", item.Level);
             XElement email = new XElement("Email", item.Email);
             XElement cost = new XElement("Cost", item.Cost);
-            XElement name = new XElement("Name", item.Name);            
+            XElement name = new XElement("Name", item.Name);
+            XElement isActive = new XElement("IsActive", item.IsActive);
 
-            engineerRoot.Add(new XElement("Engineer", id, level, email, cost, name)); //adding to root new Xelement containig XElements for each field
+            engineerRoot.Add(new XElement("Engineer", id, level, email, cost, name, isActive)); //adding to root new Xelement containig XElements for each field
             XMLTools.SaveListToXMLElement(engineerRoot, s_engineers_xml); //saving updated root to XML file
             return item.Id;
         }
@@ -116,13 +117,16 @@ internal class EngineerImplementation : IEngineer
     /// <returns>Engineer object</returns>
     static Engineer getEngineer(XElement e)
     {
+        bool isActive = true;
+        bool test = bool.TryParse(e.Element("IsActive").Value, out isActive);
         return new Engineer()
         {
             Id = e.ToIntNullable("Id") ?? throw new FormatException("Can not convert id"),
             Level = e.ToEnumNullable<EngineerExperience>("Level") ?? EngineerExperience.Beginner,
             Email = e.Element("Email").Value ?? "",
             Cost = e.ToDoubleNullable("Cost") ?? null,
-            Name = e.Element("Name").Value ?? "",            
+            Name = e.Element("Name").Value ?? "",
+            IsActive = test ? isActive : true,
         };
     }
 }

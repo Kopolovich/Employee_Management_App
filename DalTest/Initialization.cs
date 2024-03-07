@@ -46,7 +46,7 @@ public static class Initialization
             //assigning engineer hourly salary according to level
             double? _cost = 120 + (int)_level * 5;                        
 
-            Engineer newEngineer = new(_id, _level, _email , _cost, _name);
+            Engineer newEngineer = new(_id, _level, true, _email , _cost, _name);
 
             s_dal!.Engineer.Create(newEngineer);
         }
@@ -104,7 +104,7 @@ public static class Initialization
             TimeSpan? _requiredEffortTime = TimeSpan.FromDays(s_rand.Next(1, 10));
             bool? _isMilestone = false;
 
-            Task newTask = new(_id, _complexity, _createdAtDate, _description, _alias,
+            Task newTask = new(_id, _complexity, _createdAtDate, true, _description, _alias,
                 _requiredEffortTime, _isMilestone);
 
             s_dal!.Task.Create(newTask);

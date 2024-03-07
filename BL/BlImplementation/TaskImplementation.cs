@@ -38,7 +38,8 @@ internal class TaskImplementation : ITask
                    RequiredEffortTime = task.RequiredEffortTime,
                    Deliverables = task.Deliverables,
                    Remarks = task.Remarks,
-                   CreatedAtDate = _bl.Clock
+                   CreatedAtDate = _bl.Clock,
+                   IsActive = true
             });
 
         // Creating dependencies in dal for all tasks that new task depends on
@@ -81,16 +82,16 @@ internal class TaskImplementation : ITask
     }
 
     /// <summary>
-    /// reads collection of all tasks
+    /// reads list of partial tasks
     /// </summary>
-    /// <param name="filter"> optional filter to filter tasks </param>
-    /// <returns> collection of logic task entities </returns>
+    /// <param name="filter">optional filter</param>
+    /// <returns> collection of logic taskInList entities </returns>
     public IEnumerable<BO.TaskInList> ReadAll(Func<BO.Task, bool>? filter = null)
     {
         if(filter != null) 
         {
             return (
-            from DO.Task doTask in _dal.Task.ReadAll()
+            from DO.Task doTask in _dal.Task.ReadAll(task => task.IsActive)
             let boTask = Read(doTask.Id) //using Read method to create logic entity
             where filter(boTask)
             select new BO.TaskInList()
@@ -105,7 +106,7 @@ internal class TaskImplementation : ITask
         }
 
         return (
-        from DO.Task doTask in _dal.Task.ReadAll()
+        from DO.Task doTask in _dal.Task.ReadAll(task => task.IsActive)
         let boTask = Read(doTask.Id) //using Read method to create logic entity
         select new BO.TaskInList() 
         { 
@@ -119,16 +120,16 @@ internal class TaskImplementation : ITask
     }
 
     /// <summary>
-    /// reads collection of all tasks
+    /// reads list of full tasks
     /// </summary>
-    /// <param name="filter"> optional filter to filter tasks </param>
+    /// <param name="filter">optional filter</param>
     /// <returns> collection of logic task entities </returns>
     public IEnumerable<BO.Task> ReadAllFullTasks(Func<BO.Task, bool>? filter = null)
     {
         if (filter != null)
         {
             return (
-            from DO.Task doTask in _dal.Task.ReadAll()
+            from DO.Task doTask in _dal.Task.ReadAll(task => task.IsActive)
             let boTask = Read(doTask.Id) //using Read method to create logic entity
             where filter(boTask)
             select boTask
@@ -136,9 +137,29 @@ internal class TaskImplementation : ITask
         }
 
         return (
-        from DO.Task doTask in _dal.Task.ReadAll()
+        from DO.Task doTask in _dal.Task.ReadAll(task => task.IsActive)
         let boTask = Read(doTask.Id) //using Read method to create logic entity
         select boTask
+        ).OrderBy(item => item.Id);
+    }
+
+
+    /// <summary>
+    /// reads list of not active tasks
+    /// </summary>
+    /// <returns> collection of logic taskInList entities </returns>
+    public IEnumerable<BO.TaskInList> ReadAllNotActive()
+    {
+        return (
+        from DO.Task doTask in _dal.Task.ReadAll(task => !task.IsActive)
+        let boTask = Read(doTask.Id) //using Read method to create logic entity
+        select new BO.TaskInList()
+        {
+            Id = boTask.Id,
+            Description = boTask.Description,
+            Alias = boTask.Alias,
+            Status = boTask.Status
+        }
         ).OrderBy(item => item.Id);
     }
 
@@ -177,10 +198,6 @@ internal class TaskImplementation : ITask
                     throw new BO.BlUpdatingImpossibleException("Can not change required effort time after the project start date was declared");
                
             }
-
-            //Checking if updated task contains a new scheduled date
-            //if (task.ScheduledDate != null && task.ScheduledDate != _dal.Task.Read(task.Id)!.ScheduledDate)
-            //    CheckScheduledDate(task.Id, (DateTime)task.ScheduledDate);
 
             //updating dependencies
             List<BO.TaskInList>? currentDependencies = Read(task.Id).Dependencies;
@@ -221,7 +238,8 @@ internal class TaskImplementation : ITask
                 CompleteDate = task.CompleteDate,
                 Deliverables = task.Deliverables,
                 Remarks = task.Remarks,
-                EngineerId = task.Engineer == null ? null : task.Engineer.Id
+                EngineerId = task.Engineer == null ? null : task.Engineer.Id,
+                IsActive = true
             });
         }
  
@@ -248,10 +266,39 @@ internal class TaskImplementation : ITask
         IEnumerable<DO.Dependency>? dependencies = _dal.Dependency.ReadAll(item => item.DependsOnTask == id);
         if (dependencies.Any(item => Read(item.DependentTask).Status != BO.Status.Done))
             throw new BO.BlDeletionImpossibleException($"There are tasks that depend on Task with ID={id}");
-
+                 
         try
         {
-            _dal.Task.Delete(id);
+            DO.Task? doTask = _dal.Task.Read(id);
+            if (doTask!.IsActive)
+            {
+                _dal.Task.Update(new DO.Task()
+                {
+                    Id = doTask.Id,
+                    Complexity = doTask.Complexity,
+                    CreatedAtDate = doTask.CreatedAtDate,
+                    Description = doTask.Description,
+                    Alias = doTask.Alias,
+                    RequiredEffortTime = doTask.RequiredEffortTime,
+                    StartDate = doTask.StartDate,
+                    ScheduledDate = doTask.ScheduledDate,
+                    CompleteDate = doTask.CompleteDate,
+                    Deliverables = doTask.Deliverables,
+                    Remarks = doTask.Remarks,
+                    EngineerId = doTask.EngineerId,
+                    IsActive = false
+                });
+            }
+            else
+            {
+                IEnumerable<DO.Dependency>? dependenciesToDelete = _dal.Dependency.ReadAll(item => item.DependentTask == id);
+                foreach (var item in dependenciesToDelete)
+                {
+                    _dal.Dependency.Delete(item.Id);
+                }
+                _dal.Task.Delete(id);
+            }
+               
         }
         catch(DO.DalDoesNotExistException ex)
         {
@@ -305,6 +352,76 @@ internal class TaskImplementation : ITask
                 (task.Dependencies == null || task.Dependencies.All(dependency => dependency.Status == BO.Status.Done)))
                 where Read(task.Id).Complexity <= (BO.EngineerExperience)engineer.Level
                 select new BO.TaskInEngineer() {Id = task.Id, Alias = task.Alias});
+    }
+
+    /// <summary>
+    /// gets list of tasks that can be added as previous tasks/dependencies to task with given id
+    /// </summary>
+    /// <param name="id"> id of task to find dependencies for </param>
+    /// <returns> list of dependencies to add </returns>
+    public List<BO.TaskInList> GetDependenciesToAdd(int id)
+    {
+        BO.Task currentTask = Read(id);
+
+        //finding all tasks except for current task and tasks that current task already depends on
+        List<BO.Task> tasks = ReadAllFullTasks(item => item.Id != id
+                && (currentTask.Dependencies == null ||
+                !currentTask.Dependencies.Any(dep => dep.Id == item.Id))).ToList();
+
+        //list of tasks that can cause circular dependencies
+        List<BO.Task> tasksToRemove = new List<BO.Task>();
+
+        //Checking circular dependency for all tasks
+        foreach (var task in tasks)
+        {
+            if(task.Dependencies != null && task.Dependencies.Count > 0)
+            {
+                if(CheckCircularDependency(task.Dependencies, id))
+                    tasksToRemove.Add(task);
+            }                
+        }
+
+        //removing all tasks that need to be removed
+        foreach (var task in tasksToRemove)
+        {
+            tasks.Remove(task);
+        }
+
+        return (from task in tasks
+               select new BO.TaskInList()
+               {
+                   Id = task.Id,
+                   Alias = task.Alias,
+                   Description = task.Description,
+                   Status = task.Status
+               }).ToList();
+    }
+
+    /// <summary>
+    /// reactivates task
+    /// </summary>
+    /// <param name="engineer"> task to recover </param>
+    public void RecoverTask(BO.TaskInList task)
+    {
+        DO.Task? doTask = _dal.Task.Read(task.Id);
+        if (doTask == null)
+            throw new BO.BlDoesNotExistException($"Engineer with id = {task.Id} does not exist");
+        _dal.Task.Update(new DO.Task()
+        {
+            Id = doTask.Id,
+            Complexity = doTask.Complexity,
+            CreatedAtDate = doTask.CreatedAtDate,
+            Description = doTask.Description,
+            Alias = doTask.Alias,
+            RequiredEffortTime = doTask.RequiredEffortTime,
+            ScheduledDate = doTask.ScheduledDate,
+            StartDate = doTask.StartDate,
+            CompleteDate = doTask.CompleteDate,
+            Deliverables = doTask.Deliverables,
+            Remarks = doTask.Remarks,
+            EngineerId = doTask.EngineerId,
+            IsActive = true
+        });
     }
 
     #region Help methods
@@ -411,6 +528,26 @@ internal class TaskImplementation : ITask
         if (doTask.ScheduledDate != null && doTask.StartDate == null)
             forcast = doTask.ScheduledDate + doTask.RequiredEffortTime;
         return forcast;
+    }
+
+    /// <summary>
+    /// help method that checks for circular dependencies
+    /// </summary>
+    /// <param name="tasks"> list of tasks to check </param>
+    /// <param name="currentTaskId"> id of task </param>
+    /// <returns> true if circular dependency exists </returns>
+    bool CheckCircularDependency(List<BO.TaskInList> tasks, int currentTaskId)
+    {
+        foreach (var task in tasks)
+        {
+            if (task.Id == currentTaskId)
+                return true;
+            BO.Task fullTask = Read(task.Id);
+            if (fullTask.Dependencies != null)
+                return CheckCircularDependency(fullTask.Dependencies, currentTaskId);
+        }
+
+        return false;
     }
 
     #endregion

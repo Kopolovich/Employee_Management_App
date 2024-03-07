@@ -14,13 +14,14 @@
 /// <param name="DeadlineDate">deadline to complete task so project doesnt fail </param>
 /// <param name="CompleteDate">date that engineer reports that he finished working on task</param>
 /// <param name="Deliverables"> task result</param>
-/// <param name="Remarks">optinal remarks on task</param>
+/// <param name="Remarks">optional remarks on task</param>
 /// <param name="EngineerId">id of engineer working on task</param>
 public record Task
 (
     int Id,
     EngineerExperience Complexity,
     DateTime CreatedAtDate,
+    bool IsActive = true,
     string? Description = null,
     string? Alias = null,
     TimeSpan? RequiredEffortTime = null,

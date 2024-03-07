@@ -27,25 +27,21 @@
         
         <!--data template for dependenies list box-->
         <DataTemplate x:Key="DependencyTemplate" >
-            <Grid>
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="10*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Orientation="Vertical" Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+          
+            
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                     <TextBlock Text= "{Binding Id, StringFormat='Id: {0}'}" />
                     <TextBlock Text="{Binding Alias, StringFormat='Alias: {0}'}" />
                     <TextBlock Text="{Binding Description, StringFormat='Description: {0}'}"/>
                     <TextBlock Text="{Binding Status, StringFormat='Status: {0}'}" Padding="0,0,0,20"/>
                 </StackPanel>
 
-                <Button IsEnabled="{Binding State, Mode=TwoWay, Converter={StaticResource ConvertStateToIsEnabledKey}}" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="100,0,0,0" Click="Button_Click_DeleteDependency">
-                    <Image Source="/Task/bin.png" Height="40" Width="40"/>
-                </Button>
-                
-            </Grid>
+                <TextBlock Cursor="Hand" Grid.Column="2" Margin = "5 0 0 0"  IsEnabled="{Binding State, Mode=TwoWay, Converter={StaticResource ConvertStateToIsEnabledKey}}" Background="Transparent"  VerticalAlignment="Center" HorizontalAlignment="Center" MouseLeftButtonUp="Button_Click_DeleteDependency">
+                    <Image Source="/Task/bin.png" Height="40" Width="40" Margin="8 0 0 0"/>
+                </TextBlock>
+
+            </StackPanel>
         </DataTemplate>
 
     </Window.Resources>
