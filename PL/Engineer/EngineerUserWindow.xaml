@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
-        mc:Ignorable="d"
+        mc:Ignorable="d" ResizeMode="NoResize"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Title="EngineerUserWindow" Height="450" Width="800" Icon="/icon.png"
+        Title="EngineerUserWindow" Height="450" Width="800" Icon="/Images/icon.png"
         Activated="Window_Activated_Refresh">
 
     <Grid Background="#FF232226" RenderTransformOrigin="0.103,-0.22">
@@ -18,7 +18,7 @@
             <RowDefinition Height="100*"/>
             <RowDefinition Height="50*"/>
         </Grid.RowDefinitions>
-        <Image HorizontalAlignment="Center" Height="203" Margin="0,52,0,0" VerticalAlignment="Top" Width="204" Source="/logo.jpeg"/>
+        <Image HorizontalAlignment="Center" Height="203" Margin="0,52,0,0" VerticalAlignment="Top" Width="204" Source="/Images/logo.jpeg"/>
         <TextBlock Text="{Binding CurrentEngineer.Name, StringFormat='Hello {0}'}" Grid.Column="0" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe Print"/>
         
         <Label Grid.Column="1" Grid.Row="0" Content="Current Task:" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="30" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0"/>

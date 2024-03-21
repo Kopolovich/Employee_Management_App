@@ -22,7 +22,7 @@ internal static class DataSource
         private static int nextDependencyId = StartDependencyId;
         internal static int NextDependencyId { get => nextDependencyId++; set => nextDependencyId = value; }
 
-        internal static DateTime? ProjectStartDate = null;
-        internal static DateTime? ProjectDeadLine = null;
+        private static DateTime? projectStartDate = null;
+        internal static DateTime? ProjectStartDate { get => projectStartDate; set => projectStartDate = value; }
     }
 }

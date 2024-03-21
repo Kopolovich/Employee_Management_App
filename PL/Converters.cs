@@ -83,13 +83,51 @@ class ConvertStateToVisibility : IValueConverter
 }
 
 /// <summary>
+/// to hide different wpf controls according to window state and project status
+/// </summary>
+class ConvertStateAndStatusToVisibility : IValueConverter
+{
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if ((int)value == 0 && s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+            return Visibility.Visible;
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
+/// to disable different wpf controls according to window state and project status
+/// </summary>
+class ConvertStateAndStatusToIsEnabled : IValueConverter
+{
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (((int)value == 0 || (int)value == 1) && s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+            return true;
+        return false;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
 /// to disable different wpf controls according to window state
 /// </summary>
 class ConvertStateToIsEnabled : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return (int)value == 0 || (int)value == 1 ? true : false;
+        return ((int)value == 0 || (int)value == 1) ? true : false;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

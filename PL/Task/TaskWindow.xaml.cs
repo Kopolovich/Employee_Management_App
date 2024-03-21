@@ -24,7 +24,7 @@ public partial class TaskWindow : Window
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     public TaskWindow(int id = 0, int state = 0, int engineerId = 0)
     {
-        //State = 0: admin adding new task, State = 1: admin updating task, State = 2: engineer choosing task
+        //State = 0: admin adding new task, State = 1: admin updating task, State = 2: engineer choosing task, State = 3: engineer viewing task
 
         EngineerId = engineerId;
 
@@ -167,7 +167,7 @@ public partial class TaskWindow : Window
     {
         TextBlock tb = (TextBlock)sender;
 
-        if (tb.DataContext is BO.TaskInList && State != 2)
+        if (tb.DataContext is BO.TaskInList && State != 2 && s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
         {
             BO.TaskInList deleteMe = (BO.TaskInList)tb.DataContext;
             CurrentTaskDependencies!.Remove(deleteMe);

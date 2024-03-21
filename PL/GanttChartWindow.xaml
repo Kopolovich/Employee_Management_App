@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="GanttChartWindow" Height="700" Width="1100"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Icon="/icon.png">
+        Icon="/Images/icon.png">
     
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
         <Grid>

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Engineer"
         mc:Ignorable="d"
-        Title="Recycling Bin" Height="450" Width="600"
-        Icon="/icon.png"
+        Title="Recycling Bin" Height="450" Width="600" ResizeMode="NoResize"
+        Icon="/Images/icon.png"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" >
 
     <Grid Background="#FF232226">

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Engineer"
         mc:Ignorable="d"
-        Title="EngineerListWindow" Height="640" Width="800" Icon="/icon.png"
+        Title="EngineerListWindow" Height="640" Width="800" Icon="/Images/icon.png" ResizeMode="NoResize"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Activated="Window_Activated_Refresh"
         >
     <Window.Resources>
@@ -18,11 +18,11 @@
                     <TextBlock Text="{Binding Email, StringFormat='Description: {0}'}"/>
                     <TextBlock Text="{Binding Level, StringFormat='Status: {0}'}"/>
                     <TextBlock Text="{Binding Cost, StringFormat='Cost: {0}'}"/>
-                    <TextBlock Text="{Binding Task.Id, StringFormat='Current task: {0}'}" Padding="0,0,0,20"/>
+                    <TextBlock Text="{Binding Task.Id, StringFormat='Current task: {0}'}" Padding="0,0,0,10"/>
                 </StackPanel>
 
                 <TextBlock Cursor="Hand" Grid.Column="2" Margin = "5 0 0 0" Background="Transparent"  VerticalAlignment="Center" HorizontalAlignment="Center" MouseLeftButtonUp="Button_Click_DeleteEngineer">
-                    <Image Source="/Task/bin.png" Height="40" Width="40" Margin="10 0 0 0"/>
+                    <Image Source="/Images/bin.png" Height="40" Width="40" Margin="10 0 0 0"/>
                 </TextBlock>
 
             </StackPanel>
@@ -56,12 +56,12 @@
         <ListBox Background="#FF232226" Foreground ="#25A1B0" Margin="5" Grid.Row="2" ItemsSource="{Binding EngineerList}" ItemTemplate="{StaticResource engineerTemplate}" FontFamily="Comic Sans MS" MouseDoubleClick="ListBox_DoubleClick_UpdateEngineer" MouseRightButtonUp="MouseRight_assignTask"/>
 
         <Button  FontSize="20" Content="Add new engineer" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="200" Click="Button_Click_OpenEngineerWindow_Add" 
-                FontFamily="Cooper Black" Margin="0,1,0,0" Background="{StaticResource myLinearGradient}" IsEnabled="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}"/>
+                FontFamily="Cooper Black" Margin="0,1,0,0" Background="{StaticResource myLinearGradient}" Visibility="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertStateToVisibilityKey}}"/>
 
-        <TextBlock Grid.Row="3" HorizontalAlignment="Right" Margin="0 0 5 0" Padding="3 3 3 3" 
-                  IsEnabled="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertIdToIsEnabledKey}}" MouseLeftButtonUp="Click_RecyclingBin"
+        <TextBlock Grid.Row="3" HorizontalAlignment="Right" Margin="0 0 5 0" Padding="2.5" 
+                  Visibility="{Binding TaskId, Mode=OneTime, Converter={StaticResource ConvertStateToVisibilityKey}}" MouseLeftButtonUp="Click_RecyclingBin"
                   ToolTip="Recycling bin" Cursor="Hand">
-           <Image Source="/Task/recycleBin.PNG"/>
+           <Image Source="/Engineer/recycleBin.PNG"/>
         </TextBlock>
     </Grid>
 

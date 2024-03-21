@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Engineer" xmlns:validationrules="clr-namespace:PL.ValidationRules"
-        mc:Ignorable="d"
-        Title="EngineerWindow" Height="500" Width="500" Icon="/icon.png"
+        mc:Ignorable="d" ResizeMode="NoResize"
+        Title="EngineerWindow" Height="500" Width="500" Icon="/Images/icon.png"
         DataContext="{Binding CurrentEngineer, RelativeSource={RelativeSource Self}, Mode=TwoWay}">
 
     <Window.Resources>
