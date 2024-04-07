@@ -59,7 +59,7 @@ internal class EngineerImplementation : IEngineer
     }
 
     /// <summary>
-    /// retrievs requested Engineer
+    /// retrieves requested Engineer
     /// </summary>
     /// <param name="id">id of Engineer to retrieve</param>
     /// <returns>retrieved Engineer</returns>
@@ -71,7 +71,7 @@ internal class EngineerImplementation : IEngineer
 
 
     /// <summary>
-    /// retrievs requested engineer by filter
+    /// retrieves requested engineer by filter
     /// </summary>
     /// <param name="filter">Func type delegate, boolian function to filter</param>
     /// <returns>first item in collection that matches the filter</returns>
@@ -82,7 +82,7 @@ internal class EngineerImplementation : IEngineer
 
 
     /// <summary>
-    /// retreives collection of Engineers
+    /// retrieves collection of Engineers
     /// </summary>
     /// <returns>copy of collection of Engineers</returns>
     public IEnumerable<Engineer> ReadAll(Func<Engineer, bool>? filter = null)

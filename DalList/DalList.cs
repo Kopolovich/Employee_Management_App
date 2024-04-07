@@ -8,14 +8,9 @@ using System.Data.SqlTypes;
 /// </summary>
 sealed internal class DalList : IDal
 {
-    //public static IDal Instance { get; } = new DalList();
-    //private DalList() { }
-    private static readonly Lazy<DalList> lazy =
-    new Lazy<DalList>(() => new DalList());
-
-    public static DalList Instance { get { return lazy.Value; } }
-
+    public static IDal Instance { get; } = new DalList();
     private DalList() { }
+
 
     public IEngineer Engineer => new EngineerImplementation();
 
@@ -25,12 +20,19 @@ sealed internal class DalList : IDal
 
     public IUser User => new UserImplementation();
 
+    public DateTime? StartDate { get => DataSource.Config.ProjectStartDate; set => DataSource.Config.ProjectStartDate = value; }
+
     public void Reset()
     {
         DataSource.Tasks.Clear();
         DataSource.Engineers.Clear();
         DataSource.Dependencies.Clear();
-        DataSource.Users.Clear();
+        IEnumerable<User?> users = User.ReadAll(user => user.Role == UserRole.Engineer);
+        if (users.Count() != 0)
+        {
+            foreach (var user in users)
+                DataSource.Users.Remove(user);
+        }
 
         DataSource.Config.ProjectStartDate = null;
         DataSource.Config.NextDependencyId = DataSource.Config.StartDependencyId;

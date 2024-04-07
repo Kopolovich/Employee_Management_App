@@ -100,6 +100,7 @@
         <Button Content="{Binding Id, Mode=OneTime, Converter={StaticResource ConvertStateToContentEngineerKey}}" HorizontalAlignment="Left" Margin="152,10,0,0" VerticalAlignment="Top" Height="31" Width="80" Click="Button_Click_AddOrUpdateEngineer" Grid.Row="6" Grid.Column="1" Background="{StaticResource myLinearGradient}">
             <Button.Style>
                 <Style TargetType="Button">
+                    <!--only enabling add/update button if all input is without errors-->
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=costBox, Path=(Validation.HasError)}" Value="true">
                             <Setter Property="IsEnabled" Value="False"/>

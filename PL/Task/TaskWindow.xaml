@@ -180,8 +180,12 @@
                         Height="31" Width="80" Grid.Row="15" Grid.Column="1" RenderTransformOrigin="0.217,0.639" Background="{StaticResource myLinearGradient}" Click="Button_Click_AddOrUpdateTask">
                     <Button.Style>
                         <Style TargetType="Button">
+                            <!--only enabling add/update button if all input is without errors-->
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=descriptionBox, Path=(Validation.HasError)}" Value="true">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=descriptionBox, Path=text}" Value="">
                                     <Setter Property="IsEnabled" Value="False"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=aliasBox, Path=(Validation.HasError)}" Value="true">

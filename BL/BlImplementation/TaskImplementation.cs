@@ -26,8 +26,9 @@ internal class TaskImplementation : ITask
             throw new BO.BlCreationImpossibleException("Can not add new task after the project start date was declared");
 
         //not checking id correctness cuz it is automatically created in dal create method (temporarily 0)
-        if (task.Alias == "") throw new BO.BlInvalidValueException("Task must contain alias");
-       
+        if(task.Alias == "" || task.Alias == null || task.Description == "" || task.Description == null || task.RequiredEffortTime == null || task.RequiredEffortTime.Value.Days <= 0)
+            throw new BO.BlInvalidValueException("Task must contain Alias, Description and Required effort time");
+
         //Creating new task with allowed props to this stage of the project
         _dal.Task.Create(
             new DO.Task()
@@ -200,30 +201,7 @@ internal class TaskImplementation : ITask
             }
 
             //updating dependencies
-            List<BO.TaskInList>? currentDependencies = Read(task.Id).Dependencies;
-            List<BO.TaskInList>? newDependencies = task.Dependencies;
-            if(currentDependencies == null)
-                currentDependencies = new List<BO.TaskInList>();
-            if (newDependencies == null)
-                newDependencies = new List<BO.TaskInList>();
-
-            var dependenciesToDelete = currentDependencies
-                                       .Where (item => !newDependencies.Contains(item))
-                                       .Select (item => _dal.Dependency.Read(dep => dep.DependsOnTask == item.Id))
-                                       .ToList();
-
-            var dependenciesToAdd = newDependencies
-                                    .Where (item => !currentDependencies.Contains(item))
-                                    .Select (item => item)
-                                    .ToList();
-
-            dependenciesToDelete.ForEach(dependency => _dal.Dependency.Delete(dependency!.Id));
-            dependenciesToAdd.ForEach(dependency => _dal.Dependency.Create(new DO.Dependency()
-            {
-                DependentTask = task.Id,
-                DependsOnTask = dependency.Id
-            }));
-
+            updateDependencies(task);          
 
             _dal.Task.Update(new DO.Task()
             {
@@ -291,11 +269,13 @@ internal class TaskImplementation : ITask
             }
             else
             {
-                IEnumerable<DO.Dependency>? dependenciesToDelete = _dal.Dependency.ReadAll(item => item.DependentTask == id);
+                //deleting all dependencies 
+                List<DO.Dependency>? dependenciesToDelete = _dal.Dependency.ReadAll(item => item.DependentTask == id).ToList();
                 foreach (var item in dependenciesToDelete)
                 {
                     _dal.Dependency.Delete(item.Id);
                 }
+
                 _dal.Task.Delete(id);
             }
                
@@ -432,10 +412,7 @@ internal class TaskImplementation : ITask
     /// <param name="startDate"> new/updated scheduled start date </param>
     /// <exception cref="BO.BlInvalidValueException"> if date is invalid </exception>
     void CheckScheduledDate(int id, DateTime startDate)
-    {
-        //if(_bl.GetProjectStatus() == BO.ProjectStatus.InExecution) 
-        //    throw new BO.BlUpdatingImpossibleException("Can not update scheduled task date after the project start date was declared");
-        
+    {        
         BO.Task task = Read(id);
         IEnumerable<DO.Task?> depenedOnTasks = from item in task.Dependencies 
                                let doTask = _dal.Task.Read(item.Id)
@@ -443,8 +420,7 @@ internal class TaskImplementation : ITask
                                select doTask;
 
         if (depenedOnTasks.Any())
-            throw new BO.BlUpdatingImpossibleException($"Requested start date can not be assigned to this task because of previos tasks");
-
+            throw new BO.BlUpdatingImpossibleException($"Requested start date can not be assigned to this task because of previous tasks");
     }
 
     /// <summary>
@@ -548,6 +524,37 @@ internal class TaskImplementation : ITask
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// help method to update dependencies, adding new and deleting 
+    /// </summary>
+    /// <param name="task"> task that is being updated </param>
+    void updateDependencies(BO.Task task)
+    {
+        List<BO.TaskInList>? currentDependencies = Read(task.Id).Dependencies;
+        List<BO.TaskInList>? newDependencies = task.Dependencies;
+        if (currentDependencies == null)
+            currentDependencies = new List<BO.TaskInList>();
+        if (newDependencies == null)
+            newDependencies = new List<BO.TaskInList>();
+
+        var dependenciesToDelete = currentDependencies
+                                   .Where(item => !newDependencies.Contains(item))
+                                   .Select(item => _dal.Dependency.Read(dep => dep.DependsOnTask == item.Id))
+                                   .ToList();
+
+        var dependenciesToAdd = newDependencies
+                                .Where(item => !currentDependencies.Contains(item))
+                                .Select(item => item)
+                                .ToList();
+
+        dependenciesToDelete.ForEach(dependency => _dal.Dependency.Delete(dependency!.Id));
+        dependenciesToAdd.ForEach(dependency => _dal.Dependency.Create(new DO.Dependency()
+        {
+            DependentTask = task.Id,
+            DependsOnTask = dependency.Id
+        }));
     }
 
     #endregion

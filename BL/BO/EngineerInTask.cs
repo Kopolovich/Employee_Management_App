@@ -1,7 +1,7 @@
 ﻿namespace BO;
 
 /// <summary>
-/// help entity to use in task, contains id and name of enginner assigned to task
+/// help entity to use in task, contains id and name of engineer assigned to task
 /// "Id" -  Main personal unique ID of the task
 /// "Name" - name of engineer
 /// </summary>

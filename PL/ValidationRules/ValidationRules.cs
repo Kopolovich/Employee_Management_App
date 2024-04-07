@@ -52,7 +52,7 @@ internal class EmailValidationRule : ValidationRule
     public override ValidationResult Validate(object value, CultureInfo cultureInfo)
     {
         //If no value was entered
-        if (string.IsNullOrEmpty(value.ToString()))
+        if (value == null || string.IsNullOrEmpty(value.ToString()))
             return new ValidationResult(false, "Enter value");
 
         // Use the EmailAddressAttribute to validate the email address

@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 internal class EngineerImplementation : IEngineer
 {
     private readonly Bl _bl;
-    private TaskImplementation _iTask;
+    private ITask _iTask;
     internal EngineerImplementation(Bl bl)
     {
         _bl = bl;
@@ -33,15 +33,15 @@ internal class EngineerImplementation : IEngineer
                 throw new BO.BlNullPropertyException("Engineer is null");
             if (engineer.Id <= 0)
                 throw new BO.BlInvalidValueException("Engineer with invalid Id");
-            if (!CheckEmail(engineer.Email!))
+            if (engineer.Email == null || !CheckEmail(engineer.Email))
                 throw new BO.BlInvalidValueException("Engineer with invalid Email address");
-            if (engineer.Name == "")
+            if (engineer.Name == "" || engineer.Name == null)
                 throw new BO.BlInvalidValueException("Engineer with no name");
-            if (engineer.Cost <= 0 )
+            if (engineer.Cost <= 0 || engineer.Cost  == null)
                 throw new BO.BlInvalidValueException("Engineer with invalid cost");
 
             //adding engineer using dal Create method
-            _dal.Engineer.Create(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, true, engineer.Email, engineer.Cost, engineer.Name));
+            _dal.Engineer.Create(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, IsActive: true, engineer.Email, engineer.Cost, engineer.Name));
 
         }
         catch (DO.DalAlreadyExistsException ex)
@@ -67,7 +67,7 @@ internal class EngineerImplementation : IEngineer
 
         //finding current task that engineer is working on
         DO.Task? currentTask = (from DO.Task dTask in dTasks
-                               where dTask.IsActive && _iTask.Read(dTask.Id).Status == BO.Status.OnTrack
+                               where dTask.IsActive && (_iTask.Read(dTask.Id).Status == BO.Status.OnTrack || _iTask.Read(dTask.Id).Status == BO.Status.Late)
                                select dTask).FirstOrDefault();                               
 
         //defining task in engineer help entity to contain current task info
@@ -152,7 +152,7 @@ internal class EngineerImplementation : IEngineer
             if (doEngineer.Level > (DO.EngineerExperience)engineer.Level)
                 throw new BO.BlInvalidValueException("It is not possible to lower the experience level of an engineer");
 
-            _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, true, engineer.Email, engineer.Cost, engineer.Name));
+            _dal.Engineer.Update(new DO.Engineer(engineer.Id, (DO.EngineerExperience)engineer.Level, IsActive: true, engineer.Email, engineer.Cost, engineer.Name));
                       
         }
 
@@ -180,9 +180,7 @@ internal class EngineerImplementation : IEngineer
         //checking if there is a task that engineer is currently working on
         if(engineer.Task != null)
         {
-            BO.Task boTask = _iTask.Read(engineer.Task.Id);
-            if (boTask.Status == BO.Status.OnTrack)
-                throw new BO.BlDeletionImpossibleException("Can not delete engineer that is currently working on a task");
+            throw new BO.BlDeletionImpossibleException("Can not delete engineer that is currently working on a task");
         }
 
         try
@@ -279,7 +277,7 @@ internal class EngineerImplementation : IEngineer
             Cost = engineer.Cost,
             Level = (DO.EngineerExperience)engineer.Level,
             IsActive = true
-        }) ;
+        });
     }
 
     #region Help methods

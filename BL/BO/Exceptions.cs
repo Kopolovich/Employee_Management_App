@@ -23,7 +23,7 @@ public class BlAlreadyExistsException : Exception
 }
 
 /// <summary>
-/// exception for impossilbe deletion
+/// exception for impossible deletion
 /// </summary>
 [Serializable]
 public class BlDeletionImpossibleException : Exception

@@ -27,21 +27,26 @@ public partial class TaskWindow : Window
         //State = 0: admin adding new task, State = 1: admin updating task, State = 2: engineer choosing task, State = 3: engineer viewing task
 
         EngineerId = engineerId;
-
+        DependenciesToAdd = new ObservableCollection<BO.TaskInList> { };
+        
         //window in state of admin adding new task
         if (id == 0)
         {
             CurrentTask = new() { CreatedAtDate = DateTime.Now };
-            DependenciesToAdd = s_bl.Task.ReadAll().ToList();
+            foreach (var task in s_bl.Task.ReadAll())
+            {
+                DependenciesToAdd.Add(task);
+            }
             State = 0;
         }
 
-        //window in state of admin updating task or engineer choosing task
+        //window in state of admin updating task or engineer choosing/viewing task
         else
             try
             {
                 CurrentTask = s_bl.Task.Read(id);
-                DependenciesToAdd = s_bl.Task.GetDependenciesToAdd(CurrentTask.Id);
+                foreach (var task in s_bl.Task.GetDependenciesToAdd(CurrentTask.Id))
+                    DependenciesToAdd.Add(task);
                 if (state != 0) State = state;
                 else State = 1;
             }
@@ -76,7 +81,7 @@ public partial class TaskWindow : Window
     public static readonly DependencyProperty CurrentTaskProperty =
         DependencyProperty.Register("CurrentTask", typeof(BO.Task), typeof(TaskWindow), new PropertyMetadata(null));
 
-    //collection of task existing dependecies
+    //collection of task existing dependencies
     public ObservableCollection<BO.TaskInList>? CurrentTaskDependencies
     {
         get { return (ObservableCollection<BO.TaskInList>)GetValue(CurrentTaskDependenciesProperty); }
@@ -87,14 +92,14 @@ public partial class TaskWindow : Window
         DependencyProperty.Register("CurrentTaskDependencies", typeof(ObservableCollection<BO.TaskInList>), typeof(TaskWindow), new PropertyMetadata(null));
 
     //list of dependecies that can be added to task
-    public List<BO.TaskInList> DependenciesToAdd
+    public ObservableCollection<BO.TaskInList> DependenciesToAdd
     {
-        get { return (List<BO.TaskInList>)GetValue(DependenciesToAddProperty); }
+        get { return (ObservableCollection<BO.TaskInList>)GetValue(DependenciesToAddProperty); }
         set { SetValue(DependenciesToAddProperty, value); }
     }
     // Using a DependencyProperty as the backing store for CurrentEngineer.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty DependenciesToAddProperty =
-        DependencyProperty.Register("DependenciesToAdd", typeof(List<BO.TaskInList>), typeof(TaskWindow), new PropertyMetadata(null));
+        DependencyProperty.Register("DependenciesToAdd", typeof(ObservableCollection<BO.TaskInList>), typeof(TaskWindow), new PropertyMetadata(null));
 
     public BO.TaskInList? DependencyToAdd { get; set; } = null; //chosen dependency to add
 
@@ -126,9 +131,9 @@ public partial class TaskWindow : Window
                 }
 
                 else if (btn.Content.ToString() == "Update")
-                {
+                {                  
                     s_bl.Task.Update(CurrentTask);
-                    if(s_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
+                    if (s_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
                     {
                         MessageBoxResult mbResult = MessageBox.Show("Task updated successfully! \nWould you like to assign a engineer to this task?", "", MessageBoxButton.YesNo);
                         if (mbResult == MessageBoxResult.Yes)
@@ -137,24 +142,21 @@ public partial class TaskWindow : Window
                     else
                     {
                         MessageBox.Show("Task updated successfully!", "", MessageBoxButton.OK);
-                    }
-                 
-
+                    }                 
                 }
                 else if (btn.Content.ToString() == "Choose Task")
                 {
                     s_bl.Engineer.AssignTaskToEngineer(EngineerId, new BO.TaskInEngineer() { Id = CurrentTask.Id, Alias = CurrentTask.Alias });
                     MessageBox.Show("Task assigned, Good luck!", "", MessageBoxButton.OK);
                 }
-                else
-                    Close();
+                Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "", MessageBoxButton.OK);
             }
 
-            Close();
+            
         }
     }
 
@@ -167,13 +169,11 @@ public partial class TaskWindow : Window
     {
         TextBlock tb = (TextBlock)sender;
 
-        if (tb.DataContext is BO.TaskInList && State != 2 && s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
+        if (tb.DataContext is BO.TaskInList && State != 2 && State != 3 && s_bl.GetProjectStatus() == BO.ProjectStatus.InPlanning)
         {
             BO.TaskInList deleteMe = (BO.TaskInList)tb.DataContext;
             CurrentTaskDependencies!.Remove(deleteMe);
-            DependenciesToAdd = s_bl.Task.ReadAll(item => item.Id != CurrentTask.Id
-                && (CurrentTaskDependencies == null ||
-                !CurrentTaskDependencies.Any(dep => dep.Id == item.Id))).ToList();
+            DependenciesToAdd.Add(deleteMe);
         }
     }
 
@@ -192,9 +192,7 @@ public partial class TaskWindow : Window
             if (!CurrentTaskDependencies.Contains(DependencyToAdd))
             {
                 CurrentTaskDependencies.Add(DependencyToAdd);
-                DependenciesToAdd = s_bl.Task.ReadAll(item => item.Id != CurrentTask.Id
-                && (CurrentTaskDependencies == null ||
-                !CurrentTaskDependencies.Any(dep => dep.Id == item.Id))).ToList();
+                DependenciesToAdd.Remove(DependencyToAdd);
             }          
         }           
     }

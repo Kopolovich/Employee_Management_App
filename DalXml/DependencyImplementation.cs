@@ -5,7 +5,7 @@ using System.Data.Common;
 
 /// <summary>
 /// implementing Dependency CRUD methods using XMLSERIALIZER class
-/// in beggining of each method the data is loaded from XML file into List
+/// in beginning of each method the data is loaded from XML file into List
 /// if changes were made, the List is saved to XML file
 /// </summary>
 internal class DependencyImplementation : IDependency
@@ -15,7 +15,7 @@ internal class DependencyImplementation : IDependency
     /// <summary>
     /// adding new Dependency to XML file
     /// </summary>
-    /// <param name="item">refernce to new item to add</param>
+    /// <param name="item">reference to new item to add</param>
     /// <returns>Id of new dependency</returns>
     public int Create(Dependency item)
     {
@@ -60,7 +60,7 @@ internal class DependencyImplementation : IDependency
     }
 
     /// <summary>
-    /// retrievs requested dependency by filter
+    /// retrieves requested dependency by filter
     /// </summary>
     /// <param name="filter">Func type delegate, boolian function to filter</param>
     /// <returns>first item in XML file that matches the filter</returns>
@@ -71,7 +71,7 @@ internal class DependencyImplementation : IDependency
     }
 
     /// <summary>
-    /// retreives collection of dependencies from XML file
+    /// retrieves collection of dependencies from XML file
     /// </summary>
     /// <returns>copy of XML file of dependencies</returns>
     public IEnumerable<Dependency> ReadAll(Func<Dependency, bool>? filter = null)

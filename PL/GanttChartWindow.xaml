@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
-        mc:Ignorable="d"
+        mc:Ignorable="d" ResizeMode="NoResize"
         Title="GanttChartWindow" Height="700" Width="1100"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Icon="/Images/icon.png">
@@ -35,7 +35,7 @@
 
             <!--Chart - tasks-->
             <ScrollViewer Grid.Row="1" FlowDirection="RightToLeft" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <ItemsControl  Grid.Row="1" ItemsSource="{Binding TaskList}">
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding TaskList}">
                     <ItemsControl.ItemTemplate>                        
                         <DataTemplate>
                             <StackPanel Margin="0,5,0,0" FlowDirection="LeftToRight" Orientation="Horizontal">
@@ -44,17 +44,14 @@
                                         <TextBlock Text="{Binding Engineer, Converter = {StaticResource ConvertEngineerToTextKey}}"/>
                                     </ToolTip>
                                 </StackPanel.ToolTip>
+                                <!--transparent rectangle before task rectangle-->
                                 <Rectangle Margin="5,0,0,0" Width="{Binding ScheduledDate, Mode=OneWay, Converter={StaticResource ConvertStartDateToWidthKey}}" Stroke="Transparent"></Rectangle>
+                                <!--task rectangle-->
                                 <Grid>
-                                    <Rectangle Width="{Binding RequiredEffortTime, Mode=OneWay, Converter={StaticResource ConvertDurationToWidthKey}}" Height="25" Fill="{Binding Status, Mode=OneWay, Converter={StaticResource ConvertStatusToColorKey}}" >
-                                        <Rectangle.ToolTip>
-                                            <ToolTip>
-                                                <TextBlock Text="{Binding Path=Engineer.Name}"/>
-                                            </ToolTip>
-                                        </Rectangle.ToolTip>
-                                    </Rectangle>
+                                    <Rectangle Width="{Binding RequiredEffortTime, Mode=OneWay, Converter={StaticResource ConvertDurationToWidthKey}}" Height="25" Fill="{Binding Status, Mode=OneWay, Converter={StaticResource ConvertStatusToColorKey}}"/>
                                     <Label FontFamily="Comic Sans MS" Content="{Binding Id}"/>
                                 </Grid>
+                                <!--additional info about task-->
                                 <Expander FontFamily="Comic Sans MS" ExpandDirection ="Right">
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="Alias:"/>

@@ -40,6 +40,7 @@ public partial class AdminWindow : Window
 
     private void Button_Click_CreateSchedule(object sender, RoutedEventArgs e)
     {
+        
         try
         {
             DateTime finishDate =  s_bl.CreateProjectSchedule(DateTime.Now);

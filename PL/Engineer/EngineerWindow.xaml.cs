@@ -1,6 +1,8 @@
 ﻿using PL.Task;
+using PL.ValidationRules;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +36,7 @@ namespace PL.Engineer
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message,"error", MessageBoxButton.OK);
-                }           
+                }
         }
 
         public BO.Engineer CurrentEngineer
@@ -70,11 +72,16 @@ namespace PL.Engineer
 
                     else
                     {
-                        s_bl.Engineer.Update(CurrentEngineer);
-                        if (s_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
-                            mbResult = MessageBox.Show($"Engineer updated successfully! \nWould you like to assign a task to this engineer?", "", MessageBoxButton.YesNo);
+                        if (CurrentEngineer.ToString().Equals(s_bl.Engineer.Read(CurrentEngineer.Id).ToString()))
+                            MessageBox.Show($"No fields were updated", "", MessageBoxButton.OK);
                         else
-                            MessageBox.Show($"Engineer updated successfully!", "", MessageBoxButton.OK);
+                        {
+                            s_bl.Engineer.Update(CurrentEngineer);
+                            if (s_bl.GetProjectStatus() == BO.ProjectStatus.InExecution)
+                                mbResult = MessageBox.Show($"Engineer updated successfully! \nWould you like to assign a task to this engineer?", "", MessageBoxButton.YesNo);
+                            else
+                                MessageBox.Show($"Engineer updated successfully!", "", MessageBoxButton.OK);
+                        }                    
                     }
                     
                     if(mbResult == MessageBoxResult.Yes)
@@ -90,5 +97,6 @@ namespace PL.Engineer
                 }              
             }
         }
+
     }
 }

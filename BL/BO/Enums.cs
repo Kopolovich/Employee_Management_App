@@ -12,6 +12,7 @@ public enum EngineerExperienceForFilter
 {
     Beginner, AdvancedBeginner, Intermediate, Advanced, Expert, All
 }
+
 /// <summary>
 /// enum for status of task completion
 /// </summary>
@@ -28,6 +29,9 @@ public enum ProjectStatus
    InPlanning, InExecution
 }
 
+/// <summary>
+/// enum for role of user
+/// </summary>
 public enum UserRole
 {
     Admin, Engineer

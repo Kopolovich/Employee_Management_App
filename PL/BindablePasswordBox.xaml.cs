@@ -36,20 +36,19 @@ public partial class BindablePasswordBox : UserControl
 
     private static void PasswordPropertyChange(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if(d is BindablePasswordBox passwordBox)
+        if(d is BindablePasswordBox)
         {
-            passwordBox.UpdatePassword();
+            ((BindablePasswordBox)d).UpdatePassword();
         }
     }
 
     private void UpdatePassword()
     {
         passwordBox.Password = Password;
-
     }
 
     private void passwordBox_PasswordChanged(object sender, RoutedEventArgs e)
     {
-        Password = passwordBox.Password;
+        Password = ((PasswordBox)sender).Password;
     }
 }

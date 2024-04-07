@@ -207,7 +207,7 @@ public static class Initialization
             s_dal!.Dependency.Create(newDependency);
         }
 
-        //Set task 16 to be dependent on the first 12 tasks exept 7,10
+        //Set task 16 to be dependent on the first 12 tasks except 7,10
         for (int i = 0;i<12;i++)
         {
             if(i !=7 && i!=10)

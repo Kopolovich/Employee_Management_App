@@ -6,7 +6,7 @@
     
     <Application.Resources>
         
-        <!--converters-->
+        <!--converters and enum collections-->
         <local:EngineerCollection x:Key="EngineerCollectionKey"/>
         <local:EngineerCollectionForFilter x:Key="EngineerCollectionForFilterKey"/>
         <local:StatusCollection x:Key="StatusCollectionKey"/>

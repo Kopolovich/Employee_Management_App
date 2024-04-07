@@ -26,25 +26,35 @@ internal class Bl : IBl
     {
         if (GetProjectStatus() == ProjectStatus.InExecution)
             throw new BO.BlCreationImpossibleException("Can not create project schedule while project is in Execution stage");
-        
+
         //reading tasks and saving in sorted list
         List<BO.Task> tasks = Task.ReadAllFullTasks().OrderBy(item => item.Id).ToList();
-        
+
+        //checking if there are any tasks for project
+        if (tasks.Count == 0)
+            throw new BO.BlCreationImpossibleException("Can not create project schedule without tasks");
+
         //making sure all tasks have required effort time assigned
         if (tasks.Any(task => task.RequiredEffortTime == null))
             throw new BO.BlInvalidValueException("Can not plan project schedule if not all tasks have required effort time assigned");
         
         //for each task, finding the earliest possible date and assigning to task
-        tasks.ForEach(task => RecursiveProjectSchedule(task.Id, projectStartDate));     
-        
+        tasks.ForEach(task => RecursiveProjectSchedule(task.Id, projectStartDate));
+
         //updating project start date in config
-        Dal.Config.ProjectStartDate = projectStartDate;
+        DalApi.Factory.Get.StartDate = projectStartDate;
 
         //finding maximal planned finish date of tasks
         tasks = Task.ReadAllFullTasks().ToList();
         return (DateTime)tasks.Max(task => task.ForecastDate)!;
     }
 
+    /// <summary>
+    /// private recursive help method to create project schedule
+    /// </summary>
+    /// <param name="id"> id of current task to set start date for </param>
+    /// <param name="projectStartDate"> project start date </param>
+    /// <exception cref="BO.BlInvalidValueException"> if a task is missing a forecast date </exception>
     void RecursiveProjectSchedule(int id, DateTime projectStartDate) 
     { 
         BO.Task task = Task.Read(id);
@@ -57,7 +67,8 @@ internal class Bl : IBl
         DateTime? startDate = GetEarliestDate(Task.Read(task.Id), projectStartDate);
 
         if (startDate == null) throw new BO.BlInvalidValueException("Forecast date is null");
-            Task.AssignScheduledDateToTask(task.Id, (DateTime)startDate);
+        
+        Task.AssignScheduledDateToTask(task.Id, (DateTime)startDate);
     }     
 
     /// <summary>
@@ -69,13 +80,13 @@ internal class Bl : IBl
     /// <exception cref="BO.BlAssignmentImpossibleException"></exception>
     DateTime? GetEarliestDate(BO.Task task, DateTime projectStartDate)
     {
-        //if there are no previous tasks the task scheduled start date is the project start date
+        //if there are no previous tasks then task scheduled start date is the project start date
         if (task.Dependencies == null || task.Dependencies.Count == 0)
             return projectStartDate;
 
         //reading previous tasks 
         var previousTasks = from dependency in task.Dependencies
-                           select Task.Read(dependency.Id);
+                            select Task.Read(dependency.Id);
 
         //checking if any previous tasks don't have a scheduled start date yet
         if (previousTasks.Any(task => task.ScheduledDate == null))
@@ -83,26 +94,25 @@ internal class Bl : IBl
 
         //finding maximal planned finish date of previous tasks
         return previousTasks.Max(task => task.ForecastDate);
-
     }
 
     /// <summary>
-    /// method for gantt chart, to get project dates
+    /// method for Gantt chart, to get project dates
     /// </summary>
     /// <returns> list of all dates between project start date and scheduled finish date </returns>
     public List<DateTime> GetProjectDates()
     {
         List<BO.Task> tasks = Task.ReadAllFullTasks().ToList();
 
-        DateTime firstDate = (DateTime)Dal.Config.ProjectStartDate!;
+        DateTime firstDate = (DateTime)ProjectStartDate!;
 
         //finding maximal planned finish date of tasks
         DateTime lastDate = (DateTime)tasks.Max(task => task.ForecastDate)!;
 
         List<DateTime> projectDates = [];
+        projectDates.Add(firstDate); 
 
-        projectDates.Add(firstDate);
-        while(firstDate != lastDate) 
+        while(firstDate.Date != lastDate.Date) 
         {
             firstDate = firstDate.AddDays(1);
             projectDates.Add(firstDate);
@@ -132,11 +142,11 @@ internal class Bl : IBl
     /// </summary>
     /// <returns> project status </returns>
     public ProjectStatus GetProjectStatus()
-    {
-        return Dal.Config.ProjectStartDate != null ? ProjectStatus.InExecution : ProjectStatus.InPlanning;
+    {        
+        return ProjectStartDate != null ? ProjectStatus.InExecution : ProjectStatus.InPlanning;
     }
 
-    public DateTime? ProjectStartDate { get { return Dal.Config.ProjectStartDate; } }
+    public DateTime? ProjectStartDate { get => DalApi.Factory.Get.StartDate;  }
 
     #region Clock
 

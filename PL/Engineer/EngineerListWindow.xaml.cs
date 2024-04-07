@@ -37,6 +37,7 @@ namespace PL.Engineer
         {
             try
             {
+                //regular state
                 if (TaskId == 0)
                 {
                     IEnumerable<BO.Engineer> EngineerListTemp = s_bl.Engineer.ReadAll();
@@ -46,7 +47,7 @@ namespace PL.Engineer
                         EngineerList.Add(engineer);
                     }
                 }
-                    
+                //state of choosing engineer for task    
                 else
                 {
                     BO.Task currentTask = s_bl.Task.Read(TaskId);
@@ -142,6 +143,7 @@ namespace PL.Engineer
             }           
         }
 
+        //if window is in regular mode, delete engineer by clicking on bin
         private void Button_Click_DeleteEngineer(object sender, MouseButtonEventArgs e)
         {
             TextBlock tb = (TextBlock)sender;

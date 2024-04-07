@@ -16,5 +16,8 @@ public interface IDal
     /// reset method to empty all lists/xml files
     /// </summary>
     void Reset(); 
+
+    //property for project start date
+    DateTime? StartDate { get; set; }
  
 }

@@ -9,14 +9,7 @@ using System.Xml.Linq;
 /// </summary>
 sealed internal class DalXml : IDal
 {
-    //public static IDal Instance => new DalXml();
-    //private DalXml() { }
-
-    private static readonly Lazy<DalXml> lazy =
-      new Lazy<DalXml>(() => new DalXml());
-
-    public static DalXml Instance { get { return lazy.Value; } }
-
+    public static IDal Instance => new DalXml();
     private DalXml() { }
 
 
@@ -27,6 +20,8 @@ sealed internal class DalXml : IDal
     public IDependency Dependency => new DependencyImplementation();
 
     public IUser User => new UserImplementation();
+
+    public DateTime? StartDate { get => Config.ProjectStartDate; set => Config.ProjectStartDate = value; }
 
     public void Reset()
     {
